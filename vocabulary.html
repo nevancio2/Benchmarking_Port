@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Glossary — U.S. East Coast Container Port Benchmarking</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+
+  .hero {
+    background: linear-gradient(135deg, #0c2340 0%, #1e4d8c 50%, #2563b0 100%);
+    color: #fff; padding: 48px 24px 36px; text-align: center;
+  }
+  .hero .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #bfdbfe; margin-bottom: 10px; }
+  .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+  .hero h1 span { color: #93c5fd; }
+  .hero p { font-size: 13px; color: #bfdbfe; max-width: 620px; margin: 0 auto 24px; }
+  .hero-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 860px; margin: 0 auto; }
+  .hn-chip {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700;
+    color: #fff; text-decoration: none; display: inline-block;
+  }
+  .hn-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 820px; margin: 0 auto; padding: 36px 20px 60px; }
+
+  .back-bar { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .back-btn {
+    display: inline-block; background: #fff; border: 1.5px solid #e2e8f0;
+    border-radius: 10px; padding: 8px 16px; font-size: 12px; font-weight: 700;
+    text-decoration: none; color: #374151;
+  }
+  .back-btn:hover { border-color: #1e4d8c; color: #1e4d8c; }
+  .back-btn.primary { background: #1e4d8c; color: #fff; border-color: #1e4d8c; }
+  .back-btn.primary:hover { background: #0c2340; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: #57606a; margin-bottom: 16px; padding-bottom: 7px;
+    border-bottom: 2px solid #1e4d8c; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #1e4d8c; }
+
+  /* Category pills */
+  .cat-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .cat-pill {
+    background: #fff; border: 1.5px solid #e2e8f0; border-radius: 20px;
+    padding: 5px 14px; font-size: 11px; font-weight: 700; cursor: pointer;
+    color: #374151;
+  }
+  .cat-pill:hover  { border-color: #1e4d8c; color: #1e4d8c; }
+  .cat-pill.active { background: #1e4d8c; border-color: #1e4d8c; color: #fff; }
+
+  /* Term cards */
+  .term-grid { display: flex; flex-direction: column; gap: 0; }
+  .term-card {
+    background: #fff; border-radius: 0;
+    padding: 20px 24px; border-bottom: 1px solid #f1f5f9;
+    border-left: 4px solid transparent;
+  }
+  .term-card:first-child { border-radius: 14px 14px 0 0; }
+  .term-card:last-child  { border-radius: 0 0 14px 14px; border-bottom: none; }
+  .term-grid-wrap { background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,.08); overflow: hidden; margin-bottom: 40px; }
+
+  .term-card.cat-operations { border-left-color: #16a34a; }
+  .term-card.cat-infra      { border-left-color: #3b82f6; }
+  .term-card.cat-finance    { border-left-color: #f59e0b; }
+  .term-card.cat-logistics  { border-left-color: #7c3aed; }
+  .term-card.cat-governance { border-left-color: #ef4444; }
+  .term-card.cat-scale      { border-left-color: #0ea5e9; }
+
+  .term-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .term-num { font-size: 11px; font-weight: 800; color: #94a3b8; min-width: 24px; }
+  .term-name { font-size: 16px; font-weight: 800; color: #1e293b; }
+  .term-tag {
+    display: inline-block; font-size: 10px; font-weight: 700; border-radius: 20px;
+    padding: 2px 9px; white-space: nowrap;
+  }
+  .tag-operations { background: #dcfce7; color: #166534; }
+  .tag-infra      { background: #dbeafe; color: #1e40af; }
+  .tag-finance    { background: #fef9c3; color: #854d0e; }
+  .tag-logistics  { background: #f3e8ff; color: #6b21a8; }
+  .tag-governance { background: #fee2e2; color: #991b1b; }
+  .tag-scale      { background: #e0f2fe; color: #075985; }
+
+  /* Score scale table */
+  .scale-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+  .scale-table th { background: #f8fafc; color: #374151; font-weight: 700; padding: 7px 10px; border-bottom: 2px solid #e5e7eb; text-align: left; }
+  .scale-table td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9; color: #374151; vertical-align: top; line-height: 1.55; }
+  .scale-table tr:last-child td { border-bottom: none; }
+  .scale-table .score-100 { font-weight: 800; color: #16a34a; }
+  .scale-table .score-0   { font-weight: 800; color: #dc2626; }
+  .scale-table .dim-name  { font-weight: 700; color: #1e293b; white-space: nowrap; }
+
+  .term-def { font-size: 13px; color: #374151; line-height: 1.7; margin-bottom: 6px; }
+  .term-context { font-size: 12px; color: #57606a; font-style: italic; line-height: 1.6; }
+  .term-examples { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .ex-pill { background: #f1f5f9; color: #374151; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+
+  /* Sources */
+  .sources-box {
+    background: #fff; border-radius: 14px; padding: 24px 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06); border-top: 4px solid #57606a;
+    margin-bottom: 40px;
+  }
+  .sources-box .sb-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #57606a; margin-bottom: 12px; padding-bottom: 7px; border-bottom: 1px solid #e5e7eb; }
+  .sources-box p { font-size: 12px; color: #57606a; margin-bottom: 8px; line-height: 1.7; }
+  .sources-box p:last-child { margin-bottom: 0; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">IBM Benchmarking Research · 2025</div>
+  <h1>Port Benchmarking <span>Glossary</span></h1>
+  <p>Key terms and definitions used consistently across the U.S. East Coast Container Port Benchmarking Study. Understanding these concepts is essential for interpreting scores, comparisons, and strategic recommendations.</p>
+  <div class="hero-nav">
+    <a class="hn-chip" href="global-transit-benchmarking-interactive-one-pager.html">← Rankings Dashboard</a>
+    <a class="hn-chip" href="revenue-deep-dive.html">Revenue Deep Dive</a>
+    <a class="hn-chip" href="#cat-operations">Operations</a>
+    <a class="hn-chip" href="#cat-infra">Infrastructure</a>
+    <a class="hn-chip" href="#cat-logistics">Logistics &amp; Intermodal</a>
+    <a class="hn-chip" href="#cat-finance">Finance</a>
+    <a class="hn-chip" href="#cat-governance">Governance</a>
+    <a class="hn-chip" href="#cat-scale">Ranking Scales</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="back-bar" style="margin-top:8px;">
+    <a class="back-btn primary" href="global-transit-benchmarking-interactive-one-pager.html">← Rankings Dashboard</a>
+    <a class="back-btn" href="revenue-deep-dive.html">Revenue Deep Dive</a>
+    <a class="back-btn" href="profiles/savannah-gpa.html">Savannah</a>
+    <a class="back-btn" href="profiles/virginia-norfolk.html">Virginia</a>
+    <a class="back-btn" href="profiles/nynj-panynj.html">NY/NJ</a>
+    <a class="back-btn" href="profiles/charleston-sc-ports.html">Charleston</a>
+    <a class="back-btn" href="profiles/port-everglades.html">Port Everglades</a>
+    <a class="back-btn" href="profiles/portmiami.html">PortMiami</a>
+  </div>
+
+  <!-- OPERATIONS TERMS -->
+  <div id="cat-operations" style="scroll-margin-top:20px;">
+    <div class="section-label"><div class="dot"></div>Port Operations Terms</div>
+    <div class="term-grid-wrap">
+      <div class="term-grid">
+
+        <div class="term-card cat-operations">
+          <div class="term-header">
+            <span class="term-num">01</span>
+            <span class="term-name">TEU (Twenty-Foot Equivalent Unit)</span>
+            <span class="term-tag tag-operations">Operations</span>
+          </div>
+          <p class="term-def">The standard unit of container measurement in port logistics. A TEU is equivalent to one 20-foot intermodal shipping container. A 40-foot container counts as 2 TEUs. Annual TEU throughput is the foundational metric for comparing port size, market share, and revenue capacity.</p>
+          <p class="term-context">Why it matters: Volume alone does not determine the benchmark score — growth trajectory and utilization rate relative to capacity also factor in. A port growing 9% annually scores higher than a larger port growing under 1% in a comparable period. All six ports in this benchmark are measured in annual TEUs as their primary throughput metric.</p>
+          <div class="term-examples"><span class="ex-pill">NY/NJ: ~9.0M TEUs (2024)</span><span class="ex-pill">Savannah: ~5.9M TEUs (CY2025)</span><span class="ex-pill">Virginia: ~3.5M TEUs (FY2024)</span><span class="ex-pill">Charleston: ~2.5M TEUs (FY2025)</span></div>
+        </div>
+
+        <div class="term-card cat-operations">
+          <div class="term-header">
+            <span class="term-num">02</span>
+            <span class="term-name">CPPI — Container Port Performance Index</span>
+            <span class="term-tag tag-operations">Operations</span>
+          </div>
+          <p class="term-def">The World Bank Container Port Performance Index (CPPI), published annually by the World Bank and S&amp;P Global Market Intelligence, measures how efficiently vessels are served at each port. The primary metric is MPPH — Moves Per Port Hour — the number of container lifts performed per total hour of port time from vessel arrival through departure. Higher MPPH means faster vessel turnaround, lower cost per lift for carriers, and greater port attractiveness for premium vessel services.</p>
+          <p class="term-context">U.S. East Coast ports as a class have historically ranked in the lower half of global CPPI scores, due to ILA labor agreements constraining automation, multi-terminal fragmentation, and channel depth limits. Port Everglades achieved top 20% worldwide CPPI ranking (confirmed September 2025). Virginia is the consistent top CPPI performer on the East Coast. The CPPI is the anchor data source for Dimension 2 (Operational Efficiency) in this benchmark.</p>
+          <div class="term-examples"><span class="ex-pill">Virginia: East Coast CPPI leader</span><span class="ex-pill">Port Everglades: Top 20% worldwide (confirmed)</span><span class="ex-pill">NY/NJ: Mid-range (multi-terminal drag)</span></div>
+        </div>
+
+        <div class="term-card cat-operations">
+          <div class="term-header">
+            <span class="term-num">03</span>
+            <span class="term-name">Moves Per Port Hour (MPPH)</span>
+            <span class="term-tag tag-operations">Operations</span>
+          </div>
+          <p class="term-def">The number of container lifts (moves) completed per total hour of port time, calculated from vessel arrival at anchorage through departure. MPPH is the CPPI's primary efficiency metric. It captures not just how fast cranes work, but how much time is spent waiting (at anchor, waiting for berth, waiting for crane deployment) vs. actively working cargo.</p>
+          <p class="term-context">A port where a vessel sits at anchor for 12 hours before berthing will have a lower MPPH than a port where the same vessel berths immediately upon arrival — even if crane productivity (gross crane rate) is identical. This is why channel depth and berth availability are CPPI contributors, not just crane counts.</p>
+          <div class="term-examples"><span class="ex-pill">Higher is better</span><span class="ex-pill">Automation (ASCs) is the strongest MPPH driver</span><span class="ex-pill">Deep channels reduce anchor waiting time</span></div>
+        </div>
+
+        <div class="term-card cat-operations">
+          <div class="term-header">
+            <span class="term-num">04</span>
+            <span class="term-name">ASC — Automated Stacking Crane</span>
+            <span class="term-tag tag-operations">Operations</span>
+          </div>
+          <p class="term-def">A computer-controlled crane system that moves and stacks containers in a terminal yard without human operators. ASCs replace rubber-tired gantry cranes (RTGs) operated by human drivers. They reduce cycle time, labor cost per lift, and operational variability — the primary drivers of higher CPPI scores. ASC deployment consistently correlates with top CPPI rankings in the World Bank's multi-year analysis.</p>
+          <p class="term-context">Virginia International Gateway (VIG) is the only terminal in this benchmark operating ASCs at scale — the primary reason Virginia is the East Coast's CPPI leader. ILA (International Longshoremen's Association) labor agreements have historically constrained automation deployment at U.S. East Coast ports. The 2025 ILA–USMX contract negotiations directly affected the viability of further automation expansion at all six ports in this benchmark.</p>
+          <div class="term-examples"><span class="ex-pill">Virginia VIG: ASCs deployed</span><span class="ex-pill">Charleston HLT: ASC evaluation recommended</span><span class="ex-pill">Savannah GCT: RTGs (no ASCs)</span></div>
+        </div>
+
+        <div class="term-card cat-operations">
+          <div class="term-header">
+            <span class="term-num">05</span>
+            <span class="term-name">Container Dwell Time</span>
+            <span class="term-tag tag-operations">Operations</span>
+          </div>
+          <p class="term-def">The average number of days a container remains in the terminal after being discharged from a vessel, before being picked up by truck or train. Lower dwell time means faster terminal yard turnover, less congestion, and higher effective capacity — a port with 2-day average dwell time can theoretically handle more TEUs through the same physical space than a port with 5-day average dwell time. Dwell time is also a revenue variable: many ports charge escalating storage fees after a free-time period, making excessive dwell a secondary revenue source.</p>
+          <p class="term-context">Savannah's Mason Mega Rail Terminal directly reduces container dwell time by enabling direct vessel-to-train transfers, eliminating the intermediate truck dray and yard staging steps. This is why on-dock rail is a CPPI contributor, not just a connectivity asset.</p>
+          <div class="term-examples"><span class="ex-pill">On-dock rail reduces dwell time</span><span class="ex-pill">Storage fees charged after free-time period</span><span class="ex-pill">High dwell = reduced effective capacity</span></div>
+        </div>
+
+        <div class="term-card cat-operations">
+          <div class="term-header">
+            <span class="term-num">06</span>
+            <span class="term-name">STS Crane (Ship-to-Shore Crane)</span>
+            <span class="term-tag tag-operations">Operations</span>
+          </div>
+          <p class="term-def">A large gantry crane mounted on rails at the waterfront, used to load and unload containers between vessel and terminal. STS crane count is a proxy for simultaneous vessel-handling capacity — more cranes mean more berths can be actively worked or more cranes can be deployed per vessel call. STS cranes are classified by the size of vessel they can serve: post-Panamax cranes serve vessels up to approximately 18,000 TEU; super post-Panamax cranes serve the largest ULCVs of 18,000–24,000+ TEU.</p>
+          <div class="term-examples"><span class="ex-pill">Savannah: 38 STS cranes (largest in benchmark)</span><span class="ex-pill">Virginia: 29 STS cranes</span><span class="ex-pill">Charleston: ~18 STS cranes (14 WWT + 4 HLT P1)</span><span class="ex-pill">Port Everglades/Miami: ~6–8 each</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- INFRASTRUCTURE TERMS -->
+  <div id="cat-infra" style="scroll-margin-top:20px;">
+    <div class="section-label"><div class="dot" style="background:#3b82f6;"></div>Infrastructure Terms</div>
+    <div class="term-grid-wrap">
+      <div class="term-grid">
+
+        <div class="term-card cat-infra">
+          <div class="term-header">
+            <span class="term-num">07</span>
+            <span class="term-name">Channel Depth (Draft)</span>
+            <span class="term-tag tag-infra">Infrastructure</span>
+          </div>
+          <p class="term-def">The depth of water in the approach channel and harbor, measured in feet at Mean Low Water (MLW). Channel depth is the single most consequential physical variable determining which vessels can call a port fully loaded. A fully loaded ULCV of 20,000 TEU draws approximately 49–50 feet of water. A port with a 47-foot channel (Savannah) must receive ULCVs partially empty; a port with a 52-foot channel (Charleston) or 55-foot channel (Virginia) receives fully loaded ULCVs at any tide.</p>
+          <p class="term-context">Why it matters for carriers: A carrier routing a 20,000-TEU vessel to a 47-foot port cannot fill it to capacity. Every container left behind is revenue lost, which raises effective per-TEU cost. Carriers optimize vessel assignments toward ports where they can maximize load — giving deeper-channel ports a structural competitive advantage in attracting the largest, most cost-efficient vessel classes.</p>
+          <div class="term-examples"><span class="ex-pill">Virginia: 55 ft (deepest East Coast, near completion)</span><span class="ex-pill">Charleston: 52 ft</span><span class="ex-pill">NY/NJ, Everglades, Miami: 50 ft</span><span class="ex-pill">Savannah: 47 ft (shallowest in benchmark)</span></div>
+        </div>
+
+        <div class="term-card cat-infra">
+          <div class="term-header">
+            <span class="term-num">08</span>
+            <span class="term-name">ULCV — Ultra Large Container Vessel</span>
+            <span class="term-tag tag-infra">Infrastructure</span>
+          </div>
+          <p class="term-def">A container vessel of 18,000–24,000+ TEU capacity. ULCVs represent the newest generation of container ships and are being rapidly deployed on major trade lanes (Asia–Europe, Asia–East Coast via Suez) because their scale reduces per-TEU fuel and operating costs. Their deeper drafts (49–51 feet fully loaded) and wider beams require both channel depth and sufficient crane outreach (super post-Panamax cranes) to serve them productively.</p>
+          <p class="term-context">The proliferation of ULCVs is the defining infrastructure challenge for all six ports in this benchmark. Virginia's 55-foot channel is the only East Coast channel that can receive all currently operating ULCVs fully loaded. Charleston's 52-foot channel can receive most ULCVs. Savannah's 47-foot channel cannot receive the largest ULCVs fully loaded, which is the primary driver of GPA's June 2026 channel deepening feasibility study.</p>
+          <div class="term-examples"><span class="ex-pill">Typical ULCV draft: 49–51 ft fully loaded</span><span class="ex-pill">Virginia 55 ft: can receive all ULCVs</span><span class="ex-pill">Savannah 47 ft: draft restrictions on largest ULCVs</span></div>
+        </div>
+
+        <div class="term-card cat-infra">
+          <div class="term-header">
+            <span class="term-num">09</span>
+            <span class="term-name">HLT — Hugh K. Leatherman Terminal</span>
+            <span class="term-tag tag-infra">Infrastructure</span>
+          </div>
+          <p class="term-def">SC Ports' new container terminal under construction on the former Navy Base site on the Cooper River in North Charleston. Phase 1 is operational with approximately 1,400 linear feet of berth, 4 super post-Panamax STS cranes, and approximately 700,000 TEUs of annual capacity. Full build-out is planned at approximately 2.4 million TEUs annually — which, when complete, would push SC Ports' total container capacity from approximately 2.5 million TEUs to approximately 4.0–4.5 million TEUs.</p>
+          <p class="term-context">HLT is the single most important strategic asset in the SC Ports Authority portfolio. It is the primary near-term growth catalyst for Charleston's Throughput, Infrastructure, Connectivity, and Financial dimension scores. Accelerating HLT later phases is the highest-priority strategic action identified in this benchmark's gap analysis.</p>
+          <div class="term-examples"><span class="ex-pill">Phase 1: ~700K TEU capacity (operational)</span><span class="ex-pill">Full build-out: ~2.4M TEU</span><span class="ex-pill">Capital program: $1.4B (SC Ports revenue bonds)</span></div>
+        </div>
+
+        <div class="term-card cat-infra">
+          <div class="term-header">
+            <span class="term-num">10</span>
+            <span class="term-name">Bayonne Bridge (Air Draft Clearance)</span>
+            <span class="term-tag tag-infra">Infrastructure</span>
+          </div>
+          <p class="term-def">The Bayonne Bridge spans the Kill Van Kull waterway between Bayonne, NJ and Staten Island, NY — the primary maritime access route to Port Newark Container Terminal and the main Newark Bay terminals of NY/NJ. The bridge's original height of 151 feet physically blocked neo-Panamax and larger vessels from reaching these terminals. The $1.7 billion bridge-raising project, completed in 2019, elevated the air draft clearance to 215 feet — unlocking larger vessel calls to the core NY/NJ terminals.</p>
+          <p class="term-context">The Bayonne Bridge raising is one of the most consequential East Coast port infrastructure investments of the last decade. It is the reason NY/NJ can serve as a top-tier gateway for modern large container vessels. Without it, APM Terminals Bayonne and GCT New York (Howland Hook) would have been physically unable to serve the vessels that now call regularly.</p>
+          <div class="term-examples"><span class="ex-pill">Original height: 151 ft (blocked neo-Panamax)</span><span class="ex-pill">Current height: 215 ft (completed 2019)</span><span class="ex-pill">Cost: ~$1.7 billion</span></div>
+        </div>
+
+        <div class="term-card cat-infra">
+          <div class="term-header">
+            <span class="term-num">11</span>
+            <span class="term-name">Gateway Investment Program (Virginia)</span>
+            <span class="term-tag tag-infra">Infrastructure</span>
+          </div>
+          <p class="term-def">The Port of Virginia's $1.4 billion capital improvement program encompassing: channel dredging to 55 feet (nearing completion January 2026); channel widening to enable simultaneous dual-ULCV transit; a new ULCV berth at Norfolk International Terminals; Automated Stacking Crane (ASC) deployment at Virginia International Gateway; and $83 million in on-dock rail infrastructure upgrades. The program is substantially complete as of early 2026.</p>
+          <p class="term-context">The Gateway Investment Program is the benchmark comparison for SC Ports' HLT program. Virginia executed a $1.4 billion capital program on a stronger operating income foundation ($113M vs. Charleston's $26.7M), funded through a diversified mix of revenue bonds, federal PIDP and INFRA grants, and state contributions — a capital funding model that SC Ports should benchmark for future HLT phases.</p>
+          <div class="term-examples"><span class="ex-pill">Total: $1.4 billion</span><span class="ex-pill">55-ft channel, ASCs, on-dock rail, new ULCV berth</span><span class="ex-pill">Substantially complete as of Q1 2026</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGISTICS & INTERMODAL TERMS -->
+  <div id="cat-logistics" style="scroll-margin-top:20px;">
+    <div class="section-label"><div class="dot" style="background:#7c3aed;"></div>Logistics &amp; Intermodal Terms</div>
+    <div class="term-grid-wrap">
+      <div class="term-grid">
+
+        <div class="term-card cat-logistics">
+          <div class="term-header">
+            <span class="term-num">12</span>
+            <span class="term-name">On-Dock Rail</span>
+            <span class="term-tag tag-logistics">Logistics</span>
+          </div>
+          <p class="term-def">Rail tracks installed directly within the container terminal, enabling containers to be moved from vessel to railcar (or vice versa) without an intermediate truck dray to an off-dock rail ramp. On-dock rail is the gold standard of port intermodal connectivity: it eliminates the dray, reduces container dwell time, lowers total supply chain cost per TEU, and extends the port's effective hinterland reach deep into the national rail network.</p>
+          <p class="term-context">Virginia has on-dock rail at both VIG and NIT. Savannah's Mason Mega Rail Terminal is North America's largest on-dock rail facility. Charleston lacks on-dock rail at Wando Welch Terminal (containers must be truck-drayed to an off-terminal rail ramp). HLT represents the best opportunity to add on-dock rail to the SC Ports system — it is the single highest-connectivity leverage point in the benchmark gap analysis for Charleston.</p>
+          <div class="term-examples"><span class="ex-pill">Virginia VIG + NIT: on-dock rail (gold standard)</span><span class="ex-pill">Savannah Mason Mega Rail: North America's largest</span><span class="ex-pill">Charleston WWT: no on-dock rail (gap)</span><span class="ex-pill">Port Everglades, PortMiami: no on-dock rail</span></div>
+        </div>
+
+        <div class="term-card cat-logistics">
+          <div class="term-header">
+            <span class="term-num">13</span>
+            <span class="term-name">Mason Mega Rail Terminal (Savannah)</span>
+            <span class="term-tag tag-logistics">Logistics</span>
+          </div>
+          <p class="term-def">The on-dock rail facility at Garden City Terminal, Savannah — North America's largest on-dock rail terminal by capacity and throughput. The Mason Terminal enables direct vessel-to-train container transfers, serving both CSX and Norfolk Southern. GPA's target is a 40%+ rail modal share for container movements, which would dramatically reduce truck dependency and extend effective hinterland reach into the Midwest and beyond. Appalachian Regional Port (ARP) in Chatsworth, GA, set a new record of 45,700 containers in CY2025 (+19% YoY), demonstrating GPA's expanding inland rail reach.</p>
+          <div class="term-examples"><span class="ex-pill">North America's largest on-dock rail facility</span><span class="ex-pill">Serves CSX and Norfolk Southern directly</span><span class="ex-pill">40% rail modal share target</span></div>
+        </div>
+
+        <div class="term-card cat-logistics">
+          <div class="term-header">
+            <span class="term-num">14</span>
+            <span class="term-name">Inland Port</span>
+            <span class="term-tag tag-logistics">Logistics</span>
+          </div>
+          <p class="term-def">A facility located inland — away from the marine terminal — that handles container transfers between trucks and trains, enabling shippers in interior markets to access a seaport's services without trucking containers all the way to the coast. A rail-connected inland port effectively extends a port's geographic hinterland to include cities and industrial corridors hundreds of miles from the waterfront.</p>
+          <p class="term-context">Inland port networks directly determine a port's ability to compete for cargo generated beyond the immediate coastal metro area. Savannah has two inland ports (ARP Chatsworth; Blue Ridge Gainesville); Virginia has one (Front Royal/Shenandoah); SC Ports has two (Greer, Dillon). Charleston's strategic gap analysis identifies a third inland port in the Charlotte, NC corridor as the highest-priority connectivity investment.</p>
+          <div class="term-examples"><span class="ex-pill">SC Ports: Inland Port Greer (NS, Upstate SC) + Inland Port Dillon (CSX, I-95 corridor)</span><span class="ex-pill">GPA: ARP Chatsworth + Blue Ridge Gainesville (Atlanta market)</span><span class="ex-pill">Virginia: Front Royal VIP (Shenandoah Valley / DC-west market)</span></div>
+        </div>
+
+        <div class="term-card cat-logistics">
+          <div class="term-header">
+            <span class="term-num">15</span>
+            <span class="term-name">Modal Split (Rail vs. Truck)</span>
+            <span class="term-tag tag-logistics">Logistics</span>
+          </div>
+          <p class="term-def">The percentage of container movements handled by rail vs. truck. A higher rail modal share generally means lower per-TEU logistics cost, lower emissions, greater geographic reach, and less sensitivity to regional truck driver capacity constraints. A truck-dominant modal split (like Port Everglades and PortMiami) limits hinterland reach to markets reachable by truck within economical distance from the port.</p>
+          <div class="term-examples"><span class="ex-pill">Savannah target: 40%+ rail share</span><span class="ex-pill">Virginia: strong rail share (on-dock at VIG + NIT)</span><span class="ex-pill">Port Everglades: truck-only (no rail program)</span><span class="ex-pill">PortMiami: truck-only (no rail program)</span></div>
+        </div>
+
+        <div class="term-card cat-logistics">
+          <div class="term-header">
+            <span class="term-num">16</span>
+            <span class="term-name">ExpressRail (NY/NJ)</span>
+            <span class="term-tag tag-logistics">Logistics</span>
+          </div>
+          <p class="term-def">PANYNJ's on-dock rail program at Port Newark Container Terminal and Howland Hook Marine Terminal. ExpressRail is a PANYNJ-owned rail infrastructure investment that provides on-dock rail access to the NY/NJ port complex — superior to Port Everglades and PortMiami (no rail programs) but smaller in scale and strategic depth than Virginia's dual-terminal on-dock rail and Savannah's Mason Mega Rail Terminal. Rail intermodal modal share at NY/NJ is lower than Virginia and Savannah relative to total TEUs, reflecting the Northeast's truck-dominant logistics model.</p>
+          <div class="term-examples"><span class="ex-pill">PANYNJ-owned on-dock rail at PNCT + Howland Hook</span><span class="ex-pill">Less comprehensive than Virginia or Savannah programs</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCE TERMS -->
+  <div id="cat-finance" style="scroll-margin-top:20px;">
+    <div class="section-label"><div class="dot" style="background:#f59e0b;"></div>Finance &amp; Revenue Terms</div>
+    <div class="term-grid-wrap">
+      <div class="term-grid">
+
+        <div class="term-card cat-finance">
+          <div class="term-header">
+            <span class="term-num">17</span>
+            <span class="term-name">Revenue Per TEU</span>
+            <span class="term-tag tag-finance">Finance</span>
+          </div>
+          <p class="term-def">Total operating revenues divided by total annual TEU throughput. A normalized efficiency metric for cross-port comparison that captures how much operating revenue a port generates per container handled, regardless of absolute size. Revenue per TEU reflects both the value-add of the port's services and its governance model: direct-operator ports (Savannah, Virginia) capture more per-TEU revenue than landlord ports (PANYNJ) that share terminal revenue with private operators.</p>
+          <p class="term-context">Revenue per TEU reveals a counterintuitive pattern: the largest ports by volume have the lowest revenue per TEU (PANYNJ at ~$50–56/TEU is the most extreme case of landlord model dilution on massive volume), while mid-size ports with diversified revenue streams have the highest (Port Everglades at ~$187–196/TEU from petroleum + cruise + containers).</p>
+          <div class="term-examples"><span class="ex-pill">Port Everglades: ~$187–196/TEU</span><span class="ex-pill">Charleston: ~$169/TEU</span><span class="ex-pill">Virginia: ~$128–157/TEU</span><span class="ex-pill">Savannah: ~$127/TEU</span><span class="ex-pill">PANYNJ (port segment): ~$50–56/TEU</span></div>
+        </div>
+
+        <div class="term-card cat-finance">
+          <div class="term-header">
+            <span class="term-num">18</span>
+            <span class="term-name">Operator Model vs. Landlord Model</span>
+            <span class="term-tag tag-finance">Finance</span>
+          </div>
+          <p class="term-def">Two distinct port governance and revenue structures:</p>
+          <p class="term-def"><strong>Operator Model:</strong> The port authority directly operates the terminal, retaining 100% of wharfage, container handling charges, storage fees, equipment rental, and dockage. No revenue is shared with a private terminal operator. Examples: Georgia Ports Authority (Garden City Terminal), Port of Virginia (via VIT subsidiary).</p>
+          <p class="term-def"><strong>Landlord Model:</strong> The port authority owns the land and infrastructure but leases terminal operations to private companies (APM Terminals, GCT, PNCT, etc.). The authority receives lease fees rather than the full terminal operating revenue. Example: PANYNJ (leases to APM Terminals, GCT Bayonne, GCT New York, PNCT, Red Hook).</p>
+          <p class="term-context">This is the single most important revenue model insight in the benchmark. The landlord vs. operator gap translates to approximately a 2.5x revenue-per-TEU differential: Savannah (operator) generates ~$127/TEU while PANYNJ (landlord) generates ~$50–56/TEU on port revenues alone.</p>
+          <div class="term-examples"><span class="ex-pill">Operator: Savannah ($698.7M on 5.5M TEUs)</span><span class="ex-pill">Landlord: PANYNJ (~$450–500M on 9.0M TEUs port-only)</span></div>
+        </div>
+
+        <div class="term-card cat-finance">
+          <div class="term-header">
+            <span class="term-num">19</span>
+            <span class="term-name">Revenue Diversification (Tri-Sector Model)</span>
+            <span class="term-tag tag-finance">Finance</span>
+          </div>
+          <p class="term-def">The extent to which a port's revenues come from multiple, non-correlated sectors rather than container handling alone. Port Everglades is the benchmark leader in revenue diversification: its three-pillar model — containers (~60–65%), petroleum (~15–20%), and cruise (~20–25%) — provides resilience when any single sector weakens. A shipping market downturn that reduces container revenue does not reduce petroleum distribution fees or cruise homeport charges.</p>
+          <p class="term-context">The parallel in port finance to the transit benchmark's finding: "systems with high non-fare revenue are less vulnerable to ridership fluctuations." Port Everglades' FY2024 operating margin of 29.7% is the highest confirmed in the benchmark — during the same post-pandemic freight rate normalization that produced Charleston's FY2024 operating loss of ($2.3M). The single-revenue-stream vulnerability is directly demonstrated by this comparison.</p>
+          <div class="term-examples"><span class="ex-pill">Port Everglades: containers + petroleum + cruise</span><span class="ex-pill">PANYNJ: airports + bridges/tunnels + port + PATH</span><span class="ex-pill">Charleston: containers dominant (~50% of total revenues)</span></div>
+        </div>
+
+        <div class="term-card cat-finance">
+          <div class="term-header">
+            <span class="term-num">20</span>
+            <span class="term-name">Operating Income Margin</span>
+            <span class="term-tag tag-finance">Finance</span>
+          </div>
+          <p class="term-def">Operating income (revenues minus operating expenses, before interest and non-operating items) divided by total operating revenues, expressed as a percentage. Operating margin indicates how much of each revenue dollar is retained as operating profit. For capital-intensive infrastructure businesses like ports, a thin operating margin is a financial risk signal because debt service payments (interest and principal on revenue bonds) must be paid from operating income supplemented by non-operating revenues.</p>
+          <div class="term-examples"><span class="ex-pill">Port Everglades FY2024: 29.7% ($64.0M on $215.5M)</span><span class="ex-pill">Virginia FY2024: ~20–25% ($113M operating income, estimated revenues)</span><span class="ex-pill">Charleston FY2025: 6.3% ($26.7M on $426.5M)</span><span class="ex-pill">Charleston FY2024: negative ($2.3M operating loss)</span></div>
+        </div>
+
+        <div class="term-card cat-finance">
+          <div class="term-header">
+            <span class="term-num">21</span>
+            <span class="term-name">Revenue Bonds / Bond Rating</span>
+            <span class="term-tag tag-finance">Finance</span>
+          </div>
+          <p class="term-def">Revenue bonds are municipal debt instruments repaid from a specific revenue stream — in port finance, typically port operating revenues (wharfage, handling fees, storage, etc.). They are the primary capital financing instrument for independent port authorities. Bond ratings assigned by Fitch, S&amp;P, and Moody's reflect the creditworthiness of the bonds and directly determine borrowing cost. Higher ratings mean lower interest rates on capital projects.</p>
+          <p class="term-context">PANYNJ holds the highest confirmed rating in this benchmark (Fitch AA-) driven by multi-facility revenue diversification. GPA holds an S&P "excellent" (AA-range) reaffirmed August 2025 during active expansion. PortMiami holds the lowest confirmed rating (Fitch 'A' stable), reflecting the cruise revenue concentration and Deep Dredge debt service burden. SC Ports holds an investment-grade rating with $1.4B in outstanding revenue bonds as of June 30, 2025.</p>
+          <div class="term-examples"><span class="ex-pill">PANYNJ: AA- (Fitch) — highest in benchmark</span><span class="ex-pill">GPA: S&P "Excellent" (AA-range)</span><span class="ex-pill">PortMiami: A (Fitch) — lowest confirmed</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKING SCALE REFERENCE -->
+  <div id="cat-scale" style="scroll-margin-top:20px;">
+    <div class="section-label"><div class="dot" style="background:#0ea5e9;"></div>Ranking Scale Reference — What 100 and 0 Mean for Each Dimension</div>
+    <div class="term-grid-wrap">
+      <div class="term-grid">
+
+        <div class="term-card cat-scale">
+          <div class="term-header">
+            <span class="term-num">22</span>
+            <span class="term-name">Throughput &amp; Scale Score (0–100)</span>
+            <span class="term-tag tag-scale">Scale</span>
+          </div>
+          <p class="term-def">Measures annual TEU volume, year-over-year growth rate, loaded vs. empty container balance, import vs. export balance, and U.S. national ranking. Volume alone does not determine the score — growth trajectory and utilization rate relative to capacity also factor in.</p>
+          <table class="scale-table">
+            <thead><tr><th>Score</th><th>What it means</th><th>Benchmark example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="score-100">100</span></td><td>The largest U.S. container port by TEU, with strong year-over-year growth, a balanced import/export ratio, and operating well below capacity ceiling. The theoretical ceiling in this benchmark context would be a port handling 10M+ TEUs with 10%+ annual growth and 70% utilization.</td><td>No port scores 100. NY/NJ (98) comes closest on volume (~9.0M TEUs), though its growth rate is not the benchmark's highest.</td></tr>
+              <tr><td><span class="score-0">0</span></td><td>A port with negligible TEU volume, no measurable year-over-year growth, and either severely over-capacity or unused terminal infrastructure. No operating port in a commercial benchmark scores 0.</td><td>No benchmarked port is near 0. PortMiami (55) is the lowest, reflecting ~1.0–1.1M TEUs and gradual container volume ramp.</td></tr>
+            </tbody>
+          </table>
+          <div class="term-examples" style="margin-top:10px;"><span class="ex-pill">NY/NJ: 98</span><span class="ex-pill">Savannah: 95</span><span class="ex-pill">Virginia: 85</span><span class="ex-pill">Charleston: 72</span><span class="ex-pill">Everglades: 58</span><span class="ex-pill">PortMiami: 55</span></div>
+        </div>
+
+        <div class="term-card cat-scale">
+          <div class="term-header">
+            <span class="term-num">23</span>
+            <span class="term-name">Operational Efficiency (CPPI) Score (0–100)</span>
+            <span class="term-tag tag-scale">Scale</span>
+          </div>
+          <p class="term-def">Anchored in World Bank CPPI methodology. Measures MPPH, automation presence, crane fleet modernity, operational model (direct operator vs. fragmented multi-terminal), vessel dwell time, and container dwell time. Confirmed CPPI rankings take precedence over estimates.</p>
+          <table class="scale-table">
+            <thead><tr><th>Score</th><th>What it means</th><th>Benchmark example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="score-100">100</span></td><td>Top global CPPI ranking, full ASC automation, sub-1-day vessel turnaround, sub-2-day container dwell time, single-operator efficiency (no fragmentation). No U.S. East Coast port currently operates at this level.</td><td>No benchmarked port scores 100. Virginia (93) is the East Coast CPPI leader driven by VIG automation and 55-foot channel ULCV efficiency.</td></tr>
+              <tr><td><span class="score-0">0</span></td><td>Bottom of global CPPI rankings, no automation, extreme vessel waiting times, high dwell times, severely fragmented multi-terminal operations with no coordination. No operating commercial port reaches this floor.</td><td>No benchmarked port is near 0. NY/NJ (62) is the lowest, reflecting multi-terminal fragmentation and pure landlord governance limiting operational levers.</td></tr>
+            </tbody>
+          </table>
+          <div class="term-examples" style="margin-top:10px;"><span class="ex-pill">Virginia: 93</span><span class="ex-pill">Everglades: 82 (Top 20% worldwide confirmed)</span><span class="ex-pill">Savannah: 80</span><span class="ex-pill">Charleston: 72</span><span class="ex-pill">PortMiami: 60</span><span class="ex-pill">NY/NJ: 62</span></div>
+        </div>
+
+        <div class="term-card cat-scale">
+          <div class="term-header">
+            <span class="term-num">24</span>
+            <span class="term-name">Infrastructure &amp; Physical Capacity Score (0–100)</span>
+            <span class="term-tag tag-scale">Scale</span>
+          </div>
+          <p class="term-def">Measures channel depth, STS crane count and classification, berth length, terminal acreage, current capacity (TEUs), long-term planned capacity, and capacity headroom (utilization rate relative to ceiling). Deeper channel + larger super post-Panamax crane fleet + more capacity headroom = higher score.</p>
+          <table class="scale-table">
+            <thead><tr><th>Score</th><th>What it means</th><th>Benchmark example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="score-100">100</span></td><td>Deepest channel on the East Coast, the largest super post-Panamax crane fleet, unlimited expansion land, all terminals fully automated, and substantial capacity headroom above current throughput. The theoretical ceiling.</td><td>No port scores 100. Virginia (98) comes closest: 55-foot channel (deepest East Coast), 29 super post-Panamax STS cranes, ASC automation at VIG, dual-ULCV channel transit capability.</td></tr>
+              <tr><td><span class="score-0">0</span></td><td>Critically insufficient channel depth (unable to receive most container vessels), no modern STS cranes, no expansion capacity, and operating at maximum physical constraint. No commercial port reaches this floor.</td><td>No benchmarked port is near 0. Port Everglades and PortMiami (both 73) share the lowest infrastructure score, reflecting small STS crane fleets (~6–8 each) and confined urban geographies limiting expansion.</td></tr>
+            </tbody>
+          </table>
+          <div class="term-examples" style="margin-top:10px;"><span class="ex-pill">Virginia: 98</span><span class="ex-pill">Savannah: 85</span><span class="ex-pill">Charleston: 83</span><span class="ex-pill">NY/NJ: 80</span><span class="ex-pill">Everglades: 73</span><span class="ex-pill">PortMiami: 73</span></div>
+        </div>
+
+        <div class="term-card cat-scale">
+          <div class="term-header">
+            <span class="term-num">25</span>
+            <span class="term-name">Financial Performance &amp; Revenue Score (0–100)</span>
+            <span class="term-tag tag-scale">Scale</span>
+          </div>
+          <p class="term-def">Measures operating revenue, operating income margin, revenue per TEU, revenue stream diversification, bond rating, capital structure, and fiscal resilience. Higher operating revenue, stronger operating income margin, better bond rating, higher revenue per TEU, and greater revenue stream diversification all score positively.</p>
+          <table class="scale-table">
+            <thead><tr><th>Score</th><th>What it means</th><th>Benchmark example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="score-100">100</span></td><td>Multi-sector revenue (containers + petroleum/cruise/other), 30%+ operating margin, top bond rating (AAA), strong revenue per TEU, no structural subsidy dependence, and sufficient free cash flow to self-fund major capital programs. The theoretical ceiling.</td><td>No port scores 100. Savannah (90) is highest among single-purpose container authorities: $698.7M revenues, S&P "excellent" credit, direct operator model, disciplined capital execution.</td></tr>
+              <tr><td><span class="score-0">0</span></td><td>Negative operating income, junk bond rating, complete dependence on government subsidy, no revenue diversification, zero capacity for capital investment without external support. No operating port reaches this floor.</td><td>No benchmarked port is near 0. PortMiami (58) is the lowest: Fitch 'A' (lowest in benchmark), constrained by higher debt service, cruise revenue concentration, and gradual container revenue build.</td></tr>
+            </tbody>
+          </table>
+          <div class="term-examples" style="margin-top:10px;"><span class="ex-pill">Savannah: 90</span><span class="ex-pill">PANYNJ: 88</span><span class="ex-pill">Virginia: 82</span><span class="ex-pill">Everglades: 70</span><span class="ex-pill">Charleston: 65</span><span class="ex-pill">PortMiami: 58</span></div>
+        </div>
+
+        <div class="term-card cat-scale">
+          <div class="term-header">
+            <span class="term-num">26</span>
+            <span class="term-name">Connectivity &amp; Hinterland Reach Score (0–100)</span>
+            <span class="term-tag tag-scale">Scale</span>
+          </div>
+          <p class="term-def">Measures on-dock rail availability (gold standard: rail directly within the terminal), inland port network size and reach, rail vs. truck modal split, ocean carrier service breadth, and geographic hinterland served. On-dock rail at the terminal — not merely rail-served intermodal yards miles away — is the highest-scoring connectivity standard.</p>
+          <table class="scale-table">
+            <thead><tr><th>Score</th><th>What it means</th><th>Benchmark example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="score-100">100</span></td><td>On-dock rail at all primary terminals, dual Class I railroad service, an inland port network serving all major national freight corridors, 40%+ rail modal share, and comprehensive carrier coverage across all major global trade lanes.</td><td>No port scores 100. Savannah (93) comes closest: Mason Mega Rail (North America's largest), CSX + NS service, two inland ports serving the Southeast, strong carrier breadth, and a 40% rail modal share target.</td></tr>
+              <tr><td><span class="score-0">0</span></td><td>No rail program, no inland port network, truck-only distribution, and service to only a narrow geographic market. Only ports in physically constrained locations with no intermodal infrastructure reach this level.</td><td>No benchmarked port reaches 0. PortMiami (48) is the lowest: truck-only, no inland ports, no on-dock rail, geographically concentrated South Florida/Latin America market.</td></tr>
+            </tbody>
+          </table>
+          <div class="term-examples" style="margin-top:10px;"><span class="ex-pill">Savannah: 93</span><span class="ex-pill">Virginia: 90</span><span class="ex-pill">Charleston: 73</span><span class="ex-pill">NY/NJ: 72</span><span class="ex-pill">Everglades: 52</span><span class="ex-pill">PortMiami: 48</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- GOVERNANCE TERMS -->
+  <div id="cat-governance" style="scroll-margin-top:20px;">
+    <div class="section-label"><div class="dot" style="background:#ef4444;"></div>Governance &amp; Methodology</div>
+    <div class="term-grid-wrap">
+      <div class="term-grid">
+
+        <div class="term-card cat-governance">
+          <div class="term-header">
+            <span class="term-num">27</span>
+            <span class="term-name">Port Authority (State Authority)</span>
+            <span class="term-tag tag-governance">Governance</span>
+          </div>
+          <p class="term-def">A public entity created by state legislation with a dedicated mandate to own, develop, and operate port infrastructure. State port authorities (SC Ports, Virginia Port Authority, Georgia Ports Authority) are independent of general state budget processes and can issue tax-exempt revenue bonds, set rates, and make capital decisions through their own boards — without competing against highway, school, or public safety priorities in a general appropriations process.</p>
+          <p class="term-context">State authority governance is the structural advantage that enables SC Ports, Virginia, and GPA to execute billion-dollar capital programs with relative speed and decisiveness. The $1.4 billion HLT bond program (SC Ports) and the $1.4 billion Gateway Investment Program (Virginia) were funded through independent revenue bond authority — a financing speed and flexibility that county-operated Port Everglades and PortMiami do not possess.</p>
+        </div>
+
+        <div class="term-card cat-governance">
+          <div class="term-header">
+            <span class="term-num">28</span>
+            <span class="term-name">County-Operated Port (Broward County / Miami-Dade)</span>
+            <span class="term-tag tag-governance">Governance</span>
+          </div>
+          <p class="term-def">Port Everglades (Broward County) and PortMiami (Miami-Dade County) are operated as departments of their respective county governments — not as independent port authorities. This means port capital investment competes with roads, schools, public safety, and every other county service at the county commission level. Port bond issuances require county approval, and major strategic investments go through multi-year county planning and budget processes rather than independent board votes.</p>
+          <p class="term-context">The governance constraint is the primary reason Port Everglades' 2024 Master/Vision Plan expansion is slower to execute than comparable programs at SC Ports or GPA. The county model provides implicit financial backstop (county credit supports bonds) but reduces decision-making speed — the direct parallel to the governance fragmentation problem identified in the transit benchmark.</p>
+          <div class="term-examples"><span class="ex-pill">Port Everglades: Broward County dept.</span><span class="ex-pill">PortMiami: Miami-Dade County enterprise dept.</span><span class="ex-pill">Advantage: county credit backstop</span><span class="ex-pill">Disadvantage: capital competes with other county priorities</span></div>
+        </div>
+
+        <div class="term-card cat-governance">
+          <div class="term-header">
+            <span class="term-num">29</span>
+            <span class="term-name">PANYNJ — Bi-State Compact Authority</span>
+            <span class="term-tag tag-governance">Governance</span>
+          </div>
+          <p class="term-def">The Port Authority of New York and New Jersey is a bi-state compact agency created in 1921 by agreement between the states of New York and New Jersey. It is governed by commissioners appointed by two governors with independent and sometimes competing political agendas. The Port Authority operates airports (JFK, LaGuardia, Newark Liberty), bridges and tunnels (George Washington Bridge, Holland Tunnel, Lincoln Tunnel, Goethals Bridge), port marine terminals, and PATH rail under a single agency umbrella.</p>
+          <p class="term-context">PANYNJ's multi-facility diversification is simultaneously its greatest financial strength (AA- Fitch rating from diversified multi-sector revenues) and its governance constraint for port-specific decision-making (port capital competes with airport redevelopments, bridge/tunnel programs, and PATH modernization for board attention and capital allocation). PANYNJ's port division cannot independently set port capital priorities without bi-state board approval — the exact governance fragmentation problem identified in this benchmark as a root cause of NY/NJ's lower governance score.</p>
+        </div>
+
+        <div class="term-card cat-governance">
+          <div class="term-header">
+            <span class="term-num">30</span>
+            <span class="term-name">Benchmark Score — Methodology Note</span>
+            <span class="term-tag tag-governance">Methodology</span>
+          </div>
+          <p class="term-def">All benchmark scores in this study are on a 0–100 scale across six equally weighted dimensions (1/6 each): Throughput &amp; Scale, Operational Efficiency (CPPI), Infrastructure &amp; Physical Capacity, Financial Performance &amp; Revenue Model, Connectivity &amp; Hinterland Reach, and Governance &amp; Strategic Positioning. The six dimension scores are averaged into an overall score. Where two ports tie overall (Savannah and Virginia at 89/100), the tiebreaker is the Throughput &amp; Scale dimension score.</p>
+          <p class="term-context"><strong>Important:</strong> All scores are internal to the U.S. East Coast Container Port Benchmarking Study 2025. They are not independently validated external industry ratings, and should not be cited as such. They reflect the research team's assessment based on publicly available audited financial statements, World Bank CPPI data, BTS Port Performance statistics, Fitch/S&P rating analyses, and official port press releases. All financial figures are from the most recently completed audited fiscal year for each port authority as of the research date.</p>
+          <div class="term-examples"><span class="ex-pill">6 dimensions, equally weighted (1/6 each)</span><span class="ex-pill">Tiebreaker: Throughput &amp; Scale</span><span class="ex-pill">Savannah #1 (89) | Virginia #2 (89) | NY/NJ #3 (78)</span><span class="ex-pill">Charleston #4 (74) | Everglades #5 (66) | Miami #6 (59)</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources-box">
+    <div class="sb-label">Sources for Glossary Definitions</div>
+    <p><strong>Audited Financial Statements:</strong> SC Ports Authority Report on Financial Statements, Year Ended June 30, 2025; SC Ports FY25 Annual Report; Virginia Port Authority ACFR FY2024; PANYNJ Annual Financial Statements CY2024; Georgia Ports Authority ACFR FY2024 &amp; FY2025; Broward County Port Everglades Financial Statements FY2024; Broward County ACFR FY2025; PortMiami ACFR FY2024.</p>
+    <p><strong>Government and Regulatory Sources:</strong> U.S. Department of Transportation, Bureau of Transportation Statistics, Port Performance Freight Statistics: 2026 Annual Report (January 10, 2026); BTS Port Performance 2025 Annual Report; American Society of Civil Engineers, 2025 Infrastructure Report Card; PANYNJ Proposed 2025 Budget; Florida DOT, Florida Seaport Profiles 2025.</p>
+    <p><strong>Industry Rankings and Analytics:</strong> World Bank / S&amp;P Global Market Intelligence, Container Port Performance Index 2023; World Bank / S&amp;P Global, The Container Port Performance Index 2020–2024 (September 2025); Fitch Ratings, PANYNJ AA- (August 6, 2025); Fitch Ratings, Miami-Dade County Seaport Senior Revenue Bonds, A Stable (August 22, 2025); S&amp;P Global, GPA Credit Rating Reaffirmation (August 19, 2025).</p>
+    <p><strong>Port Press Releases:</strong> Port of Virginia, "Virginia Completes FY 2024 with Growth in Cargo Volumes" (July 30, 2024); Port of Virginia, "Port Nears Completion of Dredging Project; Preps to Inaugurate New ULCV Berth at NIT" (January 6, 2026); GPA, "Port of Savannah Achieves Second Busiest Year Ever" (January 27, 2026); Port Everglades, "Port Everglades in Top 20% Worldwide for Container Port Performance" (September 25, 2025); Miami-Dade County, "PortMiami Announces a Banner Year" (December 2, 2025); PANYNJ, "Port Authority Reports 2024 Volumes" (February 3, 2025).</p>
+    <p><strong>Benchmark scores:</strong> All scores are internal to the U.S. East Coast Container Port Benchmarking Study 2025 and are not independently validated external industry ratings.</p>
+  </div>
+
+</div>
+
+<div class="footer" style="padding-bottom:24px;">Made with IBM Bob &nbsp;·&nbsp; U.S. East Coast Container Port Benchmarking Research 2025</div>
+
+</body>
+</html>

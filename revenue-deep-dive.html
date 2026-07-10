@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Port Revenue Deep Dive — Container Port Benchmarking</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+    color: #fff; padding: 48px 24px 36px; text-align: center;
+  }
+  .hero .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #6ee7b7; margin-bottom: 10px; }
+  .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+  .hero h1 span { color: #34d399; }
+  .hero p { font-size: 13px; color: #a7f3d0; max-width: 640px; margin: 0 auto 24px; }
+  .hero-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 860px; margin: 0 auto; }
+  .hn-chip {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700;
+    color: #fff; text-decoration: none; display: inline-block;
+    transition: background .2s, transform .15s;
+  }
+  .hn-chip:hover { background: rgba(255,255,255,.28); transform: translateY(-2px); }
+
+  /* MAIN */
+  .main { max-width: 920px; margin: 0 auto; padding: 36px 20px 60px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: #57606a; margin-bottom: 14px; padding-bottom: 7px;
+    border-bottom: 2px solid #059669; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #059669; }
+
+  /* SUMMARY STRIP */
+  .summary-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 40px; }
+  .ss-card { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.07); border-top: 4px solid #059669; }
+  .ss-card .ss-val { font-size: 28px; font-weight: 800; color: #059669; }
+  .ss-card .ss-label { font-size: 11px; color: #64748b; font-weight: 600; margin-top: 4px; }
+  .ss-card .ss-sub { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+  /* TABLE */
+  .section { margin-bottom: 44px; }
+  .table-wrap { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 11px 16px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; text-align: left; }
+  td { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr { cursor: default; transition: background .15s; }
+  tbody tr:hover td { background: #f0fdf4; }
+  .sys-cell { font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; border-radius: 20px; padding: 2px 9px; white-space: nowrap; }
+  .tag-green  { background: #dcfce7; color: #166534; }
+  .tag-yellow { background: #fef9c3; color: #854d0e; }
+  .tag-red    { background: #fee2e2; color: #991b1b; }
+
+  /* BAR */
+  .fare-bar-wrap { width: 160px; }
+  .fare-bar-bg { background: #f1f5f9; border-radius: 4px; height: 10px; overflow: hidden; margin-bottom: 3px; }
+  .fare-bar-fill { height: 100%; border-radius: 4px; }
+  .fare-pct { font-size: 11px; font-weight: 700; }
+
+  /* REVENUE CARDS */
+  .rev-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 18px; margin-bottom: 44px; }
+  .rev-card {
+    background: #fff; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    transition: transform .15s, box-shadow .2s;
+  }
+  .rev-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+  .rc-header { padding: 16px 20px 12px; border-bottom: 1px solid #f1f5f9; }
+  .rc-header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .rc-flag { font-size: 28px; }
+  .rc-title h3 { font-size: 14px; font-weight: 800; }
+  .rc-title .rc-sub { font-size: 11px; color: #64748b; }
+  .rc-score { margin-left: auto; text-align: right; }
+  .rc-score .rs-num { font-size: 22px; font-weight: 800; }
+  .rc-score .rs-lbl { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: .06em; }
+
+  .ratio-bar { height: 8px; border-radius: 4px; overflow: hidden; display: flex; margin: 10px 0 4px; }
+  .ratio-container { background: #059669; }
+  .ratio-nonfar { background: #34d399; }
+  .ratio-subsidy { background: #e5e7eb; }
+  .ratio-legend { display: flex; gap: 12px; flex-wrap: wrap; }
+  .rl-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #64748b; }
+  .rl-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  .rc-streams { padding: 12px 20px; border-bottom: 1px solid #f1f5f9; }
+  .rc-streams-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #94a3b8; margin-bottom: 8px; }
+  .stream-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .stream-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .stream-name { font-size: 12px; color: #374151; flex: 1; }
+  .stream-tag { font-size: 10px; font-weight: 700; border-radius: 10px; padding: 1px 8px; }
+  .st-core { background: #dcfce7; color: #166534; }
+  .st-grow { background: #dbeafe; color: #1e40af; }
+  .st-new  { background: #f3e8ff; color: #6b21a8; }
+  .st-miss { background: #fee2e2; color: #991b1b; }
+
+  .rc-insight { padding: 12px 20px 16px; background: #f8fafc; }
+  .rc-insight .ri-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #94a3b8; margin-bottom: 5px; }
+  .rc-insight p { font-size: 12px; color: #374151; line-height: 1.6; }
+
+  /* OPPORTUNITY GRID */
+  .opp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 44px; }
+  .opp-card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .opp-card .oc-icon { font-size: 28px; margin-bottom: 8px; }
+  .opp-card .oc-title { font-size: 13px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+  .opp-card .oc-model { font-size: 10px; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+  .opp-card .oc-desc { font-size: 12px; color: #374151; margin-bottom: 10px; line-height: 1.6; }
+  .opp-card .oc-potential { font-size: 11px; font-weight: 700; color: #065f46; background: #ecfdf5; border-radius: 6px; padding: 5px 10px; display: inline-block; }
+
+  /* CALLOUT */
+  .compare-callout {
+    background: linear-gradient(135deg, #fef2f2, #fff5f5);
+    border: 2px solid #fca5a5; border-radius: 14px;
+    padding: 24px 28px; margin-bottom: 44px;
+  }
+  .compare-callout h3 { font-size: 16px; font-weight: 800; color: #dc2626; margin-bottom: 10px; }
+  .compare-callout p { font-size: 13px; color: #374151; margin-bottom: 10px; }
+  .compare-callout p:last-child { margin-bottom: 0; }
+  .cc-stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 16px 0; }
+  .cc-stat { text-align: center; background: #fff; border-radius: 10px; padding: 12px; border: 1px solid #fca5a5; }
+  .cc-stat .cs-val { font-size: 22px; font-weight: 800; color: #dc2626; }
+  .cc-stat .cs-lbl { font-size: 10px; color: #64748b; font-weight: 600; }
+
+  /* ROADMAP */
+  .roadmap-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 44px; }
+  .rm-card { border-radius: 12px; padding: 18px; }
+  .rm-card .rm-phase { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+  .rm-card h4 { font-size: 13px; font-weight: 800; margin-bottom: 10px; }
+  .rm-card ul { padding-left: 16px; font-size: 12px; color: #374151; }
+  .rm-card ul li { margin-bottom: 5px; }
+  .rm-near  { background: #fef2f2; border: 1.5px solid #fca5a5; }
+  .rm-near .rm-phase, .rm-near h4 { color: #dc2626; }
+  .rm-mid   { background: #fff7ed; border: 1.5px solid #fdba74; }
+  .rm-mid .rm-phase, .rm-mid h4 { color: #c2410c; }
+  .rm-long  { background: #f0fdf4; border: 1.5px solid #86efac; }
+  .rm-long .rm-phase, .rm-long h4 { color: #166534; }
+
+  /* BACK */
+  .back-bar { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .back-btn {
+    display: inline-block; background: #fff; border: 1.5px solid #e2e8f0;
+    border-radius: 10px; padding: 8px 16px; font-size: 12px; font-weight: 700;
+    text-decoration: none; color: #374151; transition: all .15s;
+  }
+  .back-btn:hover { border-color: #059669; color: #059669; }
+  .back-btn.primary { background: #059669; color: #fff; border-color: #059669; }
+  .back-btn.primary:hover { background: #047857; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">IBM Benchmarking Research · 2025–2026</div>
+  <h1>Port Revenue <span>Deep Dive</span></h1>
+  <p>How 6 U.S. East Coast container ports generate revenue — operating income, revenue per TEU, governance model impact, and a prioritized opportunity roadmap for the Port of Charleston.</p>
+  <div class="hero-nav">
+    <a class="hn-chip" href="global-transit-benchmarking-interactive-one-pager.html">← Rankings Dashboard</a>
+    <a class="hn-chip" href="#section-rankings">Revenue Rankings</a>
+    <a class="hn-chip" href="#section-profiles">Port Profiles</a>
+    <a class="hn-chip" href="#section-charleston">Charleston Opportunity</a>
+    <a class="hn-chip" href="#section-roadmap">Revenue Roadmap</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- BACK LINKS -->
+  <div class="back-bar" style="margin-top:8px;">
+    <a class="back-btn primary" href="global-transit-benchmarking-interactive-one-pager.html">← Rankings Dashboard</a>
+    <a class="back-btn" href="profiles/savannah-gpa.html">⚓ Savannah</a>
+    <a class="back-btn" href="profiles/virginia-norfolk.html">⚓ Virginia</a>
+    <a class="back-btn" href="profiles/nynj-panynj.html">🗽 NY/NJ</a>
+    <a class="back-btn" href="profiles/charleston-sc-ports.html">⚓ Charleston</a>
+    <a class="back-btn" href="profiles/port-everglades.html">⚓ Port Everglades</a>
+    <a class="back-btn" href="profiles/portmiami.html">⚓ PortMiami</a>
+  </div>
+
+  <!-- SUMMARY STRIP -->
+  <div class="summary-strip">
+    <div class="ss-card">
+      <div class="ss-val">$698.7M</div>
+      <div class="ss-label">Highest Revenue</div>
+      <div class="ss-sub">Port of Savannah — FY2024</div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-val">$426.5M</div>
+      <div class="ss-label">Charleston Revenue</div>
+      <div class="ss-sub">FY2025 (July 1, 2024 – June 30, 2025)</div>
+    </div>
+    <div class="ss-card" style="border-top-color:#dc2626;">
+      <div class="ss-val" style="color:#dc2626;">29.7%</div>
+      <div class="ss-label">Best Operating Margin</div>
+      <div class="ss-sub">Port Everglades FY2024 ($64M on $215.5M)</div>
+    </div>
+    <div class="ss-card" style="border-top-color:#3b82f6;">
+      <div class="ss-val" style="color:#3b82f6;">$187</div>
+      <div class="ss-label">Highest Revenue/TEU</div>
+      <div class="ss-sub">Port Everglades (tri-sector diversification)</div>
+    </div>
+  </div>
+
+  <!-- REVENUE RANKINGS TABLE -->
+  <div class="section" id="section-rankings">
+    <div class="section-label"><div class="dot"></div>Revenue Rankings — All 6 Ports by Operating Revenue</div>
+    <div style="background:#fef9c3;border:1px solid #f59e0b;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#374151;line-height:1.6;">
+      <strong>Governance model insight:</strong> The operator vs. landlord distinction is the single most important determinant of revenue per TEU. GPA (direct operator) generates ~$127/TEU. PANYNJ (pure landlord) generates ~$50–56/TEU on port revenues alone — because it shares terminal handling revenue with APM Terminals, GCT, and PNCT. Charleston's hybrid model sits between these extremes.
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Port</th>
+            <th>Operating Revenue</th>
+            <th>Operating Income</th>
+            <th>Revenue/TEU</th>
+            <th>Governance Model</th>
+            <th>Revenue Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="sys-cell">⚓ Port of Savannah (GPA)</div></td>
+            <td>$698.7M (FY2024)</td>
+            <td><span class="tag tag-green">Strong (not separately disclosed)</span></td>
+            <td><div class="fare-bar-wrap"><div class="fare-bar-bg"><div class="fare-bar-fill" style="width:67%;background:#22c55e;"></div></div><div class="fare-pct" style="color:#16a34a;">~$127/TEU</div></div></td>
+            <td><span class="tag tag-green">Direct Operator</span></td>
+            <td><strong style="color:#16a34a;">90/100</strong></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">🗽 Port of NY/NJ (PANYNJ)</div></td>
+            <td>~$450–500M port; $7.1B agency</td>
+            <td><span class="tag tag-green">Strong ($113M+ port segment)</span></td>
+            <td><div class="fare-bar-wrap"><div class="fare-bar-bg"><div class="fare-bar-fill" style="width:28%;background:#ef4444;"></div></div><div class="fare-pct" style="color:#dc2626;">~$50–56/TEU (port)</div></div></td>
+            <td><span class="tag tag-yellow">Pure Landlord</span></td>
+            <td><strong style="color:#16a34a;">88/100</strong></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">⚓ Port of Virginia (VPA)</div></td>
+            <td>~$450–550M est. (FY2024)</td>
+            <td><span class="tag tag-green">$113M (confirmed)</span></td>
+            <td><div class="fare-bar-wrap"><div class="fare-bar-bg"><div class="fare-bar-fill" style="width:75%;background:#22c55e;"></div></div><div class="fare-pct" style="color:#16a34a;">~$128–157/TEU</div></div></td>
+            <td><span class="tag tag-green">Hybrid (VIT subsidiary)</span></td>
+            <td><strong style="color:#16a34a;">82/100</strong></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">⚓ Port Everglades</div></td>
+            <td>$215.5M (FY2024)</td>
+            <td><span class="tag tag-green">$64.0M (29.7% margin)</span></td>
+            <td><div class="fare-bar-wrap"><div class="fare-bar-bg"><div class="fare-bar-fill" style="width:100%;background:#22c55e;"></div></div><div class="fare-pct" style="color:#16a34a;">~$187–196/TEU</div></div></td>
+            <td><span class="tag tag-yellow">County Operator/Mixed</span></td>
+            <td><strong style="color:#f59e0b;">70/100</strong></td>
+          </tr>
+          <tr style="background:#fef9c3;">
+            <td><div class="sys-cell">⚓ <strong>Port of Charleston (SC Ports)</strong></div></td>
+            <td>$426.5M (FY2025)</td>
+            <td><span class="tag tag-yellow">$26.7M (6.3% margin)</span></td>
+            <td><div class="fare-bar-wrap"><div class="fare-bar-bg"><div class="fare-bar-fill" style="width:89%;background:#f59e0b;"></div></div><div class="fare-pct" style="color:#b45309;">~$169/TEU</div></div></td>
+            <td><span class="tag tag-yellow">Hybrid Landlord/Operator</span></td>
+            <td><strong style="color:#ef4444;">65/100</strong></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">⚓ PortMiami</div></td>
+            <td>~$150–175M est. (FY2024)</td>
+            <td><span class="tag tag-red">Constrained (Fitch A)</span></td>
+            <td><div class="fare-bar-wrap"><div class="fare-bar-bg"><div class="fare-bar-fill" style="width:74%;background:#f59e0b;"></div></div><div class="fare-pct" style="color:#b45309;">~$140–165/TEU</div></div></td>
+            <td><span class="tag tag-red">County Landlord + Operating</span></td>
+            <td><strong style="color:#ef4444;">58/100</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHARLESTON GAP CALLOUT -->
+  <div class="compare-callout">
+    <h3>Charleston's Revenue Gap — The Strategic Problem</h3>
+    <p>Charleston's FY2024 operating loss ($2.3 million) and FY2025's thin 6.3% operating margin ($26.7M on $426.5M) are symptoms of a revenue model that depends too heavily on a single volatile revenue stream — container handling fees that track freight rate cycles — supplemented by insufficient non-container revenue and a state government backstop. Three structural issues compound the problem:</p>
+    <div class="cc-stat-row">
+      <div class="cc-stat">
+        <div class="cs-val">$22.1M</div>
+        <div class="cs-lbl">State grants FY2025 — structural state subsidy dependence; port not fully self-funding at current revenue levels</div>
+      </div>
+      <div class="cc-stat">
+        <div class="cs-val">~$0</div>
+        <div class="cs-lbl">Petroleum revenue, real estate development revenue, or on-port logistics park income — streams Everglades and Virginia have built</div>
+      </div>
+      <div class="cc-stat">
+        <div class="cs-val">$1.4B</div>
+        <div class="cs-lbl">Long-term debt (HLT bonds) — thin operating margin must service substantial below-the-line debt obligations</div>
+      </div>
+    </div>
+    <p>The path to financial resilience is clear: HLT volume ramp-up driving higher container revenue, storage revenue optimization, cruise expansion, and real estate development of the former Navy Base land adjacent to HLT. Federal PIDP/INFRA grant capture modeled on Virginia's Gateway Investment Program would reduce state dependency and debt concentration risk.</p>
+  </div>
+
+  <!-- PORT REVENUE PROFILES -->
+  <div class="section" id="section-profiles">
+    <div class="section-label"><div class="dot"></div>Revenue Model Deep Dive — All 6 Ports</div>
+    <div class="rev-cards-grid" id="revCardsGrid"></div>
+  </div>
+
+  <!-- CHARLESTON OPPORTUNITY -->
+  <div class="section" id="section-charleston">
+    <div class="section-label"><div class="dot" style="background:#7c3aed;"></div>Charleston Revenue Opportunities — Modeled on Benchmark Peers</div>
+    <div class="opp-grid">
+      <div class="opp-card">
+        <div class="oc-icon">🏗️</div>
+        <div class="oc-title">Container Storage Optimization</div>
+        <div class="oc-model">Modeled on: Savannah GPA Storage Growth</div>
+        <div class="oc-desc">Premium dwell pricing, covered storage expansion, and active reefer plug infrastructure. FY2025 storage revenue was already a growth driver — systematize and expand. Top U.S. reefer ports command significant premium fees.</div>
+        <span class="oc-potential">Near-term: $10–25M/yr incremental</span>
+      </div>
+      <div class="opp-card">
+        <div class="oc-icon">🚢</div>
+        <div class="oc-title">Cruise Terminal Expansion</div>
+        <div class="oc-model">Modeled on: PortMiami Cruise Model</div>
+        <div class="oc-desc">Charleston is an authentic, high-demand cruise destination. A second home-port berth and expanded cruise service contracts would add a genuinely counter-cyclical revenue stream — cruise revenue does not correlate with container freight rate cycles.</div>
+        <span class="oc-potential">Mid-term: $15–30M/yr additional cruise revenue</span>
+      </div>
+      <div class="opp-card">
+        <div class="oc-icon">🏢</div>
+        <div class="oc-title">HLT Logistics Park Development</div>
+        <div class="oc-model">Modeled on: Virginia/Savannah Adjacent Development</div>
+        <div class="oc-desc">The former Navy Base land adjacent to HLT is undeveloped real estate that, developed as an on-port logistics campus, would generate lease revenue and storage fees independent of shipping market cycles — exactly the real estate diversification that Savannah and Virginia have begun.</div>
+        <span class="oc-potential">Long-term: $20–50M/yr at scale</span>
+      </div>
+      <div class="opp-card">
+        <div class="oc-icon">🚂</div>
+        <div class="oc-title">Third Inland Port — Charlotte NC Corridor</div>
+        <div class="oc-model">Modeled on: GPA ARP + Blue Ridge Model</div>
+        <div class="oc-desc">Charlotte is the largest major Southeast freight market not firmly served by Charleston's existing Greer and Dillon inland ports. A third facility rail-connected to HLT would capture container flows from the country's fastest-growing major metro area and generate inland port fee revenue.</div>
+        <span class="oc-potential">Mid-term: $5–15M/yr inland port fees</span>
+      </div>
+      <div class="opp-card">
+        <div class="oc-icon">🏛️</div>
+        <div class="oc-title">Federal Grant Capture (PIDP/INFRA)</div>
+        <div class="oc-model">Modeled on: Virginia Gateway Investment Federal Funding</div>
+        <div class="oc-desc">Virginia captured substantial PIDP and INFRA grants for its Gateway Investment Program, reducing debt burden and improving financial flexibility. SC Ports should establish a dedicated federal funding engagement program benchmarked against Virginia's grant capture rate to reduce reliance on state appropriations.</div>
+        <span class="oc-potential">Structural: Reduce $22.1M state dependency</span>
+      </div>
+      <div class="opp-card">
+        <div class="oc-icon">🤖</div>
+        <div class="oc-title">Automation at HLT Phase 2 (ASC Evaluation)</div>
+        <div class="oc-model">Modeled on: Virginia VIG ASC Deployment</div>
+        <div class="oc-desc">A formal ASC feasibility assessment timed to HLT Phase 2 build-out (when new cranes will be procured) would deliver measurable CPPI improvement, reduce per-unit operating costs, and signal to premium ULCV services that Charleston is committed to world-class terminal operations — potentially capturing carrier service selections equivalent to CMA CGM's Virginia routing decision.</div>
+        <span class="oc-potential">Long-term: Cost reduction + volume premium</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTNERSHIPS TABLE -->
+  <div class="section">
+    <div class="section-label"><div class="dot" style="background:#f59e0b;"></div>Key Revenue Insights — What Each Port's Model Reveals for Charleston</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Peer Port</th><th>Key Revenue Differentiator</th><th>Charleston Application</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="sys-cell">⚓ Port of Savannah (GPA)</div></td>
+            <td>Direct operator model captures 100% of wharfage, storage, and handling fees — no revenue sharing with private operators</td>
+            <td>HLT direct operator model (already SC Ports' approach) — ensure HLT Phase 2+ does not introduce private operator lease dilution</td>
+            <td><span class="tag tag-green">Critical</span></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">⚓ Port of Virginia (VPA)</div></td>
+            <td>$83M rail infrastructure + federal grant capture ($1.4B total Gateway program, partially federally funded)</td>
+            <td>On-dock rail at HLT + dedicated federal grant engagement program; Virginia's model reduces per-unit debt burden vs. pure bond financing</td>
+            <td><span class="tag tag-green">High</span></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">⚓ Port Everglades</div></td>
+            <td>Tri-sector model (containers + petroleum + cruise) produces 29.7% operating margin even at $215.5M revenue — counter-cyclical resilience</td>
+            <td>Cruise expansion is Charleston's most actionable non-container revenue stream; authentic destination + existing Columbus St. terminal = credible growth pathway</td>
+            <td><span class="tag tag-green">High</span></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">⚓ Port of Savannah (GPA)</div></td>
+            <td>Two inland ports (ARP + Blue Ridge) serve Atlanta metro — the largest Southeast logistics market — extending effective hinterland and generating inland fees</td>
+            <td>Third inland port in Charlotte/Western NC corridor would give Charleston direct reach into fastest-growing US major metro currently underserved by SC Ports</td>
+            <td><span class="tag tag-yellow">Medium-High</span></td>
+          </tr>
+          <tr>
+            <td><div class="sys-cell">🗽 PANYNJ (NY/NJ)</div></td>
+            <td>AA- credit rating from multi-facility diversification provides lowest-cost capital access of any port in benchmark</td>
+            <td>SC Ports' investment-grade rating is already a strength; focus is maintaining rating headroom as HLT debt matures and Phase 2 adds incremental obligations</td>
+            <td><span class="tag tag-yellow">Monitor</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section" id="section-roadmap">
+    <div class="section-label"><div class="dot" style="background:#dc2626;"></div>Charleston Revenue Diversification Roadmap</div>
+    <div class="roadmap-row">
+      <div class="rm-card rm-near">
+        <div class="rm-phase">Near-Term — 0 to 18 Months</div>
+        <h4>Optimize Existing Streams</h4>
+        <ul>
+          <li>Implement premium container dwell pricing at Wando Welch Terminal</li>
+          <li>Expand reefer plug infrastructure and publish differentiated reefer fees</li>
+          <li>Launch dedicated federal grant engagement (PIDP/INFRA) benchmarked to Virginia's capture rate</li>
+          <li>Commission HLT Phase 2 capital plan incorporating ASC feasibility assessment</li>
+          <li>Initiate cruise terminal expansion feasibility (second home-port berth)</li>
+        </ul>
+      </div>
+      <div class="rm-card rm-mid">
+        <div class="rm-phase">Mid-Term — 18 to 48 Months</div>
+        <h4>Build New Pillars</h4>
+        <ul>
+          <li>Break ground on HLT Phase 2 (add capacity; HLT ramp-up reduces per-TEU debt service burden)</li>
+          <li>Secure and open second cruise home-port berth at Columbus Street Terminal</li>
+          <li>Identify and site Third Inland Port (Charlotte/I-77 corridor; rail-connected to HLT via CSX/NS)</li>
+          <li>Commence former Navy Base land planning for HLT logistics park development</li>
+          <li>Reduce state appropriations dependence below $15M through grant capture and revenue growth</li>
+        </ul>
+      </div>
+      <div class="rm-card rm-long">
+        <div class="rm-phase">Long-Term — 48+ Months</div>
+        <h4>Platform Transformation</h4>
+        <ul>
+          <li>Complete HLT full build-out to 2.4M TEU capacity — transforms Charleston from 2.5M to 4.5M TEU competitive platform</li>
+          <li>Open HLT logistics park (on-port warehousing, distribution center leasing — recurring real estate revenue independent of shipping cycles)</li>
+          <li>Open Third Inland Port in Charlotte corridor; target 40%+ rail modal share matching Savannah's goal</li>
+          <li>Target operating margin improvement to 15%+ (from 6.3% FY2025) as HLT volume drives revenue leverage over fixed cost base</li>
+          <li>Eliminate structural state appropriations dependence — SC Ports should be fully self-funding through operating revenues and federal grants</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACK NAV -->
+  <div class="back-bar">
+    <a class="back-btn primary" href="global-transit-benchmarking-interactive-one-pager.html">← Rankings Dashboard</a>
+    <a class="back-btn" href="profiles/charleston-sc-ports.html">⚓ Charleston Full Profile</a>
+    <a class="back-btn" href="profiles/savannah-gpa.html">⚓ Savannah Revenue Model</a>
+    <a class="back-btn" href="profiles/virginia-norfolk.html">⚓ Virginia Revenue Model</a>
+    <a class="back-btn" href="profiles/port-everglades.html">⚓ Port Everglades Revenue Model</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+
+<!-- SOURCES -->
+<div style="max-width:920px;margin:0 auto 40px;padding:0 20px;">
+  <div style="background:#fff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-top:4px solid #57606a;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#57606a;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid #e5e7eb;">Sources &amp; Data Notes — All 6 Ports</div>
+    <p style="font-size:11px;color:#57606a;margin-bottom:8px;line-height:1.6;font-style:italic;background:#fef9c3;padding:7px 10px;border-radius:6px;border-left:3px solid #f59e0b;"><strong style="color:#374151;">Disclaimer:</strong> All revenue scores and financial figures are from audited financial statements or Fitch/S&P rating analyses. Estimated figures (Port of Virginia total revenues, PortMiami total revenues) are derived from confirmed operating income data and standard maritime industry cost structure assumptions. They are labeled "estimated" and should be verified against each port's most recently published audited financial statements.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:8px;line-height:1.7;"><strong style="color:#1f2328;">SC Ports Authority:</strong> FY2025 operating revenues $426.5M; operating income $26.7M; non-operating revenues $36.8M (state grants $22.1M + investment income $16.5M); long-term debt $1.4B; total assets $3.1B; net position $1.57B. Source: SC Ports Authority Report on Financial Statements, Year Ended June 30, 2025.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:8px;line-height:1.7;"><strong style="color:#1f2328;">Georgia Ports Authority:</strong> FY2024 operating revenues $698.7M — "third-best annual operating revenues in the authority's history." S&P Global credit rating "Excellent" (AA-range) reaffirmed August 19, 2025 during active expansion. Source: GPA ACFR FY2024; S&P Rating Reaffirmation.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:8px;line-height:1.7;"><strong style="color:#1f2328;">Port of Virginia:</strong> FY2024 operating income $113M (confirmed in VPA press release July 30, 2024). Total revenues estimated ~$450–550M based on $113M operating income and standard maritime cost structures (operating expenses typically 70–80% of revenues for well-run port authorities). AA-range bond rating; $1.4B Gateway Investment Program substantially complete. Source: VPA FY2024 ACFR; VPA press releases.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:8px;line-height:1.7;"><strong style="color:#1f2328;">PANYNJ:</strong> 2025 Gross Operating Revenue Budget $7.1B (total agency). Port marine segment revenues estimated ~$450–500M — approximately 6–7% of total agency revenues. Port-segment revenue per TEU ~$50–56 reflects landlord model revenue dilution. Fitch AA- rating (August 6, 2025). Source: PANYNJ Proposed 2025 Budget; Fitch Ratings August 2025.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:8px;line-height:1.7;"><strong style="color:#1f2328;">Port Everglades:</strong> FY2024 operating revenues $215.5M (+18.1% YoY from $182.4M); operating income $64.0M (29.7% margin); net position increased $99.4M. Top 20% worldwide CPPI ranking confirmed September 25, 2025 press release. Source: Broward County Port Everglades Financial Statements FY2024; Port Everglades press release September 2025.</p>
+    <p style="font-size:12px;color:#57606a;line-height:1.7;"><strong style="color:#1f2328;">PortMiami:</strong> FY2024 revenues estimated ~$150–175M based on Fitch rating commentary; revenue per TEU ~$140–165 (estimated). Fitch Rating A Stable (August 22, 2025); commentary notes "constrained by the need for continued operating revenue growth and strength in operating cash flow generation." FY2024 results maintained "despite higher annual debt service" from Deep Dredge. Source: Fitch Ratings PortMiami August 2025; Miami-Dade County press release December 2, 2025.</p>
+  </div>
+</div>
+
+<script>
+const PORTS = [
+  {
+    flag:'⚓', name:'Port of Savannah', country:'Georgia Ports Authority', revenueScore:90,
+    profileFile:'profiles/savannah-gpa.html', topColor:'#d97706',
+    totalBudget:'FY2024 operating revenues: $698.7M (third-best in GPA history)',
+    containerPct:80, nonContainerPct:20, operatorNote:'Direct operator — 100% revenue capture, no private terminal operator sharing.',
+    streams:[
+      {icon:'📦', name:'Container Wharfage & Terminal Handling (Garden City Terminal)', tag:'st-core'},
+      {icon:'🏪', name:'Container Storage Revenue (growing)', tag:'st-core'},
+      {icon:'🚗', name:'Brunswick Port — Colonel\'s Island (Ro-Ro/Auto)', tag:'st-core'},
+      {icon:'🚂', name:'Appalachian Regional Port (ARP) — CSX rail-connected', tag:'st-grow'},
+      {icon:'🚂', name:'Blue Ridge Inland Port — Atlanta metro reach', tag:'st-grow'},
+      {icon:'🔧', name:'Equipment Rental & Non-Container Maritime Fees', tag:'st-core'},
+    ],
+    insight:'GPA is the benchmark for revenue performance among single-purpose container port authorities. Its $698.7M FY2024 revenues reflect the direct operator advantage — Garden City Terminal is operated by GPA itself, retaining 100% of wharfage, storage, and handling fees. Revenue per TEU (~$127) is lower than Everglades and Charleston because scale dilutes per-unit revenue, but absolute revenue is 1.6x Charleston on 2.2x the TEU volume. The operator model premium is the single most actionable insight for Charleston\'s HLT build-out strategy.'
+  },
+  {
+    flag:'🗽', name:'Port of NY & NJ', country:'PANYNJ', revenueScore:88,
+    profileFile:'profiles/nynj-panynj.html', topColor:'#b45309',
+    totalBudget:'Port segment est. ~$450–500M; total agency 2025 budget: $7.1B',
+    containerPct:7, nonContainerPct:93, operatorNote:'Pure landlord on port segment. Multi-facility agency (airports + bridges/tunnels + port + PATH) — AA- Fitch rating driven by diversification, not port performance.',
+    streams:[
+      {icon:'🏢', name:'Landlord Lease Fees — APM Terminals, GCT, PNCT, Red Hook', tag:'st-core'},
+      {icon:'✈️', name:'Airport Revenues (JFK, LaGuardia, Newark EWR)', tag:'st-core'},
+      {icon:'🌉', name:'Bridges & Tunnels (GWB, Holland, Lincoln, Bayonne)', tag:'st-core'},
+      {icon:'🚇', name:'PATH Rail Farebox', tag:'st-core'},
+      {icon:'🚂', name:'ExpressRail Program (on-dock rail at Port Newark & Howland Hook)', tag:'st-grow'},
+    ],
+    insight:'PANYNJ scores 88/100 on revenue — the highest score in the benchmark — because of its multi-facility enterprise diversification, not its port-specific performance. Port marine revenues (~$450–500M estimated) represent only 6–7% of total agency revenue. Revenue per TEU on port segment is ~$50–56 — the lowest in the benchmark — because the landlord model shares terminal revenue with APM, GCT, and PNCT. The Fitch AA- rating is earned by airports and toll bridges, not by containers. This distinction is critical for cross-port comparison.'
+  },
+  {
+    flag:'⚓', name:'Port of Virginia', country:'Virginia Port Authority', revenueScore:82,
+    profileFile:'profiles/virginia-norfolk.html', topColor:'#6b7280',
+    totalBudget:'FY2024 operating revenues est. ~$450–550M; operating income $113M (confirmed)',
+    containerPct:85, nonContainerPct:15, operatorNote:'Hybrid: VPA owns assets; VIT (100% VPA subsidiary) operates — equivalent to direct operator for revenue capture purposes.',
+    streams:[
+      {icon:'📦', name:'Container Wharfage & Terminal Handling (VIT)', tag:'st-core'},
+      {icon:'🚂', name:'Rail Intermodal Fees (on-dock rail, $83M rail program)', tag:'st-grow'},
+      {icon:'🏪', name:'Container Storage & Equipment Rental', tag:'st-core'},
+      {icon:'🚂', name:'Virginia Inland Port (Front Royal) — CSX', tag:'st-core'},
+      {icon:'🏛️', name:'Federal Grants (PIDP/INFRA — Gateway Investment Program)', tag:'st-grow'},
+    ],
+    insight:'Virginia\'s $113M operating income is the highest confirmed single-port operating income in the benchmark. The VIT subsidiary structure effectively captures the full operator model revenue without creating a private lessee conflict. Virginia\'s operating margin (~20–25% estimated) is the highest for a large-volume port in the benchmark — reflecting the combination of scale, efficiency, and the Gateway Investment Program\'s infrastructure improvements now generating returns. Federal grant capture (as part of the $1.4B Gateway program) is the most directly replicable model for Charleston\'s near-term federal funding strategy.'
+  },
+  {
+    flag:'⚓', name:'Port Everglades', country:'Broward County, FL', revenueScore:70,
+    profileFile:'profiles/port-everglades.html', topColor:'#0891b2',
+    totalBudget:'FY2024 operating revenues: $215.5M (+18.1% YoY); operating income: $64.0M',
+    containerPct:62, nonContainerPct:38, operatorNote:'County department — port capital competes with county priorities. Three-pillar revenue model (containers + petroleum + cruise) is the benchmark\'s most diversified by sector.',
+    streams:[
+      {icon:'📦', name:'Container/Cargo — Wharfage, Dockage, Terminal Handling (Southport)', tag:'st-core'},
+      {icon:'⛽', name:'Petroleum Distribution — Florida\'s largest petroleum port (12 counties)', tag:'st-core'},
+      {icon:'🚢', name:'Cruise Revenues — Top 3 worldwide cruise homeport', tag:'st-core'},
+      {icon:'🔧', name:'Equipment Rental & Non-Cargo Fees', tag:'st-core'},
+      {icon:'📐', name:'SAC Widening (Southport Access Channel — capacity improvement)', tag:'st-grow'},
+    ],
+    insight:'Port Everglades\' 29.7% operating margin on $215.5M revenues is the highest operating margin in the benchmark. The tri-sector model (containers + petroleum + cruise) provides counter-cyclical resilience — a shipping market downturn that depresses container revenue does not affect petroleum distribution fees or cruise homeport revenues. Revenue per TEU (~$187–196) is the highest in the benchmark, reflecting the petroleum and cruise supplement on a smaller TEU base. This is the direct model for Charleston\'s cruise expansion strategy — Everglades proves that a genuine cruise destination can generate operating margins 5x Charleston\'s current 6.3%.'
+  },
+  {
+    flag:'⚓', name:'Port of Charleston', country:'SC Ports Authority', revenueScore:65,
+    profileFile:'profiles/charleston-sc-ports.html', topColor:'#3b82f6',
+    totalBudget:'FY2025 operating revenues: $426.5M; operating income: $26.7M (6.3% margin)',
+    containerPct:50, nonContainerPct:50, operatorNote:'Hybrid landlord/operator — WWT more landlord-oriented; HLT more direct SC Ports operation. State appropriations ($22.1M FY2025) supplement thin operating income.',
+    streams:[
+      {icon:'📦', name:'Container Handling Revenue (~50% of total revenues)', tag:'st-core'},
+      {icon:'🏪', name:'Container Storage Revenue (growing; FY2025 key driver)', tag:'st-grow'},
+      {icon:'🚢', name:'Cruise Revenue — Columbus Street Cruise Terminal', tag:'st-core'},
+      {icon:'⚓', name:'Breakbulk & Non-Container Cargo (smaller contribution)', tag:'st-core'},
+      {icon:'🏛️', name:'State Grants & Operating Appropriations ($22.1M FY2025)', tag:'st-core'},
+      {icon:'❌', name:'No Petroleum Revenue, No Real Estate Development Revenue', tag:'st-miss'},
+      {icon:'❌', name:'No HLT Logistics Park Revenue (future opportunity)', tag:'st-miss'},
+    ],
+    insight:'Charleston\'s revenue model is a single-pillar operation (containers, ~50%) supplemented by growing storage, cruise, and a state backstop. The FY2024 operating loss demonstrates the model has no buffer when its primary revenue source weakens. The FY2025 return to profitability ($26.7M) is real but the 6.3% margin is thin and state-subsidized. The opportunity is clear: storage optimization (near-term), cruise expansion (mid-term), and HLT logistics park development (long-term) would each add counter-cyclical revenue streams that reduce dependence on container handling fee cycles.'
+  },
+  {
+    flag:'⚓', name:'PortMiami', country:'Miami-Dade County, FL', revenueScore:58,
+    profileFile:'profiles/portmiami.html', topColor:'#ef4444',
+    totalBudget:'FY2024 revenues est. ~$150–175M; Fitch A Stable (lowest confirmed rating in benchmark)',
+    containerPct:30, nonContainerPct:70, operatorNote:'County enterprise — cruise dominant. Three private cargo operators (POMTOC, Seaboard Marine, SFCT) run container terminals. Deep Dredge debt service constrains current financial flexibility.',
+    streams:[
+      {icon:'🚢', name:'Cruise Revenue — World\'s #1 homeport (Royal Caribbean, Carnival, Norwegian, MSC, Disney)', tag:'st-core'},
+      {icon:'📦', name:'Container/Cargo Revenue (3 operators — POMTOC, Seaboard, SFCT)', tag:'st-core'},
+      {icon:'🌎', name:'Free Trade Zone #32 — Latin American/Caribbean re-export trade', tag:'st-core'},
+      {icon:'⚓', name:'Dockage, Wharfage & Port Services', tag:'st-core'},
+      {icon:'⚡', name:'PortMiami Electrification Project (INFRA Grant — federal investment)', tag:'st-new'},
+    ],
+    insight:'PortMiami\'s Fitch A Stable rating — the lowest confirmed rating in the benchmark — reflects the financial tightening from Deep Dredge debt service combined with cruise revenue concentration and slower-than-projected container growth. Revenue per TEU (~$140–165 estimated) is below Charleston ($169) despite smaller container volume, because cruise revenue is concentrated in a different revenue category and the container landlord model dilutes container-specific per-TEU capture. The strategic narrative is sound (cruise leadership + Latin American container gateway), but the financial execution gap vs. Virginia, Savannah, and even Charleston is significant.'
+  }
+];
+
+function buildRevCards(){
+  const g = document.getElementById('revCardsGrid');
+  PORTS.forEach(s=>{
+    const card = document.createElement('div');
+    card.className = 'rev-card';
+    const streamsHTML = s.streams.map(st=>`
+      <div class="stream-row">
+        <div class="stream-icon">${st.icon}</div>
+        <div class="stream-name">${st.name}</div>
+        <span class="stream-tag ${st.tag}">${
+          st.tag==='st-core' ? 'Core' :
+          st.tag==='st-grow' ? 'Growing' :
+          st.tag==='st-new'  ? 'Emerging' : 'Missing'
+        }</span>
+      </div>
+    `).join('');
+    const noteHTML = `
+      <div style="margin-top:8px;padding:8px 10px;background:#fef9c3;border-radius:6px;border-left:3px solid #f59e0b;">
+        <span style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#854d0e;">Governance &amp; Revenue Model</span>
+        <p style="font-size:11px;color:#374151;margin-top:3px;line-height:1.5;">${s.operatorNote}</p>
+      </div>`;
+    const scoreColor = s.revenueScore>=85?'#16a34a':s.revenueScore>=65?'#b45309':'#dc2626';
+    card.innerHTML = `
+      <div class="rc-header" style="border-top:4px solid ${s.topColor}">
+        <div class="rc-header-top">
+          <div class="rc-flag">${s.flag}</div>
+          <div class="rc-title">
+            <h3>${s.name}</h3>
+            <div class="rc-sub">${s.country}</div>
+          </div>
+          <div class="rc-score">
+            <div class="rs-num" style="color:${scoreColor}">${s.revenueScore}</div>
+            <div class="rs-lbl">Revenue Score</div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:#57606a;margin-bottom:6px;font-style:italic;">${s.totalBudget}</div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:10px;color:#64748b;font-weight:700;">Revenue Mix</span>
+            <span style="font-size:10px;font-weight:700;color:#059669;">Container: ${s.containerPct}% / Other: ${s.nonContainerPct}%</span>
+          </div>
+          <div class="ratio-bar">
+            <div class="ratio-container" style="width:${s.containerPct}%"></div>
+            <div class="ratio-nonfar" style="width:${s.nonContainerPct}%"></div>
+          </div>
+          <div class="ratio-legend">
+            <div class="rl-item"><div class="rl-dot" style="background:#059669"></div>Container/Cargo (${s.containerPct}%)</div>
+            <div class="rl-item"><div class="rl-dot" style="background:#34d399"></div>Non-Container (${s.nonContainerPct}%)</div>
+          </div>
+        </div>
+        ${noteHTML}
+      </div>
+      <div class="rc-streams">
+        <div class="rc-streams-label">Revenue Streams</div>
+        ${streamsHTML}
+      </div>
+      <div class="rc-insight">
+        <div class="ri-label">Key Insight for Charleston</div>
+        <p>${s.insight}</p>
+        <a href="${s.profileFile}" style="display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:#059669;text-decoration:none;">View full profile →</a>
+      </div>
+    `;
+    g.appendChild(card);
+  });
+}
+
+buildRevCards();
+</script>
+</body>
+</html>

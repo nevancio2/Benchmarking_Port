@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Global Transit Benchmarking — Rankings</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff; padding: 48px 24px 36px; text-align: center;
+  }
+  .hero .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #a0b4ff; margin-bottom: 10px; }
+  .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+  .hero h1 span { color: #60a5fa; }
+  .hero p { font-size: 13px; color: #c7d2fe; max-width: 620px; margin: 0 auto 24px; }
+
+  .rank-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 860px; margin: 0 auto; }
+  .rank-chip {
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700;
+    color: #fff; text-decoration: none; display: inline-block;
+    transition: background .2s, transform .15s;
+  }
+  .rank-chip:hover { background: rgba(255,255,255,.28); transform: translateY(-2px); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: #57606a; margin-bottom: 12px; padding-bottom: 6px;
+    border-bottom: 2px solid #3b82f6; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; }
+
+  /* overview */
+  .overview-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 36px; margin-top: 8px; }
+  .ov-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .ov-card .ov-num { font-size: 32px; font-weight: 800; }
+  .ov-card .ov-label { font-size: 11px; color: #64748b; font-weight: 600; }
+
+  /* rank table */
+  .ranking-section { margin-bottom: 40px; }
+  .rank-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  .rank-table th { padding: 10px 14px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; text-align: left; }
+  .rank-table td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table tbody tr { cursor: pointer; transition: background .15s; }
+  .rank-table tbody tr:hover td { background: #eff6ff; }
+  .rank-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: #fff; }
+  .r1{background:#f59e0b;} .r2{background:#94a3b8;} .r3{background:#b45309;} .r4,.r5{background:#3b82f6;} .r6{background:#ef4444;}
+  .sys-name { font-weight: 700; font-size: 13px; }
+  .sys-sub  { font-size: 11px; color: #64748b; }
+  .score-bar-wrap { min-width: 110px; }
+  .score-bar-bg { background: #f1f5f9; border-radius: 4px; height: 8px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; }
+  .score-num { font-size: 11px; font-weight: 700; margin-top: 2px; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; border-radius: 20px; padding: 2px 9px; white-space: nowrap; }
+  .tag-green  { background: #dcfce7; color: #166534; }
+  .tag-yellow { background: #fef9c3; color: #854d0e; }
+  .tag-red    { background: #fee2e2; color: #991b1b; }
+  .view-btn {
+    display: inline-block; background: #3b82f6; color: #fff;
+    border-radius: 8px; padding: 4px 12px; font-size: 11px; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    transition: background .15s;
+  }
+  .view-btn:hover { background: #1d4ed8; }
+
+  /* filter */
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .filter-label { font-size: 11px; font-weight: 700; color: #64748b; }
+  .filter-btn { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s; color: #374151; }
+  .filter-btn:hover  { border-color: #3b82f6; color: #3b82f6; }
+  .filter-btn.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+
+  /* profile cards grid */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .profile-card {
+    background: #fff; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    border: 2px solid transparent; transition: transform .15s, box-shadow .2s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .profile-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.13); }
+  .pc-top { padding: 18px 18px 12px; display: flex; align-items: center; gap: 12px; }
+  .pc-flag { font-size: 32px; }
+  .pc-title { flex: 1; }
+  .pc-title h3 { font-size: 14px; font-weight: 800; }
+  .pc-title .pc-sub { font-size: 11px; color: #64748b; }
+  .pc-scores { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid #f1f5f9; }
+  .pcs { padding: 8px 6px; text-align: center; border-right: 1px solid #f1f5f9; }
+  .pcs:last-child { border-right: none; }
+  .pcs-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 2px; }
+  .pcs-val { font-size: 16px; font-weight: 800; }
+  .pc-footer { padding: 10px 18px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; font-size: 11px; }
+  .pc-rank { font-weight: 700; color: #64748b; }
+  .pc-arrow { color: #3b82f6; font-weight: 800; font-size: 13px; }
+
+  /* journey table */
+  .hidden { display: none !important; }
+
+  /* revenue cards */
+  .revenue-section { margin-bottom: 40px; }
+  .rev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .rev-card { background: #fff; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #3b82f6; }
+  .rev-card h4  { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+  .rev-sub  { font-size: 11px; color: #64748b; margin-bottom: 8px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+  .pill { background: #eff6ff; color: #1e40af; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+  .rev-stat { font-size: 11px; color: #374151; font-style: italic; }
+  .rev-link { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; color: #3b82f6; text-decoration: none; }
+  .rev-link:hover { text-decoration: underline; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">IBM Benchmarking Research · 2025–2026</div>
+  <h1>Container Port <span>Benchmarking</span></h1>
+  <p>Six U.S. East Coast container ports scored on throughput &amp; scale, operational efficiency (CPPI), infrastructure, financial performance, connectivity, and governance. Click any port for its full profile.</p>
+  <div class="rank-strip">
+    <a class="rank-chip" href="#section-rankings">🌐 Rankings</a>
+    <a class="rank-chip" href="revenue-deep-dive.html" style="background:#059669;border-color:#059669;">💰 Revenue Deep Dive</a>
+    <a class="rank-chip" href="vocabulary.html" style="background:#7c3aed;border-color:#7c3aed;">📖 Glossary</a>
+    <a class="rank-chip" href="profiles/savannah-gpa.html">🥇 Savannah</a>
+    <a class="rank-chip" href="profiles/virginia-norfolk.html">🥈 Virginia</a>
+    <a class="rank-chip" href="profiles/nynj-panynj.html">🥉 NY/NJ</a>
+    <a class="rank-chip" href="profiles/charleston-sc-ports.html">Charleston</a>
+    <a class="rank-chip" href="profiles/port-everglades.html">Port Everglades</a>
+    <a class="rank-chip" href="profiles/portmiami.html">PortMiami</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="overview-grid">
+    <div class="ov-card"><div class="ov-num" style="color:#3b82f6">6</div><div class="ov-label">Ports Benchmarked</div></div>
+    <div class="ov-card"><div class="ov-num" style="color:#22c55e">6</div><div class="ov-label">Dimensions Scored</div></div>
+    <div class="ov-card"><div class="ov-num" style="color:#f59e0b">~35M</div><div class="ov-label">Combined TEU Volume</div></div>
+    <div class="ov-card"><div class="ov-num" style="color:#ef4444">15</div><div class="ov-label">Overall Gap: Charleston vs #1</div></div>
+  </div>
+
+  <!-- RANKINGS TABLE -->
+  <div class="ranking-section" id="section-rankings">
+    <div class="section-label"><div class="dot"></div>Overall Rankings — Click any row for full port profile</div>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>Rank</th><th>Port</th><th>Throughput</th><th>Efficiency (CPPI)</th>
+          <th>Infrastructure</th><th>Revenue</th><th>Overall</th><th>Profile</th>
+        </tr>
+      </thead>
+      <tbody id="rankBody"></tbody>
+    </table>
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter profiles:</span>
+    <button class="filter-btn active" onclick="filterCards('all',this)">All Ports</button>
+    <button class="filter-btn" onclick="filterCards('stateauth',this)">State Authorities</button>
+    <button class="filter-btn" onclick="filterCards('county',this)">County-Operated</button>
+    <button class="filter-btn" onclick="filterCards('top3',this)">Top 3 Only</button>
+  </div>
+
+  <!-- PROFILE CARDS -->
+  <div class="section-label" style="margin-bottom:16px;"><div class="dot" style="background:#7c3aed"></div>Port Profile Cards — Click to open full profile</div>
+  <div class="cards-grid" id="cardsGrid"></div>
+
+  <!-- REVENUE SECTION -->
+  <div class="revenue-section" id="section-revenue">
+    <div class="section-label"><div class="dot" style="background:#16a34a"></div>Revenue Models — How Each Port Generates Income</div>
+    <div class="rev-grid" id="revGrid"></div>
+  </div>
+
+  <!-- INFRASTRUCTURE TABLE -->
+  <div class="ranking-section" id="section-journey">
+    <div class="section-label"><div class="dot" style="background:#f59e0b"></div>Infrastructure Snapshot — Channel Depth · Cranes · Capacity</div>
+    <table class="rank-table">
+      <thead>
+        <tr><th>Port</th><th>Channel Depth</th><th>STS Cranes</th><th>Current Capacity</th><th>Long-Term Target</th><th>Profile</th></tr>
+      </thead>
+      <tbody id="journeyBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+
+<!-- SOURCES SECTION -->
+<div style="max-width:900px;margin:0 auto 40px;padding:0 20px;">
+  <div style="background:#fff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-top:4px solid #57606a;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#57606a;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid #e5e7eb;">Sources &amp; Methodology Notes</div>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Benchmark Scores:</strong> All scores (Throughput &amp; Scale, Operational Efficiency, Infrastructure, Financial &amp; Revenue, Connectivity, Governance) are internal benchmark ratings produced by this Container Port Benchmarking Research study. They are not independently validated external industry ratings. Each dimension is weighted equally (1/6); scores are averaged into an overall score on a 0–100 scale.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Ranking Note:</strong> Port of Savannah (89/100) and Port of Virginia (89/100) are tied overall; Savannah ranks #1 due to superior Throughput &amp; Scale score. Rankings reflect scores at time of research.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Financial Data:</strong> Revenue and operating income figures are sourced from audited financial statements: SC Ports Authority FY2025 (year ended June 30, 2025); Virginia Port Authority FY2024 (year ended June 30, 2024); PANYNJ CY2024 (year ended December 31, 2024); Georgia Ports Authority FY2024/2025 (year ended June 30); Port Everglades FY2024 (year ended September 30, 2024); PortMiami FY2024 (year ended September 30, 2024). PANYNJ port-segment revenues are estimated; full-agency figures are not comparable to single-purpose port revenues. Port of Virginia and PortMiami total revenues include estimated figures derived from confirmed operating income and Fitch/S&amp;P commentary — labeled "estimated" throughout.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Key Sources:</strong> BTS Port Performance Freight Statistics 2026 Annual Report (Jan 10, 2026); World Bank Container Port Performance Index 2020–2024 (Sep 2025); SC Ports Authority FY2025 Financial Statements; Virginia Port Authority FY2024 ACFR; PANYNJ Annual Financial Statements 2024; Georgia Ports Authority FY2025 ACFR; Broward County Port Everglades FY2024 Financial Statements; Fitch Ratings — PANYNJ AA- (Aug 6, 2025) and PortMiami A Stable (Aug 22, 2025); S&amp;P Global — GPA Reaffirmation (Aug 19, 2025); ASCE 2025 Infrastructure Report Card.</p>
+    <p style="font-size:12px;color:#57606a;line-height:1.7;"><strong style="color:#1f2328;">Infrastructure Data:</strong> Channel depths, STS crane counts, and berth lengths are sourced from port press releases, BTS 2026 Annual Report, and individual port ACFRs. Virginia's 55-foot channel target was nearing completion as of January 2026. Savannah's channel deepening feasibility study was formally initiated June 2026.</p>
+  </div>
+</div>
+
+<script>
+const SYSTEMS = [
+  { id:'savannah', name:'Port of Savannah',       country:'Georgia Ports Authority',  flag:'⚓', rank:1, region:'stateauth',
+    scores:{throughput:95,efficiency:80,infra:85,revenue:90}, overall:89,
+    effRating:'Strong', effTag:'tag-green',
+    topColor:'#f59e0b', rankColor:'#f59e0b', rankLabel:'🥇 #1 Overall', profileFile:'profiles/savannah-gpa.html',
+    channel:'47 ft', cranes:'38', capacity:'~6.5–7.0M TEU', target:'12.5M TEU by 2035',
+    revenue:{streams:['Container Handling (Direct Operator)','Container Storage','Brunswick Port (Ro-Ro/Auto)','Appalachian Regional Port','Blue Ridge Inland Port'],stat:'FY2024 operating revenues: $698.7M · ~$127/TEU · S&P "Excellent" credit rating · Largest single-purpose container port authority revenue in benchmark'},
+  },
+  { id:'virginia', name:'Port of Virginia',        country:'Virginia Port Authority',  flag:'⚓', rank:2, region:'stateauth',
+    scores:{throughput:85,efficiency:93,infra:98,revenue:82}, overall:89,
+    effRating:'Best-in-class', effTag:'tag-green',
+    topColor:'#94a3b8', rankColor:'#94a3b8', rankLabel:'🥈 #2 Overall', profileFile:'profiles/virginia-norfolk.html',
+    channel:'55 ft (target)', cranes:'29', capacity:'~4.0–4.5M TEU', target:'Not stated (ULCV berth added)',
+    revenue:{streams:['Container Handling (VIT Operator)','Rail Intermodal Fees','Container Storage','Equipment Rental','Virginia Inland Port Fees'],stat:'FY2024 operating income: $113M · ~$128–157/TEU (est.) · AA-range bond rating · $1.4B Gateway Investment Program'},
+  },
+  { id:'nynj',     name:'Port of NY & NJ',         country:'Port Authority of NY & NJ', flag:'🗽', rank:3, region:'stateauth',
+    scores:{throughput:98,efficiency:62,infra:80,revenue:88}, overall:78,
+    effRating:'Medium', effTag:'tag-yellow',
+    topColor:'#b45309', rankColor:'#b45309', rankLabel:'🥉 #3 Overall', profileFile:'profiles/nynj-panynj.html',
+    channel:'50 ft', cranes:'Large (5 terminals)', capacity:'~10–11M TEU', target:'Not stated',
+    revenue:{streams:['Landlord Lease Fees (APM/GCT/PNCT)','Airports (JFK/LGA/EWR)','Bridges & Tunnels','PATH Rail','ExpressRail Program'],stat:'Total agency 2025 budget: $7.1B · Port segment est. ~$450–500M · ~$50–56/TEU (port) · Fitch AA- (highest in benchmark)'},
+  },
+  { id:'charleston', name:'Port of Charleston',    country:'SC Ports Authority',       flag:'⚓', rank:4, region:'stateauth',
+    scores:{throughput:72,efficiency:72,infra:83,revenue:65}, overall:74,
+    effRating:'Competent', effTag:'tag-yellow',
+    topColor:'#3b82f6', rankColor:'#3b82f6', rankLabel:'#4 Overall', profileFile:'profiles/charleston-sc-ports.html',
+    channel:'52 ft', cranes:'~18', capacity:'~2.5–3.0M TEU', target:'~4.0M TEU (HLT full build-out)',
+    revenue:{streams:['Container Handling','Container Storage','Cruise (Columbus St. Terminal)','Breakbulk Cargo','State Grants/Appropriations'],stat:'FY2025 operating revenues: $426.5M · $26.7M operating income · ~$169/TEU · $1.4B long-term debt (HLT)'},
+  },
+  { id:'everglades', name:'Port Everglades',       country:'Broward County, FL',       flag:'⚓', rank:5, region:'county',
+    scores:{throughput:58,efficiency:82,infra:73,revenue:70}, overall:66,
+    effRating:'Top 20% Worldwide', effTag:'tag-green',
+    topColor:'#0891b2', rankColor:'#0891b2', rankLabel:'#5 Overall', profileFile:'profiles/port-everglades.html',
+    channel:'50 ft', cranes:'~6–8', capacity:'~1.5M TEU', target:'Not stated (SAC widening)',
+    revenue:{streams:['Container/Cargo (Wharfage)','Petroleum Distribution (12 counties)','Cruise (Top 3 worldwide)','Equipment Rental','Dockage Fees'],stat:'FY2024 operating revenues: $215.5M · $64.0M operating income (29.7% margin) · ~$187–196/TEU · Highest operating margin in benchmark'},
+  },
+  { id:'miami',    name:'PortMiami',               country:'Miami-Dade County, FL',    flag:'⚓', rank:6, region:'county',
+    scores:{throughput:55,efficiency:60,infra:73,revenue:58}, overall:59,
+    effRating:'Developing', effTag:'tag-yellow',
+    topColor:'#ef4444', rankColor:'#ef4444', rankLabel:'#6 Overall', profileFile:'profiles/portmiami.html',
+    channel:'50 ft', cranes:'~6–8', capacity:'~1.2–1.5M TEU', target:'Not stated',
+    revenue:{streams:['Cruise (World #1 Homeport)','Container/Cargo (3 operators)','Free Trade Zone #32','Dockage & Wharfage','Electrification Project (INFRA Grant)'],stat:'FY2024 revenues est. ~$150–175M · ~$140–165/TEU · Fitch A Stable (lowest confirmed rating in benchmark)'},
+  }
+];
+
+function scoreColor(n){ return n>=85?'#22c55e':n>=65?'#f59e0b':'#ef4444'; }
+function scoreTag(n)  { return n>=85?'tag-green':n>=65?'tag-yellow':'tag-red'; }
+
+function buildRankTable(){
+  const tb = document.getElementById('rankBody');
+  SYSTEMS.slice().sort((a,b)=>a.rank-b.rank).forEach(s=>{
+    const tr = document.createElement('tr');
+    tr.onclick = ()=>{ window.location.href = s.profileFile; };
+    tr.innerHTML=`
+      <td><div class="rank-num r${s.rank}">${s.rank}</div></td>
+      <td><div class="sys-name">${s.flag} ${s.name}</div><div class="sys-sub">${s.country}</div></td>
+      <td><span class="tag ${scoreTag(s.scores.throughput)}">${s.scores.throughput}/100</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.scores.efficiency}%;background:${scoreColor(s.scores.efficiency)}"></div></div>
+          <div class="score-num" style="color:${scoreColor(s.scores.efficiency)}">${s.scores.efficiency}/100</div>
+        </div>
+      </td>
+      <td><span class="tag ${s.effTag}">${s.effRating}</span></td>
+      <td><span class="tag ${scoreTag(s.scores.revenue)}">${s.scores.revenue}/100</span></td>
+      <td><strong style="color:${scoreColor(s.overall)};font-size:15px;">${s.overall}</strong><span style="font-size:10px;color:#94a3b8;">/100</span></td>
+      <td><a class="view-btn" href="${s.profileFile}">View Profile →</a></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function buildCards(){
+  const grid = document.getElementById('cardsGrid');
+  SYSTEMS.forEach(s=>{
+    const div = document.createElement('a');
+    div.href = s.profileFile;
+    div.className = 'profile-card';
+    div.dataset.region = s.region;
+    div.dataset.rank = s.rank;
+    div.style.borderTopColor = s.topColor;
+    div.innerHTML=`
+      <div class="pc-top" style="border-top:4px solid ${s.topColor}">
+        <div class="pc-flag">${s.flag}</div>
+        <div class="pc-title">
+          <h3>${s.name}</h3>
+          <div class="pc-sub">${s.country}</div>
+        </div>
+      </div>
+      <div class="pc-scores">
+        <div class="pcs"><div class="pcs-lbl">Throughput</div><div class="pcs-val" style="color:${scoreColor(s.scores.throughput)}">${s.scores.throughput}</div></div>
+        <div class="pcs"><div class="pcs-lbl">Efficiency</div><div class="pcs-val" style="color:${scoreColor(s.scores.efficiency)}">${s.scores.efficiency}</div></div>
+        <div class="pcs"><div class="pcs-lbl">Infra</div><div class="pcs-val" style="color:${scoreColor(s.scores.infra)}">${s.scores.infra}</div></div>
+        <div class="pcs"><div class="pcs-lbl">Revenue</div><div class="pcs-val" style="color:${scoreColor(s.scores.revenue)}">${s.scores.revenue}</div></div>
+      </div>
+      <div class="pc-footer">
+        <span class="pc-rank">${s.rankLabel} · Overall: <strong style="color:${scoreColor(s.overall)}">${s.overall}/100</strong></span>
+        <span class="pc-arrow">→</span>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function buildRevCards(){
+  const g = document.getElementById('revGrid');
+  SYSTEMS.forEach(s=>{
+    const d = document.createElement('div');
+    d.className = 'rev-card';
+    d.style.borderTopColor = s.topColor;
+    d.innerHTML=`
+      <h4>${s.flag} ${s.name}</h4>
+      <div class="rev-sub">${s.country} · Revenue Score: <strong style="color:${scoreColor(s.scores.revenue)}">${s.scores.revenue}/100</strong></div>
+      <div class="pill-row">${s.revenue.streams.slice(0,4).map(r=>`<span class="pill">${r}</span>`).join('')}</div>
+      <div class="rev-stat">${s.revenue.stat}</div>
+      <a class="rev-link" href="${s.profileFile}">See full revenue analysis →</a>
+    `;
+    g.appendChild(d);
+  });
+}
+
+function buildJourneyTable(){
+  const tb = document.getElementById('journeyBody');
+  SYSTEMS.slice().sort((a,b)=>a.rank-b.rank).forEach(s=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML=`
+      <td><a href="${s.profileFile}" style="font-weight:700;color:#1f2328;text-decoration:none;">${s.flag} ${s.name}</a></td>
+      <td><strong>${s.channel}</strong></td>
+      <td><strong>${s.cranes}</strong></td>
+      <td>${s.capacity}</td>
+      <td style="color:#374151;">${s.target}</td>
+      <td><a class="view-btn" href="${s.profileFile}">Full Profile →</a></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function filterCards(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.profile-card').forEach(card=>{
+    if(f==='all')       card.classList.remove('hidden');
+    else if(f==='stateauth') card.classList.toggle('hidden', card.dataset.region!=='stateauth');
+    else if(f==='county')    card.classList.toggle('hidden', card.dataset.region!=='county');
+    else if(f==='top3')      card.classList.toggle('hidden', parseInt(card.dataset.rank)>3);
+  });
+}
+
+buildRankTable();
+buildCards();
+buildRevCards();
+buildJourneyTable();
+</script>
+</body>
+</html>

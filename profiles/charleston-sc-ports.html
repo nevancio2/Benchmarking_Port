@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Port of Charleston — SC Ports Authority Profile</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* Header */
+  .profile-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    border-radius: 16px; padding: 32px 36px; color: #fff; margin-bottom: 32px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .profile-flag { font-size: 64px; }
+  .profile-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .profile-header .sub { font-size: 13px; color: #bfdbfe; margin-bottom: 12px; }
+  .rank-badge {
+    display: inline-block; background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.4); border-radius: 20px;
+    padding: 4px 14px; font-size: 12px; font-weight: 700;
+  }
+
+  /* Score strip */
+  .score-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+    margin-bottom: 32px;
+  }
+  .score-box {
+    background: #fff; border-radius: 12px; padding: 14px 8px;
+    text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    border-top: 4px solid #3b82f6;
+  }
+  .score-box .sb-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+  .score-box .sb-val { font-size: 22px; font-weight: 800; }
+  .score-box .sb-max { font-size: 10px; color: #94a3b8; }
+  .score-box.overall { border-top-color: #22c55e; background: #f0fdf4; }
+  .score-box.overall .sb-val { color: #16a34a; }
+
+  /* Sections */
+  .section { background: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .section-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #3b82f6; margin-bottom: 6px; }
+  .section h2 { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9; }
+  .section p { font-size: 13px; color: #374151; margin-bottom: 10px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* Highlights */
+  .highlight-item { margin-bottom: 14px; padding-left: 14px; border-left: 3px solid #3b82f6; }
+  .highlight-item .hi-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #3b82f6; margin-bottom: 3px; }
+  .highlight-item p { font-size: 13px; color: #374151; }
+
+  /* Opportunity list */
+  .opp-list { list-style: none; padding: 0; }
+  .opp-list li {
+    padding: 8px 12px 8px 36px; position: relative;
+    font-size: 13px; color: #374151;
+    border-bottom: 1px solid #f8fafc;
+  }
+  .opp-list li:last-child { border-bottom: none; }
+  .opp-list li::before {
+    content: '→'; position: absolute; left: 12px;
+    color: #3b82f6; font-weight: 700;
+  }
+
+  /* Dimension pipeline */
+  .journey-row { display: flex; gap: 0; margin: 16px 0; }
+  .jp { flex: 1; text-align: center; position: relative; }
+  .jp::after { content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #cbd5e1; }
+  .jp:last-child::after { display: none; }
+  .jp-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #64748b; margin-bottom: 5px; }
+  .jp-dot { width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 5px; }
+  .jp-green { background: #22c55e; }
+  .jp-yellow { background: #f59e0b; }
+  .jp-red { background: #ef4444; }
+  .jp-note { font-size: 10px; color: #64748b; }
+
+  /* Revenue pills */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .pill { background: #dbeafe; color: #1e40af; border-radius: 20px; font-size: 11px; font-weight: 700; padding: 3px 11px; }
+
+  /* Info box */
+  .innovation-box {
+    background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+    border: 1.5px solid #93c5fd; border-radius: 10px;
+    padding: 16px 20px; margin-top: 10px;
+  }
+  .innovation-box p { font-size: 13px; color: #374151; }
+
+  /* Overall score */
+  .overall-section {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    border-radius: 14px; padding: 28px; text-align: center;
+    color: #fff; margin-bottom: 20px;
+  }
+  .overall-section .os-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #bfdbfe; margin-bottom: 8px; }
+  .overall-section .os-num { font-size: 72px; font-weight: 900; line-height: 1; }
+  .overall-section .os-max { font-size: 18px; color: #93c5fd; }
+  .overall-section .os-verdict { font-size: 14px; color: #bfdbfe; margin-top: 10px; font-style: italic; }
+
+  /* Nav buttons */
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .nav-btn {
+    background: #1e293b; color: #fff; border: none; border-radius: 10px;
+    padding: 10px 22px; font-size: 12px; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block;
+  }
+  .nav-btn:hover { background: #334155; }
+  .nav-btn.home { background: #3b82f6; }
+
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="profile-header">
+    <div class="profile-flag">⚓</div>
+    <div>
+      <h1>Port of Charleston</h1>
+      <div class="sub">SC Ports Authority · South Carolina · FY2025 Data (Year Ended June 30, 2025)</div>
+      <span class="rank-badge">#4 of 6 — Greatest Opportunity for Improvement</span>
+    </div>
+  </div>
+
+  <!-- SCORES -->
+  <div class="score-strip">
+    <div class="score-box"><div class="sb-label">Throughput</div><div class="sb-val" style="color:#f59e0b">72</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Efficiency</div><div class="sb-val" style="color:#f59e0b">72</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Infrastructure</div><div class="sb-val" style="color:#16a34a">83</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Revenue</div><div class="sb-val" style="color:#ef4444">65</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Connectivity</div><div class="sb-val" style="color:#f59e0b">73</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Governance</div><div class="sb-val" style="color:#f59e0b">78</div><div class="sb-max">/100</div></div>
+    <div class="score-box overall"><div class="sb-label">Overall</div><div class="sb-val">74</div><div class="sb-max">/100</div></div>
+  </div>
+
+  <!-- THROUGHPUT & SCALE -->
+  <div class="section">
+    <div class="section-eyebrow">Dimension 1 — Throughput &amp; Scale</div>
+    <h2>Steady Growth, But Low Velocity Against Peers</h2>
+    <p>Charleston's annual container throughput reached 2,518,553 TEUs in FY2025 (July 1, 2024 – June 30, 2025), up 0.8% from 2,497,143 TEUs in FY2024, which was itself up 0.6% from 2,482,080 TEUs in FY2023. Within this six-port benchmark, Charleston ranks fifth in TEU throughput — ahead only of Port Everglades and PortMiami, and materially behind Savannah (~5.9M TEUs), Virginia (~3.5M TEUs), and NY/NJ (~9.0M TEUs).</p>
+    <p>The throughput score of 72/100 reflects Charleston's established mid-size position and its low growth velocity. The port is growing, but 0.6–0.8% annual TEU growth in an environment where Savannah is growing 9% in a single month represents a competitive gap that will compound over time if unaddressed. The Hugh K. Leatherman Terminal (HLT) Phase 1 adds incremental capacity but has not yet generated volume acceleration.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Key Metric</div>
+      <p>2,518,553 TEUs — FY2025 (July 1, 2024 – June 30, 2025) · +0.8% YoY · Approx. 4th–5th largest East Coast container port · Top 8–10 nationally</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 72/100</div>
+      <p>Volume sufficient for a competitive mid-size port, but growth velocity is the critical gap. HLT full build-out is the primary near-term growth catalyst.</p>
+    </div>
+  </div>
+
+  <!-- OPERATIONAL EFFICIENCY -->
+  <div class="section">
+    <div class="section-eyebrow">Dimension 2 — Operational Efficiency (CPPI)</div>
+    <h2>Competent Operations; Lacks Automation Differentiator</h2>
+    <p>Charleston operates across three primary container facilities: Wando Welch Terminal (WWT) — the main container terminal with approximately 4,700 linear feet of berth and 14 STS cranes; Hugh K. Leatherman Terminal (HLT) Phase 1 — with approximately 1,400 linear feet and 4 super post-Panamax cranes; and North Charleston Terminal (NCT), which handles breakbulk and limited containers. The 52-foot channel depth, completed in 2021, is the most important efficiency-enabling infrastructure development at the port in the last decade, allowing neo-Panamax and large ULCV vessels to call.</p>
+    <p>On the World Bank CPPI framework, Charleston performs competitively for its volume tier. The deepened channel enables larger vessel calls, which improve moves-per-port-hour (MPPH) scores. However, Charleston does not have the automation advantage of Virginia (no ASCs deployed at scale) and does not have the absolute scale of Savannah. Truck turn time at Wando Welch Terminal has been a noted pain point during peak periods due to the terminal's layout designed in an earlier era of smaller vessel calls.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 72/100</div>
+      <p>Above-average infrastructure from the 52-foot channel deepening. Lacks Virginia's automation differentiator and Savannah's scale-driven efficiency, but performs solidly within its volume tier.</p>
+    </div>
+  </div>
+
+  <!-- INFRASTRUCTURE -->
+  <div class="section">
+    <div class="section-eyebrow">Dimension 3 — Infrastructure &amp; Physical Capacity</div>
+    <h2>52-Foot Channel — A Genuine Competitive Advantage</h2>
+    <p>Charleston's most significant infrastructure achievement is the 52-foot channel depth — second only to Virginia's 55-foot target on the East Coast and meaningfully deeper than NY/NJ (50 ft), Port Everglades (50 ft), PortMiami (50 ft), and Savannah (47 ft). This is Charleston's single most important competitive infrastructure differentiator as ultra-large container vessels (ULCVs) proliferate. A 52-foot channel allows fully loaded neo-Panamax vessels to call at any tide.</p>
+    <p>The Hugh K. Leatherman Terminal is the transformative capacity project. Phase 1 is operational with 1,400 linear feet of berth and 4 super post-Panamax STS cranes, adding approximately 700,000 TEUs of annual capacity. When fully built out, HLT is planned for ~2.4 million TEUs annually, which would push the port into the 4.0–4.5 million TEU capacity range. The combined crane fleet totals approximately 18 STS cranes (14 at WWT + 4 at HLT Phase 1) — smaller than Virginia's 29 and Savannah's 38.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Channel Depth</div>
+      <p>52 feet — 2nd deepest on the East Coast; deeper than NY/NJ, Everglades, Miami, and Savannah</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Long-Term Capacity</div>
+      <p>~4.0–4.5M TEU at HLT full build-out — up from current ~2.5–3.0M TEU ceiling</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 83/100</div>
+      <p>52-foot channel is a genuine competitive advantage. HLT potential is a strong forward-looking strength. Deductions reflect near-term capacity constraint, smaller crane fleet vs. peers, and absence of ASC automation.</p>
+    </div>
+  </div>
+
+  <!-- FINANCIAL PERFORMANCE -->
+  <div class="section">
+    <div class="section-eyebrow">Dimension 4 — Financial Performance &amp; Revenue Model</div>
+    <h2>Thin Margins, Heavy Debt, and State Subsidy Dependence</h2>
+    <p>Total operating revenues were $426.5 million in FY2025, a 5.6% increase from $404.0 million in FY2024. Operating income in FY2025 was $26.7 million — a return to profitability after a loss of ($2.3 million) in FY2024. The FY2024 operating loss indicates that at $404 million in revenues, SC Ports was not covering its operating costs without non-operating support. The 6.3% FY2025 operating margin is thin for a capital-intensive infrastructure business.</p>
+    <p>Non-operating revenues in FY2025 totaled $36.8 million — including $22.1 million in state grants and operating appropriations and $16.5 million in investment income. Total assets: $3.1 billion; Long-term debt: $1.4 billion (primarily HLT revenue bonds); Net position: $1.57 billion as of June 30, 2025.</p>
+    <div class="pill-row">
+      <span class="pill">Container Handling (~50% of revenues)</span>
+      <span class="pill">Container Storage</span>
+      <span class="pill">Cruise Revenue</span>
+      <span class="pill">Breakbulk Cargo</span>
+      <span class="pill">State Grants ($22.1M)</span>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Revenue per TEU</div>
+      <p>~$169/TEU ($426.5M ÷ 2,518,553 TEUs) — above Savannah (~$127) and Virginia (~$143 est.), reflecting higher per-unit fees from storage, cruise, and the smaller container base</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 65/100</div>
+      <p>Revenues growing (+5.6%), return to profitability positive, revenue per TEU healthy. Constrained by thin 6.3% operating margin, FY2024 operating loss, state subsidy dependence, $1.4B debt load, and limited revenue diversification.</p>
+    </div>
+  </div>
+
+  <!-- CONNECTIVITY -->
+  <div class="section">
+    <div class="section-eyebrow">Dimension 5 — Connectivity &amp; Hinterland Reach</div>
+    <h2>Two Inland Ports — Real Assets, But Limited Geographic Reach</h2>
+    <div class="journey-row">
+      <div class="jp">
+        <div class="jp-label">Inland Port Greer</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">Norfolk Southern · I-85 Corridor</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Inland Port Dillon</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">CSX · I-95 Corridor</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">On-Dock Rail</div>
+        <div class="jp-dot jp-red"></div>
+        <div class="jp-note">Not at WWT — Gap vs. Peers</div>
+      </div>
+    </div>
+    <p><strong>Inland Port Greer</strong> (Upstate SC, near I-85): Opened 2013, connected via Norfolk Southern rail. Serves Upstate South Carolina, western North Carolina, and portions of Tennessee and Georgia — enabling SC Ports to compete for BMW, Michelin, and other Upstate manufacturing container flows.</p>
+    <p><strong>Inland Port Dillon</strong> (NE South Carolina, I-95 corridor): Opened 2018, connected via CSX rail. Extends Charleston's reach toward cargo flows in southeastern North Carolina and the Eastern Seaboard.</p>
+    <p>The absence of on-dock rail at Wando Welch Terminal is a notable gap — rail at WWT requires truck drays to move containers between the terminal and the nearest rail ramp, adding time and cost compared to true on-dock rail at Virginia's VIG/NIT and Savannah's Mason Mega Rail Terminal.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 73/100</div>
+      <p>Two inland ports are genuine strategic assets. The absence of on-dock rail at the primary terminal and the smaller inland network vs. Savannah and Virginia constrain the score.</p>
+    </div>
+  </div>
+
+  <!-- GOVERNANCE -->
+  <div class="section">
+    <div class="section-eyebrow">Dimension 6 — Governance &amp; Strategic Positioning</div>
+    <h2>Single-Purpose State Authority — Agile Governance With Capital Risk</h2>
+    <p>The SC Ports Authority is a state authority of South Carolina, created by the General Assembly and governed by a Board of Directors appointed by the Governor. It operates as an enterprise fund, nominally self-supporting through revenue bond financing and operating revenues — with the state providing grants and appropriations as a supplemental backstop. This is a clean, single-purpose governance structure that allows SC Ports to make port-specific capital decisions without competing against airport, highway, or rail priorities at the board level.</p>
+    <p>The HLT full build-out is the defining strategic commitment. Its planned 2.4 million TEU capacity adds sufficient runway to grow Charleston from a 2.5 million TEU port to a potential 4.5–5.0 million TEU port over a 10–15 year horizon — a positioning that would vault Charleston past Virginia and challenge Savannah's East Coast #2 status behind NY/NJ.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Primary Governance Risk</div>
+      <p>Capital concentration: with $1.4B in long-term debt almost entirely attributable to HLT, financial health is heavily dependent on HLT volume ramp-up proceeding on schedule.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 78/100</div>
+      <p>Single-purpose state authority governance is a strength. HLT vision is clearly defined and ambitious. Deductions reflect capital concentration risk, state appropriations dependence, and the strategic vision still being mid-execution.</p>
+    </div>
+  </div>
+
+  <!-- OPPORTUNITY AREAS -->
+  <div class="section">
+    <div class="section-eyebrow">Strategic Opportunity Areas</div>
+    <h2>The Path to Closing the 15-Point Gap to #1</h2>
+    <ul class="opp-list">
+      <li><strong>Priority 1 — Accelerate HLT Phase 2+:</strong> Every year of delay is a year of capacity constraint forcing carriers to redirect volume to Savannah or Virginia. HLT full build-out transforms Charleston into a 4.0–4.5M TEU competitive platform.</li>
+      <li><strong>Priority 2 — On-Dock Rail at HLT:</strong> HLT on a former Navy Base site with substantial surrounding land is the most feasible location for on-dock rail in the SC Ports system. CSX or NS on-dock service at HLT directly addresses the 20-point connectivity gap vs. Savannah.</li>
+      <li><strong>Priority 3 — Third Inland Port (Charlotte/Western NC):</strong> Charlotte is the largest major Southeast freight market not firmly served by Charleston's existing inland ports. A third facility rail-connected to HLT would extend effective hinterland into the country's fastest-growing major metro area.</li>
+      <li><strong>Priority 4 — Revenue Diversification:</strong> Container storage optimization (premium dwell pricing), cruise expansion (second home-port berth), HLT logistics park development (former Navy Base land), and federal PIDP/INFRA grant capture to reduce state dependency.</li>
+      <li><strong>Priority 5 — Automation Evaluation at HLT Phase 2:</strong> A formal ASC feasibility assessment timed to Phase 2 build-out, when new cranes will be procured in any case, would deliver measurable CPPI improvement and signal to premium ULCV services that Charleston is committed to world-class terminal operations.</li>
+    </ul>
+  </div>
+
+  <!-- OVERALL SCORE -->
+  <div class="overall-section">
+    <div class="os-label">Overall Benchmarking Score</div>
+    <div class="os-num">74<span class="os-max">/100</span></div>
+    <div class="os-verdict">"A well-governed mid-size port with a genuine infrastructure advantage (52-ft channel) and a transformative growth platform (HLT) — the gap to #1 is 15 points and closeable within a 7–10 year investment horizon with disciplined execution."</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-row">
+    <span style="font-size:12px;color:#94a3b8;">4 of 6 · Port of Charleston</span>
+    <div style="display:flex;gap:10px;">
+      <a class="nav-btn home" href="../global-transit-benchmarking-interactive-one-pager.html">← Rankings</a>
+      <a class="nav-btn" href="zurich-sbb.html">Next: Port of Virginia →</a>
+    </div>
+  </div>
+
+  <div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+</div>
+</body>
+</html>

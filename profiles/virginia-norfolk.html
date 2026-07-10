@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Port of Virginia — Virginia Port Authority Profile</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  .profile-header {
+    background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+    border-radius: 16px; padding: 32px 36px; color: #fff; margin-bottom: 32px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .profile-flag { font-size: 64px; }
+  .profile-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .profile-header .sub { font-size: 13px; color: #d1d5db; margin-bottom: 12px; }
+  .rank-badge {
+    display: inline-block; background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.4); border-radius: 20px;
+    padding: 4px 14px; font-size: 12px; font-weight: 700;
+  }
+
+  .score-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 32px; }
+  .score-box {
+    background: #fff; border-radius: 12px; padding: 14px 8px;
+    text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    border-top: 4px solid #6b7280;
+  }
+  .score-box .sb-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+  .score-box .sb-val { font-size: 22px; font-weight: 800; }
+  .score-box .sb-max { font-size: 10px; color: #94a3b8; }
+  .score-box.overall { border-top-color: #22c55e; background: #f0fdf4; }
+  .score-box.overall .sb-val { color: #16a34a; }
+
+  .section { background: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .section-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #6b7280; margin-bottom: 6px; }
+  .section h2 { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9; }
+  .section p { font-size: 13px; color: #374151; margin-bottom: 10px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  .highlight-item { margin-bottom: 14px; padding-left: 14px; border-left: 3px solid #6b7280; }
+  .highlight-item .hi-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #4b5563; margin-bottom: 3px; }
+  .highlight-item p { font-size: 13px; color: #374151; }
+
+  .opp-list { list-style: none; padding: 0; }
+  .opp-list li { padding: 8px 12px 8px 36px; position: relative; font-size: 13px; color: #374151; border-bottom: 1px solid #f8fafc; }
+  .opp-list li:last-child { border-bottom: none; }
+  .opp-list li::before { content: '→'; position: absolute; left: 12px; color: #6b7280; font-weight: 700; }
+
+  .journey-row { display: flex; gap: 0; margin: 16px 0; }
+  .jp { flex: 1; text-align: center; position: relative; }
+  .jp::after { content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #cbd5e1; }
+  .jp:last-child::after { display: none; }
+  .jp-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #64748b; margin-bottom: 5px; }
+  .jp-dot { width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 5px; }
+  .jp-green { background: #22c55e; }
+  .jp-yellow { background: #f59e0b; }
+  .jp-red { background: #ef4444; }
+  .jp-note { font-size: 10px; color: #64748b; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .pill { background: #f3f4f6; color: #374151; border-radius: 20px; font-size: 11px; font-weight: 700; padding: 3px 11px; }
+
+  .innovation-box { background: #f9fafb; border: 1.5px solid #d1d5db; border-radius: 10px; padding: 16px 20px; margin-top: 10px; }
+  .innovation-box p { font-size: 13px; color: #374151; }
+
+  .overall-section {
+    background: linear-gradient(135deg, #374151, #6b7280);
+    border-radius: 14px; padding: 28px; text-align: center; color: #fff; margin-bottom: 20px;
+  }
+  .overall-section .os-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #d1d5db; margin-bottom: 8px; }
+  .overall-section .os-num { font-size: 72px; font-weight: 900; line-height: 1; }
+  .overall-section .os-max { font-size: 18px; color: #9ca3af; }
+  .overall-section .os-verdict { font-size: 14px; color: #d1d5db; margin-top: 10px; font-style: italic; }
+
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .nav-btn { background: #1e293b; color: #fff; border: none; border-radius: 10px; padding: 10px 22px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+  .nav-btn:hover { background: #334155; }
+  .nav-btn.home { background: #6b7280; }
+
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="profile-header">
+    <div class="profile-flag">⚓</div>
+    <div>
+      <h1>Port of Virginia</h1>
+      <div class="sub">Virginia Port Authority · Norfolk, VA · FY2024 Data (Year Ended June 30, 2024)</div>
+      <span class="rank-badge">🥈 #2 Overall — #1 on Infrastructure &amp; Efficiency</span>
+    </div>
+  </div>
+
+  <div class="score-strip">
+    <div class="score-box"><div class="sb-label">Throughput</div><div class="sb-val" style="color:#16a34a">85</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Efficiency</div><div class="sb-val" style="color:#16a34a">93</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Infrastructure</div><div class="sb-val" style="color:#16a34a">98</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Revenue</div><div class="sb-val" style="color:#16a34a">82</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Connectivity</div><div class="sb-val" style="color:#16a34a">90</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Governance</div><div class="sb-val" style="color:#16a34a">85</div><div class="sb-max">/100</div></div>
+    <div class="score-box overall"><div class="sb-label">Overall</div><div class="sb-val">89</div><div class="sb-max">/100</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 1 — Throughput &amp; Scale</div>
+    <h2>3.5 Million TEUs — Strong Growth, Clear Upward Trajectory</h2>
+    <p>The Port of Virginia handled 3,503,129 TEUs in FY2024 (year ended June 30, 2024), positioning it as the 3rd-largest East Coast container port by TEU volume, behind NY/NJ (~9.0M TEUs) and Savannah (~5.5–5.9M TEUs) and ahead of Charleston (~2.5M TEUs). Virginia's TEU trajectory has been consistently upward, driven by the Gateway Investment Program infrastructure improvements, strong carrier relationships, and a competitive on-dock rail program.</p>
+    <p>As the ULCV transition accelerates — with the 55-foot channel allowing fully loaded mega-ships to call — Virginia's volume growth advantage over shallower-draft competitors is expected to widen. Virginia has been selected as the first U.S. East Coast port of call for CMA CGM's upgraded Chesapeake Bay Express ULCV service, a direct market confirmation of carrier confidence.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 85/100</div>
+      <p>Third position in benchmark volume ranking, with a stronger growth trajectory than Charleston and a clear competitive pathway as the 55-foot channel is fully utilized.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 2 — Operational Efficiency (CPPI)</div>
+    <h2>Top-Performing U.S. East Coast Port on the World Bank CPPI</h2>
+    <p>The Port of Virginia is the top-performing U.S. East Coast port on the World Bank Container Port Performance Index (CPPI) across multiple editions. This is not a marginal advantage — Virginia's automation-first approach fundamentally separates it from every other port in this benchmark.</p>
+    <p>The Virginia International Gateway (VIG) in Portsmouth operates with automated stacking cranes (ASCs) — a technology deployed at relatively few North American terminals. ASCs replace rubber-tired gantry cranes with computer-controlled stacked container handling, reducing cycle time, labor cost per lift, and operational variability. The World Bank CPPI 2020–2024 publication explicitly identifies automation as a consistent predictor of higher moves-per-port-hour (MPPH) scores. VIG's ASC deployment is the primary driver of Virginia's CPPI leadership.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 93/100</div>
+      <p>Highest efficiency score in benchmark. Combination of ASC automation at VIG, 55-foot channel enabling maximum ULCV productivity, on-dock rail at both major terminals, and consistent CPPI top-performer status. The 7-point deduction reflects NIT not yet fully automated and the ILA labor environment limiting further automation expansion.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 3 — Infrastructure &amp; Physical Capacity</div>
+    <h2>America's Most Modern Gateway — The Infrastructure Benchmark</h2>
+    <p>Virginia's infrastructure portfolio is the strongest in this benchmark on nearly every dimension. The $450 million dredging program is bringing the Norfolk Harbor channel to 55 feet at mean low water — the deepest harbor on the U.S. East Coast upon completion (nearing completion as of January 2026). Channel widening was completed in February 2024, enabling two ultra-large container vessels to transit simultaneously — a capability no other East Coast port offers.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Channel Depth</div>
+      <p>55 feet (target, near completion) — deepest on the U.S. East Coast; enables fully loaded ULCVs above 18,000 TEU that no competing port can accept</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">STS Cranes</div>
+      <p>29 ship-to-shore cranes across VIG and NIT — all post-Panamax or super post-Panamax; 2nd largest fleet in benchmark behind Savannah (38)</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Capital Program</div>
+      <p>$1.4B Gateway Investment Program — channel dredging, channel widening, new ULCV berth at NIT, ASC deployment at VIG, $83M rail infrastructure. Substantially complete, benefits being realized now.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 98/100</div>
+      <p>Top infrastructure score in benchmark. The 55-foot channel, 29 STS cranes, ASC automation at VIG, dual-ULCV simultaneous transit capability, and $1.4B near-complete capital program represent a combination no other port in this benchmark can match.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 4 — Financial Performance &amp; Revenue Model</div>
+    <h2>$113M Operating Income — Strongest Single-Port Result in Benchmark</h2>
+    <p>The Port of Virginia generated operating income of $113 million in FY2024 (year ended June 30, 2024) on total cargo volume of 3.5 million TEUs — the highest operating income of any single-purpose container port authority in this benchmark. VPA operates through Virginia International Terminals (VIT), its wholly owned subsidiary that runs all terminal operations, meaning VPA captures the full operational revenue stream rather than sharing it with a private lessee.</p>
+    <div class="pill-row">
+      <span class="pill">Container Handling (VIT Operator)</span>
+      <span class="pill">Rail Intermodal Fees</span>
+      <span class="pill">Container Storage</span>
+      <span class="pill">Equipment Rental</span>
+      <span class="pill">Virginia Inland Port Fees</span>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Revenue per TEU</div>
+      <p>~$128–157/TEU (est.) based on estimated $450–550M total revenues ÷ 3.5M TEUs — competitive with Savannah, below Charleston, reflecting Virginia's higher volume base diluting per-unit revenue</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 82/100</div>
+      <p>$113M operating income is the benchmark leader. Deductions reflect absence of confirmed full-year revenue totals in available data, relatively limited revenue diversification (container-and-rail-centric model), and the large Gateway Investment capital program now on the balance sheet.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 5 — Connectivity &amp; Hinterland Reach</div>
+    <h2>On-Dock Rail at Both Major Terminals — Best Intermodal Connectivity in Benchmark</h2>
+    <div class="journey-row">
+      <div class="jp">
+        <div class="jp-label">VIG On-Dock Rail</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">CSX · Direct vessel-to-train</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">NIT On-Dock Rail</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">Norfolk Southern · Direct</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Virginia Inland Port</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">Front Royal, VA · CSX</div>
+      </div>
+    </div>
+    <p>On-dock rail at both VIG and NIT, served by both CSX and Norfolk Southern, is the gold standard in port intermodal connectivity — containers move directly between ship and train without an intermediate truck dray. Virginia's $83 million rail upgrade (part of the Gateway Investment Program) is expanding this capacity further.</p>
+    <p>Virginia's 55-foot channel (deepest East Coast) creates an additional connectivity advantage: carriers deploying their largest vessels route them through ports that can physically accept them fully loaded. Virginia captures the highest-capacity vessel deployments and the premium trade lanes that use ULCVs.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 90/100</div>
+      <p>Strongest hinterland reach in benchmark. On-dock rail at both major terminals, dual Class I railroad service, Virginia Inland Port, and ULCV vessel service premium combine for the top connectivity score. The 10-point deduction reflects Virginia's geographic hinterland being smaller than Savannah (broader Southeast footprint) and NY/NJ (largest U.S. consumer market).</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 6 — Governance &amp; Strategic Positioning</div>
+    <h2>Single-Purpose State Authority With Proven Capital Execution</h2>
+    <p>The Virginia Port Authority is a political subdivision of the Commonwealth of Virginia. The hybrid structure — VPA owns assets, VIT (100% VPA subsidiary) operates them — gives VPA the strategic and capital authority of a public body while capturing the full operational revenue of a terminal operator. Virginia's $1.4B Gateway Investment Program is the most ambitious and most complete capital program in this benchmark — clearly envisioned, comprehensively funded, and nearing completion.</p>
+    <div class="innovation-box">
+      <p><strong>"America's Most Modern Gateway"</strong> — Virginia's branding is grounded in verifiable infrastructure facts (ASCs, deepest channel, on-dock rail at two terminals) rather than mere marketing, and carrier behavior (CMA CGM ULCV service selection) validates it in the marketplace.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 85/100</div>
+      <p>Single-purpose state authority with strong capital program execution, clear strategic vision, and demonstrated carrier confidence. The deduction reflects the need for continued investment to maintain the infrastructure lead and the complexity of managing both automated (VIG) and non-automated (NIT) operations simultaneously.</p>
+    </div>
+  </div>
+
+  <div class="overall-section">
+    <div class="os-label">Overall Benchmarking Score</div>
+    <div class="os-num">89<span class="os-max">/100</span></div>
+    <div class="os-verdict">"The operational benchmark every East Coast port should measure against — the deepest channel, the most modern automation, on-dock rail at two terminals, and a $1.4B capital program substantially delivered."</div>
+  </div>
+
+  <div class="nav-row">
+    <span style="font-size:12px;color:#94a3b8;">2 of 6 · Port of Virginia</span>
+    <div style="display:flex;gap:10px;">
+      <a class="nav-btn home" href="../global-transit-benchmarking-interactive-one-pager.html">← Rankings</a>
+      <a class="nav-btn" href="london-tfl.html">Next: Port of NY/NJ →</a>
+    </div>
+  </div>
+
+  <div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+</div>
+</body>
+</html>

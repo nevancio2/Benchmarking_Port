@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PortMiami — Miami-Dade County Profile</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  .profile-header {
+    background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%);
+    border-radius: 16px; padding: 32px 36px; color: #fff; margin-bottom: 32px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .profile-flag { font-size: 64px; }
+  .profile-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .profile-header .sub { font-size: 13px; color: #fecaca; margin-bottom: 12px; }
+  .rank-badge { display: inline-block; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; }
+
+  .score-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 32px; }
+  .score-box { background: #fff; border-radius: 12px; padding: 14px 8px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06); border-top: 4px solid #ef4444; }
+  .score-box .sb-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+  .score-box .sb-val { font-size: 22px; font-weight: 800; }
+  .score-box .sb-max { font-size: 10px; color: #94a3b8; }
+  .score-box.overall { border-top-color: #22c55e; background: #f0fdf4; }
+  .score-box.overall .sb-val { color: #16a34a; }
+
+  .section { background: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .section-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #ef4444; margin-bottom: 6px; }
+  .section h2 { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9; }
+  .section p { font-size: 13px; color: #374151; margin-bottom: 10px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  .highlight-item { margin-bottom: 14px; padding-left: 14px; border-left: 3px solid #ef4444; }
+  .highlight-item .hi-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #dc2626; margin-bottom: 3px; }
+  .highlight-item p { font-size: 13px; color: #374151; }
+
+  .opp-list { list-style: none; padding: 0; }
+  .opp-list li { padding: 8px 12px 8px 36px; position: relative; font-size: 13px; color: #374151; border-bottom: 1px solid #f8fafc; }
+  .opp-list li:last-child { border-bottom: none; }
+  .opp-list li::before { content: '→'; position: absolute; left: 12px; color: #ef4444; font-weight: 700; }
+
+  .journey-row { display: flex; gap: 0; margin: 16px 0; }
+  .jp { flex: 1; text-align: center; position: relative; }
+  .jp::after { content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #cbd5e1; }
+  .jp:last-child::after { display: none; }
+  .jp-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #64748b; margin-bottom: 5px; }
+  .jp-dot { width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 5px; }
+  .jp-green { background: #22c55e; }
+  .jp-yellow { background: #f59e0b; }
+  .jp-red { background: #ef4444; }
+  .jp-note { font-size: 10px; color: #64748b; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .pill { background: #fee2e2; color: #991b1b; border-radius: 20px; font-size: 11px; font-weight: 700; padding: 3px 11px; }
+
+  .innovation-box { background: linear-gradient(135deg, #fef2f2, #fff5f5); border: 1.5px solid #fca5a5; border-radius: 10px; padding: 16px 20px; margin-top: 10px; }
+  .innovation-box p { font-size: 13px; color: #374151; }
+
+  .overall-section { background: linear-gradient(135deg, #991b1b, #ef4444); border-radius: 14px; padding: 28px; text-align: center; color: #fff; margin-bottom: 20px; }
+  .overall-section .os-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #fecaca; margin-bottom: 8px; }
+  .overall-section .os-num { font-size: 72px; font-weight: 900; line-height: 1; }
+  .overall-section .os-max { font-size: 18px; color: #fca5a5; }
+  .overall-section .os-verdict { font-size: 14px; color: #fecaca; margin-top: 10px; font-style: italic; }
+
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .nav-btn { background: #1e293b; color: #fff; border: none; border-radius: 10px; padding: 10px 22px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+  .nav-btn:hover { background: #334155; }
+  .nav-btn.home { background: #ef4444; }
+
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="profile-header">
+    <div class="profile-flag">⚓</div>
+    <div>
+      <h1>PortMiami</h1>
+      <div class="sub">Miami-Dade County, FL · FY2024 Data (Year Ended September 30, 2024)</div>
+      <span class="rank-badge">#6 Overall — World's #1 Cruise Homeport; Growing Cargo Ambitions</span>
+    </div>
+  </div>
+
+  <div class="score-strip">
+    <div class="score-box"><div class="sb-label">Throughput</div><div class="sb-val" style="color:#ef4444">55</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Efficiency</div><div class="sb-val" style="color:#ef4444">60</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Infrastructure</div><div class="sb-val" style="color:#f59e0b">73</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Revenue</div><div class="sb-val" style="color:#ef4444">58</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Connectivity</div><div class="sb-val" style="color:#ef4444">48</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Governance</div><div class="sb-val" style="color:#ef4444">62</div><div class="sb-max">/100</div></div>
+    <div class="score-box overall"><div class="sb-label">Overall</div><div class="sb-val">59</div><div class="sb-max">/100</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 1 — Throughput &amp; Scale</div>
+    <h2>~1.0–1.1M TEUs — Cruise-Dominant Port With Growing Cargo</h2>
+    <p>PortMiami's container TEU volume is approximately 1.0–1.1 million TEUs annually in recent fiscal years, with an increase in cargo TEU volume confirmed for FY2025 (ended September 30, 2025). PortMiami ranks sixth (last) in this benchmark by container TEU volume. The Deep Dredge project (deepening the channel from approximately 42 feet to 50 feet, completed in phases through the late 2010s) was intended to catalyze large-vessel container growth, and TEU volumes have grown since — but the container business remains small relative to the other five ports.</p>
+    <p>PortMiami's total economic identity is defined by cruise, not cargo. As the world's busiest cruise homeport (hosting Royal Caribbean, Carnival, Norwegian, MSC, Disney, and other major lines), cruise passenger volumes and cruise revenue dominate both the port's financial profile and its public identity. Container cargo is genuinely secondary.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 55/100</div>
+      <p>Lowest TEU volume in benchmark, but active growth trajectory (FY2025 confirmed increase) and the strategic rationale of the Deep Dredge program provide forward-looking credit. Container growth execution has been gradual.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 2 — Operational Efficiency (CPPI)</div>
+    <h2>Three-Operator Fragmentation Limits Direct Operational Control</h2>
+    <p>PortMiami operates through three private cargo terminal operators: Port of Miami Terminal Operating Company (POMTOC), Seaboard Marine, and South Florida Container Terminal (SFCT). This three-operator fragmentation, while less complex than NY/NJ's five-terminal environment, creates coordination challenges and limits PortMiami's direct control over terminal productivity. The World Bank CPPI has not produced a confirmed top-tier ranking for Miami equivalent to Port Everglades' confirmed top 20% worldwide placement.</p>
+    <p>The Deep Dredge (50-foot channel) has enabled post-Panamax vessels to call — larger vessels generate more moves per port hour on a single call, improving MPPH scores. Fitch describes PortMiami as building its container revenue profile post-Deep Dredge, implying that the efficiency infrastructure is now in place but the vessel service scale is still building.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 60/100</div>
+      <p>The 50-foot channel and post-Panamax cranes provide competitive physical infrastructure for its size class. Three-operator fragmentation, earlier-stage ULCV call volume, and absence of a confirmed top-tier CPPI ranking constrain this score. Improvement is possible as larger vessel calls ramp up.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 3 — Infrastructure &amp; Physical Capacity</div>
+    <h2>50-Foot Channel + PortMiami Tunnel — The Key Infrastructure Differentiator</h2>
+    <div class="journey-row">
+      <div class="jp">
+        <div class="jp-label">Channel Depth</div>
+        <div class="jp-dot jp-yellow"></div>
+        <div class="jp-note">50 ft (Deep Dredge completed)</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">PortMiami Tunnel</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">Direct I-395/I-95 access (2014)</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Expansion Space</div>
+        <div class="jp-dot jp-red"></div>
+        <div class="jp-note">Man-made island — very limited</div>
+      </div>
+    </div>
+    <p>PortMiami's infrastructure profile is nearly identical to Port Everglades on the headline metrics: 50-foot channel (via the transformative Deep Dredge), approximately 6–8 post-Panamax STS cranes, and multiple cargo berths (POMTOC, Seaboard Marine, SFCT). The PortMiami Tunnel (opened 2014) is PortMiami's most notable logistics infrastructure investment and a genuine competitive differentiator over Port Everglades — diverting truck traffic from downtown Miami streets directly to I-395 and I-95. PortMiami is receiving a federal INFRA grant for its Electrification Project, reflecting active federal engagement.</p>
+    <p>Physical constraints are severe: PortMiami is located on a man-made island in Biscayne Bay, surrounded by downtown Miami on one side and the bay on the other. Space for container terminal expansion is extremely limited, and the cruise-dominated berth allocation leaves minimal room for additional container berths.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 73/100</div>
+      <p>50-foot channel, post-Panamax cranes, and PortMiami Tunnel provide a competitive baseline. Physical space constraints, smaller crane fleet, and cruise-dominant berth allocation limit the score. Tied with Port Everglades on this dimension.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 4 — Financial Performance &amp; Revenue Model</div>
+    <h2>Cruise-Dominant Revenue — Fitch A Stable, Constrained Financial Profile</h2>
+    <p>PortMiami's financial profile is the most constrained in this benchmark. Fitch Rating: A (stable) — the lowest credit rating of any port with a confirmed rating in this benchmark. Key Fitch commentary: PortMiami's credit profile is "constrained by the need for continued operating revenue growth and strength in operating cash flow generation." FY2024 performance was maintained "despite higher annual debt service" from Deep Dredge capital investment.</p>
+    <div class="pill-row">
+      <span class="pill">Cruise (World #1 Homeport)</span>
+      <span class="pill">Container/Cargo (3 operators)</span>
+      <span class="pill">Free Trade Zone #32</span>
+      <span class="pill">Dockage &amp; Wharfage</span>
+    </div>
+    <div class="innovation-box">
+      <p><strong>The Cruise Concentration Risk:</strong> The cruise revenue concentration is both a strength (world-leading position in the world's largest cruise market) and a risk — as demonstrated during COVID-19, when cruise operations globally suspended for 15+ months, eliminating PortMiami's primary revenue source essentially overnight. The Deep Dredge investment was partly motivated by the desire to reduce this cruise dependence by building a second, significant revenue pillar in container cargo. Estimated FY2024 revenues: ~$150–175M; revenue per TEU: ~$140–165/TEU.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 58/100</div>
+      <p>Fitch 'A' rating (lowest in benchmark) and explicit credit agency commentary about the need for continued revenue growth paint a constrained financial picture. Cruise-dominant revenue model introduces sector concentration risk. Container revenue growth is the key to improving this score over time.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 5 — Connectivity &amp; Hinterland Reach</div>
+    <h2>No Rail, No Inland Ports — "Cargo Gateway of the Americas" is a Trade Lane, Not a Hinterland</h2>
+    <p>PortMiami has the most limited hinterland connectivity profile in this benchmark. There is no on-dock rail program — PortMiami relies entirely on trucks via the PortMiami Tunnel for container distribution. There is no inland port network, no rail intermodal facility, and no Class I railroad service into the terminal. Primary market: Miami-Dade County (~2.8M people) and the broader South Florida market plus Latin American and Caribbean trade.</p>
+    <p>PortMiami's positioning as "Cargo Gateway of the Americas" reflects its genuine strategic specialization in Latin American and Caribbean trade — a market segment where Miami's geographic position, FTZ #32 status, and cultural/linguistic connectivity with Latin America provide competitive advantages that no other port in this benchmark can replicate. However, Latin American and Caribbean trade generates lower absolute container volumes than the Asia-direct import trade dominating volumes at Virginia, Savannah, Charleston, and NY/NJ.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 48/100</div>
+      <p>Lowest connectivity score in benchmark. No rail intermodal capability, no inland port network, truck-only container distribution, and geographically concentrated South Florida/Latin America market. The PortMiami Tunnel provides operational connectivity benefit, but does not extend geographic hinterland reach.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 6 — Governance &amp; Strategic Positioning</div>
+    <h2>County Enterprise — Same Governance Constraints as Port Everglades, Tighter Finances</h2>
+    <p>PortMiami is operated by Miami-Dade County as an enterprise department — the same governance model as Port Everglades, with the same advantages and disadvantages. Miami-Dade County Board of County Commissioners governs; port capital competes with other county priorities; three private cargo terminal operators run container operations under lease arrangements. The primary strategic constraint is financial: Deep Dredge-driven debt service increase, combined with cruise revenue concentration and slower-than-projected container volume growth, has tightened PortMiami's financial flexibility at a time when competing ports are executing large capital programs.</p>
+    <p>PortMiami has two clearly differentiated strategic pillars — cruise and Latin American cargo — and has executed capital investment (Deep Dredge) and federal engagement (INFRA Electrification grant) to strengthen both. The container growth strategy is sound; execution has been gradual.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 62/100</div>
+      <p>County governance model is a structural constraint on capital deployment speed. Three-operator container terminal fragmentation limits direct operational control. Cruise revenue concentration is a strategic risk. The container growth strategy is sound but execution has been gradual compared to the scale of competing port capital programs.</p>
+    </div>
+  </div>
+
+  <div class="overall-section">
+    <div class="os-label">Overall Benchmarking Score</div>
+    <div class="os-num">59<span class="os-max">/100</span></div>
+    <div class="os-verdict">"The world's #1 cruise homeport is genuinely world-class in its primary business — the container ambition is real and the Deep Dredge infrastructure is in place, but county governance, three-operator fragmentation, and tightened post-Dredge finances constrain the near-term competitive position."</div>
+  </div>
+
+  <div class="nav-row">
+    <span style="font-size:12px;color:#94a3b8;">6 of 6 · PortMiami</span>
+    <div style="display:flex;gap:10px;">
+      <a class="nav-btn home" href="../global-transit-benchmarking-interactive-one-pager.html">← Rankings</a>
+      <a class="nav-btn" href="../revenue-deep-dive.html" style="background:#059669;">Revenue Deep Dive</a>
+    </div>
+  </div>
+
+  <div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+</div>
+</body>
+</html>

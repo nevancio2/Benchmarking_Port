@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Port of Savannah — Georgia Ports Authority Profile</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  .profile-header {
+    background: linear-gradient(135deg, #78350f 0%, #d97706 100%);
+    border-radius: 16px; padding: 32px 36px; color: #fff; margin-bottom: 32px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .profile-flag { font-size: 64px; }
+  .profile-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .profile-header .sub { font-size: 13px; color: #fde68a; margin-bottom: 12px; }
+  .rank-badge { display: inline-block; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; }
+
+  .score-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 32px; }
+  .score-box { background: #fff; border-radius: 12px; padding: 14px 8px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06); border-top: 4px solid #d97706; }
+  .score-box .sb-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+  .score-box .sb-val { font-size: 22px; font-weight: 800; }
+  .score-box .sb-max { font-size: 10px; color: #94a3b8; }
+  .score-box.overall { border-top-color: #22c55e; background: #f0fdf4; }
+  .score-box.overall .sb-val { color: #16a34a; }
+
+  .section { background: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .section-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #d97706; margin-bottom: 6px; }
+  .section h2 { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9; }
+  .section p { font-size: 13px; color: #374151; margin-bottom: 10px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  .highlight-item { margin-bottom: 14px; padding-left: 14px; border-left: 3px solid #d97706; }
+  .highlight-item .hi-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #92400e; margin-bottom: 3px; }
+  .highlight-item p { font-size: 13px; color: #374151; }
+
+  .opp-list { list-style: none; padding: 0; }
+  .opp-list li { padding: 8px 12px 8px 36px; position: relative; font-size: 13px; color: #374151; border-bottom: 1px solid #f8fafc; }
+  .opp-list li:last-child { border-bottom: none; }
+  .opp-list li::before { content: '→'; position: absolute; left: 12px; color: #d97706; font-weight: 700; }
+
+  .journey-row { display: flex; gap: 0; margin: 16px 0; }
+  .jp { flex: 1; text-align: center; position: relative; }
+  .jp::after { content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #cbd5e1; }
+  .jp:last-child::after { display: none; }
+  .jp-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #64748b; margin-bottom: 5px; }
+  .jp-dot { width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 5px; }
+  .jp-green { background: #22c55e; }
+  .jp-yellow { background: #f59e0b; }
+  .jp-red { background: #ef4444; }
+  .jp-note { font-size: 10px; color: #64748b; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .pill { background: #fef3c7; color: #92400e; border-radius: 20px; font-size: 11px; font-weight: 700; padding: 3px 11px; }
+
+  .innovation-box { background: linear-gradient(135deg, #fffbeb, #fef9c3); border: 1.5px solid #fcd34d; border-radius: 10px; padding: 16px 20px; margin-top: 10px; }
+  .innovation-box p { font-size: 13px; color: #374151; }
+
+  .overall-section { background: linear-gradient(135deg, #78350f, #d97706); border-radius: 14px; padding: 28px; text-align: center; color: #fff; margin-bottom: 20px; }
+  .overall-section .os-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #fde68a; margin-bottom: 8px; }
+  .overall-section .os-num { font-size: 72px; font-weight: 900; line-height: 1; }
+  .overall-section .os-max { font-size: 18px; color: #fcd34d; }
+  .overall-section .os-verdict { font-size: 14px; color: #fde68a; margin-top: 10px; font-style: italic; }
+
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .nav-btn { background: #1e293b; color: #fff; border: none; border-radius: 10px; padding: 10px 22px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+  .nav-btn:hover { background: #334155; }
+  .nav-btn.home { background: #d97706; }
+
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="profile-header">
+    <div class="profile-flag">⚓</div>
+    <div>
+      <h1>Port of Savannah</h1>
+      <div class="sub">Georgia Ports Authority · Savannah, GA · FY2024/FY2025 Data</div>
+      <span class="rank-badge">🥇 #1 Overall — #1 on Throughput, Connectivity &amp; Revenue</span>
+    </div>
+  </div>
+
+  <div class="score-strip">
+    <div class="score-box"><div class="sb-label">Throughput</div><div class="sb-val" style="color:#16a34a">95</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Efficiency</div><div class="sb-val" style="color:#16a34a">80</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Infrastructure</div><div class="sb-val" style="color:#16a34a">85</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Revenue</div><div class="sb-val" style="color:#16a34a">90</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Connectivity</div><div class="sb-val" style="color:#16a34a">93</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Governance</div><div class="sb-val" style="color:#16a34a">88</div><div class="sb-max">/100</div></div>
+    <div class="score-box overall"><div class="sb-label">Overall</div><div class="sb-val">89</div><div class="sb-max">/100</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 1 — Throughput &amp; Scale</div>
+    <h2>~5.9 Million TEUs — East Coast's Most Ambitious Growth Platform</h2>
+    <p>The Port of Savannah achieved its second-busiest year ever in calendar year 2025, with approximately 5.9 million TEUs — trailing only the pandemic-era surge of CY2022. FY2024 operating revenues of $698.7 million were generated on a TEU base of approximately 5.5 million — confirming Savannah as the largest single-purpose container port authority by operating revenue in this benchmark. In August 2025 alone, volumes were up 9% year-over-year — a single-month growth rate that exceeds Charleston's full-year growth rate of 0.8%.</p>
+    <p>Savannah is the 3rd-largest U.S. container port overall and the largest container port on the East Coast by throughput volume among single-terminal authorities. Garden City Terminal — the world's largest single-terminal container facility by acreage — is Savannah's operational core.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 95/100</div>
+      <p>Near the top of the throughput scale. Deduction from 100 reflects NY/NJ (9.0M TEUs) being substantially larger and that CY2025's extraordinary performance may partially reflect trade lane shifts (front-loading ahead of tariff deadlines) not permanently sustainable at the same growth rate.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 2 — Operational Efficiency (CPPI)</div>
+    <h2>Scale-Driven Efficiency — 38 Cranes, Mason Mega Rail, Direct Operator Control</h2>
+    <p>Savannah's CPPI performance is strong but not the benchmark leader on a per-unit basis — that distinction belongs to Virginia. Savannah's efficiency advantage comes from scale rather than automation: Garden City Terminal's 38 STS cranes operating simultaneously across 9,000 linear feet of deep-water berth generate high absolute MPPH through crane deployment density rather than automated handling. Eight new STS cranes entered service in March 2024. GPA operates Garden City Terminal directly, retaining full control over crane productivity targets and operational scheduling.</p>
+    <p>The Mason Mega Rail Terminal reduces container dwell time by moving boxes directly from vessel to train without intermediate truck movement — reduced dwell time frees terminal yard space, reduces congestion, and shortens the effective vessel working window. The 47-foot channel depth is the single most significant operational constraint — fully loaded ULCVs above approximately 13,000–14,000 TEU cannot call at low tide without draft restrictions. GPA formally initiated a channel deepening feasibility study in June 2026.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 80/100</div>
+      <p>Scale-driven efficiency, Mason Mega Rail dwell time advantage, and direct operator model are significant strengths. The 47-foot channel depth ceiling for ULCV access is the primary efficiency constraint. If channel deepening proceeds, this score would improve materially.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 3 — Infrastructure &amp; Physical Capacity</div>
+    <h2>World's Largest Single Terminal — One Critical Limitation</h2>
+    <div class="journey-row">
+      <div class="jp">
+        <div class="jp-label">Garden City Terminal</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">World's largest by acreage</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Mason Mega Rail</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">N. America's largest on-dock rail</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Channel Depth</div>
+        <div class="jp-dot jp-red"></div>
+        <div class="jp-note">47 ft — Shallowest in benchmark</div>
+      </div>
+    </div>
+    <p>Garden City Terminal's ~1,200+ acre footprint gives it a throughput capacity that no comparable single terminal in the Americas can match. The Mason Mega Rail Terminal is architecturally the most capable on-dock rail facility in North America — a competitive moat that would take any competitor 5–7 years and several hundred million dollars to replicate. STS crane fleet: 38 — the largest in this benchmark. Capacity target: 12.5 million TEUs by 2035 through phased expansion of Garden City Terminal, Ocean Terminal, and rail infrastructure.</p>
+    <div class="highlight-item">
+      <div class="hi-label">The Critical Limitation</div>
+      <p>47-foot channel — shallowest in the benchmark. GPA is 3 feet behind NY/NJ/Everglades/Miami (50 ft), 5 feet behind Charleston (52 ft), and 8 feet behind Virginia's 55-foot target. For 18,000–24,000 TEU ULCVs, 47 feet is a meaningful structural constraint with no near-term funded resolution.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 85/100</div>
+      <p>World's largest single container terminal, largest on-dock rail facility in North America, 38 STS cranes, and a clear 12.5M TEU expansion pathway are extraordinary infrastructure assets. The 47-foot channel depth — the shallowest in the benchmark — prevents a higher score.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 4 — Financial Performance &amp; Revenue Model</div>
+    <h2>$698.7M Operating Revenue — Strongest Single-Purpose Port Authority in Benchmark</h2>
+    <p>Georgia Ports Authority is the strongest financial performer of any single-purpose container port authority in this benchmark. FY2024 operating revenues: $698.7 million — described by GPA as the "third-best annual operating revenues in the authority's history." S&P Global credit rating: Excellent (investment grade, high quality, reaffirmed August 19, 2025). GPA operates Garden City Terminal directly, retaining 100% of container wharfage, terminal handling charges, storage fees, equipment rental, and dockage fees — no private terminal operator lease arrangements diluting GPA's revenue capture.</p>
+    <div class="pill-row">
+      <span class="pill">Container Handling (Direct Operator)</span>
+      <span class="pill">Container Storage</span>
+      <span class="pill">Brunswick Port (Ro-Ro/Auto)</span>
+      <span class="pill">Appalachian Regional Port</span>
+      <span class="pill">Blue Ridge Inland Port</span>
+    </div>
+    <div class="innovation-box">
+      <p><strong>The Operator Model Premium:</strong> GPA generates $698.7M on 5.5M TEUs (~$127/TEU). PANYNJ generates only ~$450–500M in port revenues on 9.0M TEUs (~$50–56/TEU). The landlord vs. operator gap translates to a roughly 2.5x revenue-per-TEU differential — the single most important revenue model insight in this benchmark. Savannah's direct operator model is the benchmark for Charleston's HLT build-out to aspire to.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 90/100</div>
+      <p>Highest financial score among single-purpose container port authorities. $698.7M operating revenues, S&P "Excellent" rating, direct operator revenue model, and growing throughput base are the dominant strengths. Deductions reflect post-pandemic revenue normalization and the capital demands of the 12.5M TEU expansion program.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 5 — Connectivity &amp; Hinterland Reach</div>
+    <h2>Mason Mega Rail + Two Inland Ports — Best Container Intermodal in Benchmark</h2>
+    <div class="journey-row">
+      <div class="jp">
+        <div class="jp-label">Mason Mega Rail</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">CSX + NS on-dock · N. America's largest</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Appalachian Port (ARP)</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">Chatsworth, GA · CSX · +19% CY2025</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Blue Ridge Port</div>
+        <div class="jp-dot jp-green"></div>
+        <div class="jp-note">Gainesville, GA · Atlanta metro</div>
+      </div>
+    </div>
+    <p>The Mason Mega Rail Terminal enables direct vessel-to-train transfer — the deepest possible on-dock rail integration. GPA's stated goal is 40%+ rail modal share for container movements. The Appalachian Regional Port (ARP) in Chatsworth, GA recorded 45,700 containers in CY2025, up 19%. The Blue Ridge Inland Port in Gainesville serves Atlanta's northern suburbs and growing logistics corridors along I-85 and I-985 — giving GPA direct reach into the nation's 9th-largest metro area.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 93/100</div>
+      <p>On-dock rail at the world's largest single container terminal, dual Class I railroad service, two growing inland ports, and a 40%+ rail modal share target combine for the highest connectivity score in the benchmark. Deduction reflects the 47-foot channel constraining the universe of ULCV vessel services that can call Savannah.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 6 — Governance &amp; Strategic Positioning</div>
+    <h2>Direct Operator State Authority — Disciplined Execution Toward 12.5M TEU Vision</h2>
+    <p>GPA is a state authority of Georgia, governed by a Board of Directors appointed by the Governor. It operates as a direct operator — running its own terminals — which maximizes revenue capture and operational control. The 12.5 million TEU capacity by 2035 strategic target is the most clearly articulated long-term capacity vision in this benchmark: $65.6M Ocean Terminal approval (March 2024), eight new STS cranes at Garden City (March 2024), ongoing Garden City West Expansion, and Mason Rail expansion. S&P "Excellent" credit reaffirmation (August 2025) during active expansion validates the market's confidence in GPA's capital management.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Primary Strategic Risk</div>
+      <p>47-foot channel depth: if carriers accelerate ULCV deployments on Savannah call rotations and experience draft restrictions, volume could migrate to Virginia (55 ft) or Charleston (52 ft). No funded, approved deepening program exists as of the research date.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 88/100</div>
+      <p>Direct operator governance (100% revenue capture), single-purpose state authority, clearly articulated 12.5M TEU vision, disciplined capital execution, and S&P "Excellent" rating are the strengths. The 47-foot channel strategic risk and the scale of active capital commitments prevent a higher score.</p>
+    </div>
+  </div>
+
+  <div class="overall-section">
+    <div class="os-label">Overall Benchmarking Score</div>
+    <div class="os-num">89<span class="os-max">/100</span></div>
+    <div class="os-verdict">"The East Coast's most ambitious growth platform — the world's largest single container terminal, the largest on-dock rail facility in North America, and a clear 12.5M TEU expansion roadmap. The 47-foot channel is the single most important gap to close."</div>
+  </div>
+
+  <div class="nav-row">
+    <span style="font-size:12px;color:#94a3b8;">1 of 6 · Port of Savannah</span>
+    <div style="display:flex;gap:10px;">
+      <a class="nav-btn home" href="../global-transit-benchmarking-interactive-one-pager.html">← Rankings</a>
+      <a class="nav-btn" href="seoul-metro.html">Next: Port Everglades →</a>
+    </div>
+  </div>
+
+  <div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Port Everglades — Broward County Profile</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.7; }
+  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  .profile-header {
+    background: linear-gradient(135deg, #164e63 0%, #0891b2 100%);
+    border-radius: 16px; padding: 32px 36px; color: #fff; margin-bottom: 32px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .profile-flag { font-size: 64px; }
+  .profile-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .profile-header .sub { font-size: 13px; color: #a5f3fc; margin-bottom: 12px; }
+  .rank-badge { display: inline-block; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; }
+
+  .score-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 32px; }
+  .score-box { background: #fff; border-radius: 12px; padding: 14px 8px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06); border-top: 4px solid #0891b2; }
+  .score-box .sb-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+  .score-box .sb-val { font-size: 22px; font-weight: 800; }
+  .score-box .sb-max { font-size: 10px; color: #94a3b8; }
+  .score-box.overall { border-top-color: #22c55e; background: #f0fdf4; }
+  .score-box.overall .sb-val { color: #16a34a; }
+
+  .section { background: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .section-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #0891b2; margin-bottom: 6px; }
+  .section h2 { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9; }
+  .section p { font-size: 13px; color: #374151; margin-bottom: 10px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  .highlight-item { margin-bottom: 14px; padding-left: 14px; border-left: 3px solid #0891b2; }
+  .highlight-item .hi-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #0e7490; margin-bottom: 3px; }
+  .highlight-item p { font-size: 13px; color: #374151; }
+
+  .opp-list { list-style: none; padding: 0; }
+  .opp-list li { padding: 8px 12px 8px 36px; position: relative; font-size: 13px; color: #374151; border-bottom: 1px solid #f8fafc; }
+  .opp-list li:last-child { border-bottom: none; }
+  .opp-list li::before { content: '→'; position: absolute; left: 12px; color: #0891b2; font-weight: 700; }
+
+  .journey-row { display: flex; gap: 0; margin: 16px 0; }
+  .jp { flex: 1; text-align: center; position: relative; }
+  .jp::after { content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #cbd5e1; }
+  .jp:last-child::after { display: none; }
+  .jp-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #64748b; margin-bottom: 5px; }
+  .jp-dot { width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 5px; }
+  .jp-green { background: #22c55e; }
+  .jp-yellow { background: #f59e0b; }
+  .jp-red { background: #ef4444; }
+  .jp-note { font-size: 10px; color: #64748b; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .pill { background: #e0f2fe; color: #0e7490; border-radius: 20px; font-size: 11px; font-weight: 700; padding: 3px 11px; }
+
+  .innovation-box { background: linear-gradient(135deg, #ecfeff, #f0fdfe); border: 1.5px solid #67e8f9; border-radius: 10px; padding: 16px 20px; margin-top: 10px; }
+  .innovation-box p { font-size: 13px; color: #374151; }
+
+  .overall-section { background: linear-gradient(135deg, #164e63, #0891b2); border-radius: 14px; padding: 28px; text-align: center; color: #fff; margin-bottom: 20px; }
+  .overall-section .os-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #a5f3fc; margin-bottom: 8px; }
+  .overall-section .os-num { font-size: 72px; font-weight: 900; line-height: 1; }
+  .overall-section .os-max { font-size: 18px; color: #67e8f9; }
+  .overall-section .os-verdict { font-size: 14px; color: #a5f3fc; margin-top: 10px; font-style: italic; }
+
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .nav-btn { background: #1e293b; color: #fff; border: none; border-radius: 10px; padding: 10px 22px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+  .nav-btn:hover { background: #334155; }
+  .nav-btn.home { background: #0891b2; }
+
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="profile-header">
+    <div class="profile-flag">⚓</div>
+    <div>
+      <h1>Port Everglades</h1>
+      <div class="sub">Broward County, Fort Lauderdale, FL · FY2024 Data (Year Ended September 30, 2024)</div>
+      <span class="rank-badge">#5 Overall — Highest Revenue Diversification &amp; Operating Margin in Benchmark</span>
+    </div>
+  </div>
+
+  <div class="score-strip">
+    <div class="score-box"><div class="sb-label">Throughput</div><div class="sb-val" style="color:#ef4444">58</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Efficiency</div><div class="sb-val" style="color:#16a34a">82</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Infrastructure</div><div class="sb-val" style="color:#f59e0b">73</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Revenue</div><div class="sb-val" style="color:#f59e0b">70</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Connectivity</div><div class="sb-val" style="color:#ef4444">52</div><div class="sb-max">/100</div></div>
+    <div class="score-box"><div class="sb-label">Governance</div><div class="sb-val" style="color:#ef4444">63</div><div class="sb-max">/100</div></div>
+    <div class="score-box overall"><div class="sb-label">Overall</div><div class="sb-val">66</div><div class="sb-max">/100</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 1 — Throughput &amp; Scale</div>
+    <h2>~1.1–1.2M TEUs — Smaller Volume, Record FY2025 Growth</h2>
+    <p>Port Everglades is a top 10 U.S. container port with estimated annual container throughput of approximately 1.1–1.2 million TEUs in FY2024 (year ended September 30, 2024). The port recorded double-digit growth in cargo tonnage and container throughput in Q1 FY2025, and fiscal year 2025 (ended September 30, 2025) shattered all-time records across all performance metrics. Within this benchmark's six-port set, Port Everglades ranks fifth in container TEU volume — ahead only of PortMiami.</p>
+    <p>Its total operating revenues of $215.5 million significantly understate its economic importance: Port Everglades generates over $28 billion in annual economic impact, reflecting its role as a multi-modal logistics hub for petroleum distribution, cruise home-porting, and container imports for South Florida's large consumer base.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 58/100</div>
+      <p>Container volume is the second-lowest in the benchmark. The record FY2025 performance and double-digit growth trajectory are positive signals, but the absolute TEU base is less than half of Charleston's and less than a fifth of Savannah's.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 2 — Operational Efficiency (CPPI)</div>
+    <h2>Top 20% Worldwide — Confirmed World Bank CPPI Ranking</h2>
+    <p>Port Everglades achieved a top 20% worldwide ranking on the World Bank Container Port Performance Index (CPPI), confirmed in a September 25, 2025 press release — the single most directly confirmed CPPI result in this benchmark. This is one of the most efficient container operations relative to its size anywhere in the world.</p>
+    <p>The explanation lies in the focused nature of the Everglades container operation: containers are handled exclusively at the Southport area (Berths 23–26), a compact, purpose-designed container terminal with rail-mounted STS cranes. A focused, modern container operation with good crane productivity and manageable vessel call sizes can generate excellent MPPH scores. STS crane upgrades at Southport are underway per the 2024 Master/Vision Plan.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 82/100</div>
+      <p>Top 20% worldwide CPPI ranking is directly confirmed and represents genuine operational excellence. Deduction reflects the smaller absolute call size and volume base — MPPH is calculated over fewer total moves than larger ports.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 3 — Infrastructure &amp; Physical Capacity</div>
+    <h2>50-Foot Channel, Focused Southport Container Terminal — Urban Space Constraints</h2>
+    <div class="journey-row">
+      <div class="jp">
+        <div class="jp-label">Channel Depth</div>
+        <div class="jp-dot jp-yellow"></div>
+        <div class="jp-note">50 ft — Tied 3rd in benchmark</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Container Berths</div>
+        <div class="jp-dot jp-yellow"></div>
+        <div class="jp-note">Southport only · ~3,000–3,500 ft</div>
+      </div>
+      <div class="jp">
+        <div class="jp-label">Expansion Potential</div>
+        <div class="jp-dot jp-red"></div>
+        <div class="jp-note">Constrained by urban geography</div>
+      </div>
+    </div>
+    <p>Port Everglades' infrastructure is adequate for its current role but has physical constraints limiting container growth ambitions. At 50 feet, it can handle post-Panamax and many neo-Panamax vessels, but the largest ULCVs require draft restrictions. The port's layout — petroleum terminals, cruise terminals, and container terminals sharing a confined waterway within Broward County's urban geography — limits expansion potential. The Southport Access Channel (SAC) widening improves vessel maneuverability within existing space rather than creating new berth capacity. STS crane fleet: approximately 6–8 — the smallest in the benchmark.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 73/100</div>
+      <p>Competitive 50-foot channel and well-equipped Southport operation. Physical space constraints, smallest STS crane fleet in benchmark, and the structural limitation of a confined urban port layout prevent a higher score.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 4 — Financial Performance &amp; Revenue Model</div>
+    <h2>Three-Pillar Revenue Model — Highest Operating Margin in Benchmark</h2>
+    <p>Port Everglades' financial model is the most diversified by revenue sector of any port in this benchmark. Total operating revenues FY2024: $215.5 million — an 18.1% increase from $182.4 million in FY2023. Operating income FY2024: $64.0 million — an operating margin of approximately 29.7%, the highest operating margin among ports with directly confirmed revenue and income data in this benchmark.</p>
+    <div class="pill-row">
+      <span class="pill">Container/Cargo (Wharfage &amp; Handling)</span>
+      <span class="pill">Petroleum Distribution (12 FL counties)</span>
+      <span class="pill">Cruise (Top 3 worldwide homeport)</span>
+      <span class="pill">Equipment Rental</span>
+      <span class="pill">Dockage Fees</span>
+    </div>
+    <div class="innovation-box">
+      <p><strong>The Diversification Premium:</strong> Revenue per TEU ~$187–196 — the highest in the benchmark. Petroleum and cruise revenues supplement container revenue on a smaller TEU base. This tri-sector model is directly analogous to the most financially resilient systems in any benchmarking study — a shipping market downturn that reduces container revenue does not reduce petroleum distribution revenue or cruise homeport fees. Charleston's FY2024 operating loss ($2.3M) occurred during the same post-pandemic container rate normalization period when Everglades' diversification provided stability.</p>
+    </div>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 70/100</div>
+      <p>Strong 29.7% operating margin, highest revenue per TEU in benchmark ($187–196), and genuinely distinctive three-pillar revenue model. Deductions reflect the small absolute revenue base ($215.5M vs. $698.7M for Savannah), county governance constraint on capital deployment, and cruise revenue concentration risk.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 5 — Connectivity &amp; Hinterland Reach</div>
+    <h2>Truck-Only Intermodal — Most Limited Connectivity in Benchmark</h2>
+    <p>Port Everglades' hinterland reach is the most limited of any port in this benchmark. There is no significant on-dock rail program — Port Everglades is primarily a truck-dependent container operation. The port's location within Broward County's dense urban geography physically constrains on-dock rail infrastructure creation. There is no inland port network, no rail intermodal facility, and no Class I railroad service into the terminal. Primary market: South Florida consumer base (Broward, Miami-Dade, Palm Beach counties — approximately 6 million people combined).</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 52/100</div>
+      <p>Truck-only intermodal model and geographically concentrated South Florida market constrain this score more than any other dimension limits any port in the benchmark. This is a structural limitation of geography and county governance model — not addressable through investment alone.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Dimension 6 — Governance &amp; Strategic Positioning</div>
+    <h2>County-Operated — Financial Backstop With Capital Deployment Constraints</h2>
+    <p>Port Everglades is operated as a department of Broward County, Florida. Port capital investment competes for county budget attention against road maintenance, public safety, schools, and every other county service. The 2024 Master/Vision Plan process reflects this governance friction — strategic plans require multi-year county approval processes rather than the single-board-vote execution available to independent port authorities like GPA ($65.6M Ocean Terminal approval, March 2024).</p>
+    <p>Port Everglades has successfully established itself as a top 20% worldwide CPPI performer — an operational excellence achievement that validates its competitive position. Its tri-sector revenue model is a genuine financial strength. The strategic challenge is capital deployment speed in a constrained governance environment and the physical constraints on container growth within the existing port footprint.</p>
+    <div class="highlight-item">
+      <div class="hi-label">Score: 63/100</div>
+      <p>County governance, while financially backstopped, is structurally slower for port capital deployment than independent authority governance. Lack of dedicated bond authority (bonds require county approval) and competition with other county priorities are the primary deductions.</p>
+    </div>
+  </div>
+
+  <div class="overall-section">
+    <div class="os-label">Overall Benchmarking Score</div>
+    <div class="os-num">66<span class="os-max">/100</span></div>
+    <div class="os-verdict">"A top 20% worldwide CPPI performer with the best operating margin in the benchmark (29.7%) and a genuinely distinctive three-pillar revenue model — constrained by county governance, urban geography, and the absence of any rail intermodal capability."</div>
+  </div>
+
+  <div class="nav-row">
+    <span style="font-size:12px;color:#94a3b8;">5 of 6 · Port Everglades</span>
+    <div style="display:flex;gap:10px;">
+      <a class="nav-btn home" href="../global-transit-benchmarking-interactive-one-pager.html">← Rankings</a>
+      <a class="nav-btn" href="mta-nyc.html">Next: PortMiami →</a>
+    </div>
+  </div>
+
+  <div class="footer">Made with IBM Bob · Container Port Benchmarking Research 2025–2026</div>
+</div>
+</body>
+</html>
