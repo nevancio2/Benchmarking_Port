@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case 07 — Smart City &amp; Connected Infrastructure | IBM Success Stories for NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .case-hero { background: linear-gradient(135deg, #0f0a2a 0%, #1e1b4b 50%, #4338ca 100%); color: #fff; padding: 48px 24px 36px; text-align: center; }
+  .breadcrumb { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 10px; }
+  .breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .case-num { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #a5b4fc; margin-bottom: 8px; }
+  .case-hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  .case-hero p { font-size: 13px; color: #c7d2fe; max-width: 620px; margin: 0 auto 24px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .nav-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #fff; text-decoration: none; transition: background .2s; display: inline-block; }
+  .nav-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #57606a; margin-bottom: 14px; padding-bottom: 7px; border-bottom: 2px solid #4338ca; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #4338ca; flex-shrink: 0; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #4338ca; }
+  .kpi-num { font-size: 22px; font-weight: 900; color: #4338ca; }
+  .kpi-lbl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 4px; }
+
+  .content-card { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .content-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+  .content-card p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul { padding-left: 18px; margin-bottom: 10px; }
+  .content-card ul li { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 4px; }
+
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .col-card { background: #fff; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .col-card h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #57606a; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #f1f5f9; }
+  .col-card p, .col-card li { font-size: 12px; color: #374151; line-height: 1.65; margin-bottom: 5px; }
+  .col-card ul { padding-left: 16px; }
+
+  .ncdot-box { background: linear-gradient(90deg,#fef3c7,#fffbeb); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .ncdot-box .nb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #92400e; margin-bottom: 6px; }
+  .ncdot-box h3 { font-size: 15px; font-weight: 800; color: #78350f; margin-bottom: 8px; }
+  .ncdot-box p, .ncdot-box li { font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 5px; }
+  .ncdot-box ul { padding-left: 18px; }
+
+  .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .data-table th { padding: 10px 14px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; text-align: left; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px; vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:nth-child(odd) td { background: #fafafa; }
+  .pill { display: inline-block; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+  .pill-indigo { background: #e0e7ff; color: #3730a3; }
+  .pill-green  { background: #d1fae5; color: #065f46; }
+  .pill-gold   { background: #fef3c7; color: #92400e; }
+
+  .ai-vision { background: linear-gradient(135deg,#1e1b4b,#1e3a5f); color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; }
+  .ai-vision h3 { font-size: 16px; font-weight: 800; color: #a5b4fc; margin-bottom: 10px; }
+  .ai-vision p { font-size: 13px; color: #c7d2fe; line-height: 1.75; margin-bottom: 10px; }
+  .ai-vision ul { padding-left: 18px; }
+  .ai-vision ul li { font-size: 13px; color: #c7d2fe; line-height: 1.75; margin-bottom: 5px; }
+
+  .quote-block { background: #1e293b; border-radius: 12px; padding: 22px 26px; margin-bottom: 24px; }
+  .quote-block p { font-size: 14px; color: #e2e8f0; font-style: italic; line-height: 1.7; }
+  .quote-block .qsource { font-size: 11px; color: #64748b; margin-top: 8px; font-style: normal; }
+
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .page-nav a { display: inline-block; background: #1e293b; color: #fff; border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+  .page-nav a:hover { background: #334155; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="case-hero">
+  <div class="breadcrumb"><a href="index.html">IBM Success Stories</a> &rsaquo; Case 07 of 07</div>
+  <div class="case-num">Case Study 07 &nbsp;·&nbsp; Smart City / IoT &nbsp;·&nbsp; Final Case</div>
+  <h1>🌐 Smart City &amp; Connected Infrastructure</h1>
+  <p>The endgame: IBM unifies NCDOT's siloed sensor, GPS, toll, and ridership data into a single AI-ready multimodal intelligence platform — enabling new revenue streams and positioning North Carolina as a national testbed.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="index.html">← All Cases</a>
+    <a class="nav-chip" href="#section-what">What IBM Did</a>
+    <a class="nav-chip" href="#section-silos">NCDOT Data Silos</a>
+    <a class="nav-chip" href="#section-ncdot">Revenue &amp; AI Vision</a>
+    <a class="nav-chip" href="06-pensions.html">← Case 06</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num">93/100</div><div class="kpi-lbl">NCDOT Relevance Score</div></div>
+    <div class="kpi"><div class="kpi-num">IoT + AI</div><div class="kpi-lbl">Unified Intelligence</div></div>
+    <div class="kpi"><div class="kpi-num">Digital Twin</div><div class="kpi-lbl">IBM Technology Leader</div></div>
+    <div class="kpi"><div class="kpi-num">New Revenue</div><div class="kpi-lbl">Non-Fare Streams</div></div>
+  </div>
+
+  <div id="section-what">
+    <div class="section-label"><div class="dot"></div>What IBM Did</div>
+    <div class="content-card">
+      <h2>IBM Smart City — From Sensor Data Fragmentation to Unified Intelligence</h2>
+      <p>IBM defines a smart city as one that uses data from connected devices to identify patterns and tackle infrastructure problems. This is not an aspirational concept for IBM — it is a documented practice area with deployed technology across multiple cities and transportation networks globally.</p>
+      <p>IBM is a recognized leader in <strong>digital twin technology</strong>, which plays a central role in smart city implementations. A digital twin is a continuously updated virtual model of a physical asset — a highway segment, a ferry vessel, a transit corridor — that is fed by real-time IoT sensor data. IBM's digital twin platform uses IoT-connected devices to continuously collect and share operational data, enabling cities and transportation agencies to optimize infrastructure performance, predict failures, and model the impact of operational decisions before implementing them.</p>
+      <p>Broader academic and industry research validates the platform approach: IoT platforms enable cities to connect and manage smart infrastructure through real-time big data service platforms and open-data ecosystems. IBM's smart city work sits at the intersection of this IoT infrastructure and its watsonx AI platform — meaning the sensor data collected does not just flow into a dashboard; it trains AI models that improve operational decisions over time.</p>
+    </div>
+
+    <div class="quote-block">
+      <p>"The meeting notes emphasize preparing for 'AI readiness' and 'the AI future.' IBM has modernized sensor/IoT data silos for smart city initiatives, integrating traffic signals, parking sensors, and transit real-time data into a unified intelligence layer."</p>
+      <div class="qsource">— IBM NCDOT Strategy Document, 2025</div>
+    </div>
+
+    <div class="three-col">
+      <div class="col-card">
+        <h3>IoT Data Collection</h3>
+        <p>IBM's platform connects sensors across every infrastructure type — traffic cameras, highway loop detectors, parking sensors, ferry GPS receivers, transit vehicle trackers — and streams their data in real time into a unified event layer.</p>
+        <p>Crucially, IBM's connectors work with existing sensor hardware. NCDOT does not need to replace its physical infrastructure to start collecting unified data.</p>
+      </div>
+      <div class="col-card">
+        <h3>Digital Twin Modeling</h3>
+        <p>IBM creates living digital models of NCDOT's physical assets — each ferry route, highway corridor, and transit network. These models update in real time as sensor data arrives, giving NCDOT planners a continuously accurate virtual picture of the entire transportation network.</p>
+        <p>Digital twins enable "what if" scenario modeling: what happens to ferry demand if a highway incident closes I-95 for two hours?</p>
+      </div>
+      <div class="col-card">
+        <h3>AI Intelligence Layer</h3>
+        <p>IBM watsonx AI consumes the unified sensor data stream to deliver predictive capabilities: congestion prediction 30–60 minutes ahead, demand forecasting for ferry and transit services, dynamic routing recommendations, and anomaly detection for infrastructure health.</p>
+        <p>This is the AI readiness outcome that NCDOT's leadership identified as a strategic priority in the initial IBM meeting.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-silos">
+    <div class="section-label"><div class="dot"></div>NCDOT's Current Data Silos — The Problem IBM Solves</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>NCDOT Data Source</th><th>Current State</th><th>IBM Smart City Integration</th><th>AI Capability Unlocked</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ferry Division</strong><br><span style="font-size:11px;color:#64748b;">GPS, arrival times, passenger counts</span></td>
+          <td>Ferry GPS and ridership data isolated within Ferry Division systems. Not accessible to transit planners or highway operations.</td>
+          <td><span class="pill pill-indigo">Real-time ferry data stream via Confluent</span></td>
+          <td><span class="pill pill-green">Demand forecasting, dynamic capacity scheduling</span></td>
+        </tr>
+        <tr>
+          <td><strong>NC Turnpike / Toll Systems</strong><br><span style="font-size:11px;color:#64748b;">Transaction data, traffic flow, gantry sensors</span></td>
+          <td>Toll transaction and traffic flow data confined to NCTA systems. No linkage to transit ridership or ferry operations.</td>
+          <td><span class="pill pill-indigo">Toll + traffic data joined to transit stream</span></td>
+          <td><span class="pill pill-green">Congestion prediction, dynamic pricing models</span></td>
+        </tr>
+        <tr>
+          <td><strong>Highway Traffic Sensors &amp; Cameras</strong><br><span style="font-size:11px;color:#64748b;">Loop detectors, radar sensors, CCTV</span></td>
+          <td>Sensor data used for incident response only. Not integrated with transit or ferry demand models.</td>
+          <td><span class="pill pill-indigo">Highway sensor feed into unified platform</span></td>
+          <td><span class="pill pill-green">Cross-modal incident impact modeling</span></td>
+        </tr>
+        <tr>
+          <td><strong>Regional Transit Operators</strong><br><span style="font-size:11px;color:#64748b;">CATS, GoTriangle, Wave Transit, GoRaleigh</span></td>
+          <td>Each operator has independent vehicle tracking and ridership data. No statewide real-time transit intelligence exists.</td>
+          <td><span class="pill pill-indigo">Operator feeds aggregated via IBM layer</span></td>
+          <td><span class="pill pill-green">Statewide ridership analytics, network optimization</span></td>
+        </tr>
+        <tr>
+          <td><strong>Parking Facilities</strong><br><span style="font-size:11px;color:#64748b;">Park-and-ride lots, ferry terminal parking</span></td>
+          <td>Parking occupancy not tracked in real time. Revenue not linked to transit ridership or event demand data.</td>
+          <td><span class="pill pill-indigo">Real-time occupancy sensors connected</span></td>
+          <td><span class="pill pill-gold">Dynamic parking pricing, EV charging optimization</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="ncdot-box">
+      <div class="nb-label">NCDOT Direct Parallel</div>
+      <h3>NCDOT Has All the Data — It Just Cannot See Any of It Together</h3>
+      <p>NCDOT already generates an enormous volume of sensor, GPS, transaction, and ridership data every day. The problem is not that the data does not exist — it is that each data source lives in a separate silo and is used only by the team that operates that specific system. IBM's Smart City platform is designed precisely for this situation: connect what already exists, unify it, and unlock AI capabilities that none of the individual silos could support alone.</p>
+      <ul>
+        <li>Ferry GPS data + highway congestion data = dynamic ferry demand forecasting triggered by road incidents</li>
+        <li>Toll transaction data + transit ridership = pricing models that shift drivers to transit during peak congestion</li>
+        <li>Parking occupancy + event data = dynamic pricing that maximizes revenue from NCDOT-owned parking assets</li>
+        <li>All data streams combined = IBM watsonx AI trained on NCDOT's own operational reality, not a generic model</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div id="section-ncdot">
+    <div class="section-label"><div class="dot"></div>NCDOT Revenue &amp; AI Vision — What Becomes Possible</div>
+
+    <div class="ai-vision">
+      <h3>North Carolina as a National Testbed for Multimodal AI Optimization</h3>
+      <p>IBM's Smart City platform does not just solve NCDOT's internal operational problems — it positions North Carolina to lead the nation in multimodal AI-driven transportation. NCDOT is uniquely positioned for this: it is one of the few state DOTs operating ferries, highways, tolls, and transit under a single coordinating agency umbrella, generating cross-modal data that most transportation agencies cannot access.</p>
+      <p>With IBM's unified intelligence platform in place, NCDOT can offer something no other state DOT currently has: a live, AI-driven statewide transportation intelligence system that spans every mode of travel. This creates federal funding leverage (FTA, FHWA innovation grants), research partnership opportunities with NC universities, and a differentiated position in conversations with private mobility operators.</p>
+      <ul>
+        <li>Federal USDOT Innovation Grants: AI-ready platforms qualify for discretionary competitive funding that routine maintenance projects do not</li>
+        <li>University research partnerships: NC State, UNC, Duke — all have transportation research programs that would compete to partner with a live statewide AI platform</li>
+        <li>Private sector data licensing: Anonymized, aggregated NCDOT mobility data has commercial value to logistics companies, insurers, and urban planners</li>
+        <li>National model status: Being first earns recognition, replication requests, and additional funding from federal agencies looking to document best practices</li>
+      </ul>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>New Revenue Opportunity</th><th>IBM Enabling Technology</th><th>Estimated Annual Potential</th><th>NCDOT Action Required</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dynamic Parking Pricing</strong><br><span style="font-size:11px;color:#64748b;">NCDOT park-and-ride + ferry terminal lots</span></td>
+          <td><span class="pill pill-indigo">Smart City real-time occupancy + watsonx pricing AI</span></td>
+          <td><span class="pill pill-gold">Revenue uplift from underpriced assets</span></td>
+          <td>Connect parking sensors to unified platform; implement variable rate schedule</td>
+        </tr>
+        <tr>
+          <td><strong>EV Charging Revenue</strong><br><span style="font-size:11px;color:#64748b;">Park-and-ride lots statewide</span></td>
+          <td><span class="pill pill-indigo">Asset intelligence from FinServ case + IoT grid connectivity</span></td>
+          <td><span class="pill pill-gold">Partnership revenue per charger installed</span></td>
+          <td>Identify top-priority lots via IBM asset scoring; negotiate charging operator partnerships</td>
+        </tr>
+        <tr>
+          <td><strong>Mobility Data Licensing</strong><br><span style="font-size:11px;color:#64748b;">Anonymized statewide movement data</span></td>
+          <td><span class="pill pill-indigo">IBM data governance layer ensures privacy compliance</span></td>
+          <td><span class="pill pill-gold">$5–15M/yr (NJT comparable estimate)</span></td>
+          <td>Establish data governance policy; identify commercial data buyers (logistics, insurers, planners)</td>
+        </tr>
+        <tr>
+          <td><strong>Congestion Pricing</strong><br><span style="font-size:11px;color:#64748b;">Highway corridors + toll network</span></td>
+          <td><span class="pill pill-indigo">Confluent real-time traffic + watsonx dynamic pricing</span></td>
+          <td><span class="pill pill-gold">$200–500M+/yr if NC adopts model</span></td>
+          <td>Policy decision required; IBM provides the technical platform when ready</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="content-card">
+      <h2>The IBM Smart City Case Completes the 7-Case Journey for NCDOT</h2>
+      <p>The Smart City case is not a standalone project — it is where all 7 IBM case studies converge. The IRS and VA cases provide the methodology for incremental modernization without disruption. Honda provides the strategic framework for choosing which silos to attack first. Confluent provides the real-time data streaming backbone. FinServ governance unlocks NCDOT's asset revenue potential. The Pensions case connects workforce intelligence to operational optimization.</p>
+      <p><strong>Smart City / IoT is the destination</strong> — the state where all of NCDOT's data flows into a single AI-ready platform, generating the operational insights and revenue opportunities that fragmented silos make impossible today. IBM is the only technology partner with proven capabilities across all seven of these domains, and the only one that now owns the Confluent streaming platform that makes real-time unification achievable without replacing NCDOT's existing systems.</p>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="06-pensions.html">← Case 06: Pension &amp; Payroll</a>
+    <a href="index.html">← Back to All Cases</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>

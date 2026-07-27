@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Global Transit Benchmarking — Rankings</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff; padding: 48px 24px 36px; text-align: center;
+  }
+  .hero .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #a0b4ff; margin-bottom: 10px; }
+  .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+  .hero h1 span { color: #60a5fa; }
+  .hero p { font-size: 13px; color: #c7d2fe; max-width: 620px; margin: 0 auto 24px; }
+
+  .rank-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 860px; margin: 0 auto; }
+  .rank-chip {
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700;
+    color: #fff; text-decoration: none; display: inline-block;
+    transition: background .2s, transform .15s;
+  }
+  .rank-chip:hover { background: rgba(255,255,255,.28); transform: translateY(-2px); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: #57606a; margin-bottom: 12px; padding-bottom: 6px;
+    border-bottom: 2px solid #3b82f6; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; }
+
+  /* overview */
+  .overview-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 36px; margin-top: 8px; }
+  .ov-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .ov-card .ov-num { font-size: 32px; font-weight: 800; }
+  .ov-card .ov-label { font-size: 11px; color: #64748b; font-weight: 600; }
+
+  /* rank table */
+  .ranking-section { margin-bottom: 40px; }
+  .rank-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  .rank-table th { padding: 10px 14px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; text-align: left; }
+  .rank-table td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table tbody tr { cursor: pointer; transition: background .15s; }
+  .rank-table tbody tr:hover td { background: #eff6ff; }
+  .rank-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: #fff; }
+  .r1{background:#f59e0b;} .r2{background:#94a3b8;} .r3{background:#b45309;} .r4,.r5{background:#3b82f6;} .r6{background:#f59e0b;} .r7{background:#f59e0b;} .r8,.r9{background:#ef4444;}
+  .sys-name { font-weight: 700; font-size: 13px; }
+  .sys-sub  { font-size: 11px; color: #64748b; }
+  .score-bar-wrap { min-width: 110px; }
+  .score-bar-bg { background: #f1f5f9; border-radius: 4px; height: 8px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; }
+  .score-num { font-size: 11px; font-weight: 700; margin-top: 2px; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; border-radius: 20px; padding: 2px 9px; white-space: nowrap; }
+  .tag-green  { background: #dcfce7; color: #166534; }
+  .tag-yellow { background: #fef9c3; color: #854d0e; }
+  .tag-red    { background: #fee2e2; color: #991b1b; }
+  .view-btn {
+    display: inline-block; background: #3b82f6; color: #fff;
+    border-radius: 8px; padding: 4px 12px; font-size: 11px; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    transition: background .15s;
+  }
+  .view-btn:hover { background: #1d4ed8; }
+
+  /* filter */
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .filter-label { font-size: 11px; font-weight: 700; color: #64748b; }
+  .filter-btn { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s; color: #374151; }
+  .filter-btn:hover  { border-color: #3b82f6; color: #3b82f6; }
+  .filter-btn.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+
+  /* profile cards grid */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .profile-card {
+    background: #fff; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    border: 2px solid transparent; transition: transform .15s, box-shadow .2s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .profile-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.13); }
+  .pc-top { padding: 18px 18px 12px; display: flex; align-items: center; gap: 12px; }
+  .pc-flag { font-size: 32px; }
+  .pc-title { flex: 1; }
+  .pc-title h3 { font-size: 14px; font-weight: 800; }
+  .pc-title .pc-sub { font-size: 11px; color: #64748b; }
+  .pc-scores { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid #f1f5f9; }
+  .pcs { padding: 8px 6px; text-align: center; border-right: 1px solid #f1f5f9; }
+  .pcs:last-child { border-right: none; }
+  .pcs-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 2px; }
+  .pcs-val { font-size: 16px; font-weight: 800; }
+  .pc-footer { padding: 10px 18px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; font-size: 11px; }
+  .pc-rank { font-weight: 700; color: #64748b; }
+  .pc-arrow { color: #3b82f6; font-weight: 800; font-size: 13px; }
+
+  /* journey table */
+  .hidden { display: none !important; }
+
+  /* revenue cards */
+  .revenue-section { margin-bottom: 40px; }
+  .rev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .rev-card { background: #fff; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #3b82f6; }
+  .rev-card h4  { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+  .rev-sub  { font-size: 11px; color: #64748b; margin-bottom: 8px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+  .pill { background: #eff6ff; color: #1e40af; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+  .rev-stat { font-size: 11px; color: #374151; font-style: italic; }
+  .rev-link { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; color: #3b82f6; text-decoration: none; }
+  .rev-link:hover { text-decoration: underline; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">IBM Benchmarking Research · 2024</div>
+  <h1>Global Transit Systems <span>Benchmarking</span></h1>
+  <p>Nine transit systems scored on technology stack, user experience, data silo connectivity (pre → during → post transit), and revenue generation. Click any system for its full profile.</p>
+  <div class="rank-strip">
+    <a class="rank-chip" href="#section-rankings">🌐 Rankings</a>
+    <a class="rank-chip" href="revenue-deep-dive.html" style="background:#059669;border-color:#059669;">💰 Revenue Deep Dive</a>
+    <a class="rank-chip" href="vocabulary.html" style="background:#7c3aed;border-color:#7c3aed;">📖 Glossary</a>
+    <a class="rank-chip" href="ibm-success/index.html" style="background:#1d4ed8;border-color:#1d4ed8;">🏆 IBM Success Stories</a>
+    <a class="rank-chip" href="profiles/singapore-lta.html">🥇 Singapore LTA</a>
+    <a class="rank-chip" href="profiles/zurich-sbb.html">🥈 Zürich SBB</a>
+    <a class="rank-chip" href="profiles/london-tfl.html">🥉 London TfL</a>
+    <a class="rank-chip" href="profiles/tokyo-jr-east.html">🥇 Tokyo JR East</a>
+    <a class="rank-chip" href="profiles/seoul-metro.html">Seoul Metro</a>
+    <a class="rank-chip" href="profiles/mta-nyc.html">MTA NYC</a>
+    <a class="rank-chip" href="profiles/wmata-dc.html">WMATA DC</a>
+    <a class="rank-chip" href="profiles/la-metro.html">LA Metro</a>
+    <a class="rank-chip" href="profiles/ncdot.html">🚌 NCDOT</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="overview-grid">
+    <div class="ov-card"><div class="ov-num" style="color:#3b82f6">9</div><div class="ov-label">Systems Benchmarked</div></div>
+    <div class="ov-card"><div class="ov-num" style="color:#22c55e">4</div><div class="ov-label">Dimensions Scored</div></div>
+    <div class="ov-card"><div class="ov-num" style="color:#f59e0b">3</div><div class="ov-label">Journey Phases</div></div>
+    <div class="ov-card"><div class="ov-num" style="color:#ef4444">60+</div><div class="ov-label">Opportunity Gap: NCDOT vs #1</div></div>
+  </div>
+
+  <!-- RANKINGS TABLE -->
+  <div class="ranking-section" id="section-rankings">
+    <div class="section-label"><div class="dot"></div>Overall Rankings — Click any row for full system profile</div>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>Rank</th><th>System</th><th>Technology</th><th>UX Score</th>
+          <th>Silo Integration</th><th>Revenue</th><th>Overall</th><th>Profile</th>
+        </tr>
+      </thead>
+      <tbody id="rankBody"></tbody>
+    </table>
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter profiles:</span>
+    <button class="filter-btn active" onclick="filterCards('all',this)">All Systems</button>
+    <button class="filter-btn" onclick="filterCards('global',this)">Global Leaders</button>
+    <button class="filter-btn" onclick="filterCards('us',this)">US Systems</button>
+    <button class="filter-btn" onclick="filterCards('top3',this)">Top 3 Only</button>
+  </div>
+
+  <!-- PROFILE CARDS -->
+  <div class="section-label" style="margin-bottom:16px;"><div class="dot" style="background:#7c3aed"></div>System Profile Cards — Click to open full profile</div>
+  <div class="cards-grid" id="cardsGrid"></div>
+
+  <!-- REVENUE SECTION -->
+  <div class="revenue-section" id="section-revenue">
+    <div class="section-label"><div class="dot" style="background:#16a34a"></div>Revenue Generation Models — How Each System Earns</div>
+    <div class="rev-grid" id="revGrid"></div>
+  </div>
+
+  <!-- JOURNEY TABLE -->
+  <div class="ranking-section" id="section-journey">
+    <div class="section-label"><div class="dot" style="background:#f59e0b"></div>Pre → During → Post Transit Data Connectivity</div>
+    <table class="rank-table">
+      <thead>
+        <tr><th>System</th><th>Pre-Transit</th><th>During Transit</th><th>Post-Transit</th><th>Connectivity</th><th>Profile</th></tr>
+      </thead>
+      <tbody id="journeyBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob · NCDOT Benchmarking Research 2024</div>
+
+<!-- SOURCES SECTION -->
+<div style="max-width:900px;margin:0 auto 40px;padding:0 20px;">
+  <div style="background:#fff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-top:4px solid #57606a;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#57606a;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid #e5e7eb;">Sources &amp; Methodology Notes</div>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Benchmark Scores:</strong> All scores (Technology, UX, Silo Integration, Revenue) are internal benchmark ratings produced by this NCDOT Benchmarking Research 2024 study. They are not independently validated industry ratings. Methodology weighs each dimension equally across pre/during/post-transit phases. NCDOT is a statewide coordinating DOT, not a single operator — its peer comparison against unified metro agencies (Singapore LTA, TfL, etc.) is intentional and reflects the coordination opportunity, with this caveat noted for credibility.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Ranking Note:</strong> Tokyo JR East (88/100) is ranked #4 and Seoul Metro (86/100) is ranked #5 in accordance with their overall scores. Rankings reflect scores at time of research.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Revenue Data:</strong> Budget and fare recovery figures are sourced from agency annual reports and public financial disclosures for the benchmarked period. Singapore LTA revenue reflects operating costs covered by fares and non-fare streams; government capital funding under the New Rail Financing Framework (NRFF) is provided separately. SBB (Zurich) receives federal infrastructure subsidies in addition to its commercial revenues. NCDOT figures are estimates pending verification via NCDOT UPTAS and individual operator reports. All figures should be verified against each agency's most recent audited financials.</p>
+    <p style="font-size:12px;color:#57606a;margin-bottom:10px;line-height:1.7;"><strong style="color:#1f2328;">Key Sources:</strong> WMATA FY2024 Adopted Budget; MTA FY2024 Budget; TfL Annual Report 2023/24; JR East Annual Report; Seoul Metro Annual Statistical Report; Singapore LTA Annual Report; SBB Annual Report; LA Metro FY2024 Adopted Budget; NCDOT Public Transportation Division (ncdot.gov); NCDOT UPTAS (connect.ncdot.gov). London open data value per 2017 Deloitte/TfL study.</p>
+    <p style="font-size:12px;color:#57606a;line-height:1.7;"><strong style="color:#1f2328;">Congestion Pricing (MTA):</strong> NYC congestion pricing is projected in the benchmark to generate $1B+ annually for capital investment capacity (via bonding). Toll revenue was projected at ~$500–600M annually. The program launched in modified form in January 2025 after a temporary pause.</p>
+  </div>
+</div>
+
+<script>
+const SYSTEMS = [
+  { id:'singapore', name:'Singapore LTA',    country:'Singapore',          flag:'🇸🇬', rank:1, region:'global',
+    scores:{tech:97,ux:95,silo:98,revenue:90}, overall:95, siloRating:'Best-in-class', siloTag:'tag-green',
+    topColor:'#ef4444', rankColor:'#f59e0b', rankLabel:'🥇 #1 Global', profileFile:'profiles/singapore-lta.html',
+    preSilo:'green', duringSilo:'green', postSilo:'green',
+    revenue:{streams:['Fare Revenue','Retail Concessions','API Data Licensing','Advertising','Property Development'],stat:'Non-fare revenue ~30% of total operating income (retail concessions, advertising, property, tourist passes, data services)'},
+    siloNotes:{pre:'Route planning, ticket purchase, parking booking unified in MyTransport app',during:'Live vehicle positions, crowd levels, delay alerts in real-time',post:'Journey history, fare summaries, loyalty rewards integrated'}
+  },
+  { id:'zurich',    name:'Zürich SBB/ZVV',   country:'Switzerland',         flag:'🇨🇭', rank:2, region:'global',
+    scores:{tech:94,ux:96,silo:95,revenue:85}, overall:93, siloRating:'Best-in-class', siloTag:'tag-green',
+    topColor:'#dc2626', rankColor:'#94a3b8', rankLabel:'🥈 #2 Global', profileFile:'profiles/zurich-sbb.html',
+    preSilo:'green', duringSilo:'green', postSilo:'green',
+    revenue:{streams:['Fare Revenue','SwissPass Licensing','Freight Operations','Real Estate','International Passes'],stat:'SBB ~CHF 9B annual revenue; ~40% non-passenger. Note: SBB also receives federal infrastructure subsidies for network maintenance.'},
+    siloNotes:{pre:'Unified timetable, SwissPass purchase, seat reservation all pre-journey',during:'HAFAS real-time updates, live occupancy, on-board WiFi continuity',post:'Automatic delay compensation, trip history, hotel/car rental integrated'}
+  },
+  { id:'london',   name:'London TfL',        country:'United Kingdom',      flag:'🇬🇧', rank:3, region:'global',
+    scores:{tech:92,ux:91,silo:90,revenue:88}, overall:90, siloRating:'High', siloTag:'tag-green',
+    topColor:'#1d4ed8', rankColor:'#b45309', rankLabel:'🥉 #3 Global', profileFile:'profiles/london-tfl.html',
+    preSilo:'green', duringSilo:'green', postSilo:'yellow',
+    revenue:{streams:['Fares (Oyster/Contactless)','Congestion Charge','ULEZ','Advertising','Property Development'],stat:'Non-fare target £1B+/yr; Congestion Charge (~£280M) and ULEZ (~£200M) in benchmarked period'},
+    siloNotes:{pre:'Journey planner, contactless setup, accessibility pre-booking integrated',during:'Live line status, real-time crowding, open APIs for 700+ apps',post:'Journey history accessible but limited loyalty/personalization layer'}
+  },
+  { id:'tokyo',    name:'Tokyo JR East',     country:'Japan',               flag:'🇯🇵', rank:4, region:'global',
+    scores:{tech:88,ux:90,silo:84,revenue:92}, overall:88, siloRating:'High', siloTag:'tag-green',
+    topColor:'#7c3aed', rankColor:'#3b82f6', rankLabel:'#4 Ranked', profileFile:'profiles/tokyo-jr-east.html',
+    preSilo:'green', duringSilo:'green', postSilo:'yellow',
+    revenue:{streams:['Fare Revenue','Suica Payment Fees','Station Retail (Lumine)','Hotel Operations','Real Estate','IT Licensing'],stat:'Approx. ¥1.5T annual revenue (benchmark year); non-rail >40%'},
+    siloNotes:{pre:'Route planning, Suica purchase, seat booking all in JR East app',during:'Real-time status, AI delay prediction 30min ahead, live platform info',post:'Suica loyalty points, trip history — personalization layer developing'}
+  },
+  { id:'seoul',    name:'Seoul Metro',       country:'South Korea',         flag:'🇰🇷', rank:5, region:'global',
+    scores:{tech:90,ux:88,silo:87,revenue:80}, overall:86, siloRating:'High', siloTag:'tag-green',
+    topColor:'#0891b2', rankColor:'#3b82f6', rankLabel:'#5 Ranked', profileFile:'profiles/seoul-metro.html',
+    preSilo:'green', duringSilo:'green', postSilo:'yellow',
+    revenue:{streams:['Fare Revenue','T-money Transaction Fees','Station Retail','Digital Advertising','Smart City Data'],stat:'7M+ daily riders; station retail and advertising ~15% of operating revenue'},
+    siloNotes:{pre:'T-money top-up, route planning, real-time bus connections unified',during:'Car-level crowding display, 5G connectivity, IoT station environment',post:'Limited post-journey experience beyond T-money history'}
+  },
+  { id:'mta',      name:'MTA New York',      country:'USA — New York',      flag:'🗽', rank:6, region:'us',
+    scores:{tech:68,ux:65,silo:62,revenue:75}, overall:68, siloRating:'Medium', siloTag:'tag-yellow',
+    topColor:'#f59e0b', rankColor:'#f59e0b', rankLabel:'#6 Ranked', profileFile:'profiles/mta-nyc.html',
+    preSilo:'yellow', duringSilo:'yellow', postSilo:'red',
+    revenue:{streams:['Fare Revenue','Government Subsidies','Congestion Pricing (new)','Advertising','Real Estate'],stat:'Budget ~$19B; fare covers ~35%; congestion pricing to add $1B+'},
+    siloNotes:{pre:'OMNY and MyMTA improving; LIRR/Metro-North still partially separate',during:'GTFS-RT solid on CBTC lines; disruptions inconsistent',post:'No unified post-journey experience or loyalty layer'}
+  },
+  { id:'wmata',    name:'WMATA (DC Metro)',  country:'USA — Washington DC',  flag:'🏛️', rank:7, region:'us',
+    scores:{tech:65,ux:63,silo:60,revenue:60}, overall:62, siloRating:'Medium', siloTag:'tag-yellow',
+    topColor:'#16a34a', rankColor:'#f59e0b', rankLabel:'#7 Ranked', profileFile:'profiles/wmata-dc.html',
+    preSilo:'yellow', duringSilo:'yellow', postSilo:'red',
+    revenue:{streams:['Fare Revenue','DC/MD/VA Jurisdictional Funding','Federal Grants','Joint Development','Parking','Advertising'],stat:'Budget ~$2.5B; fare covers ~25%; dedicated funding legislation passed by all three jurisdictions in 2018 ($500M+ annually)'},
+    siloNotes:{pre:'SmarTrip works; multi-agency planning requires app-switching',during:'Real-time arrivals available; crowding data not published',post:'No personalization, loyalty, or post-journey engagement exists'}
+  },
+  { id:'la',       name:'LA Metro',          country:'USA — Los Angeles',    flag:'🌴', rank:8, region:'us',
+    scores:{tech:62,ux:60,silo:55,revenue:65}, overall:60, siloRating:'Medium', siloTag:'tag-yellow',
+    topColor:'#ea580c', rankColor:'#f59e0b', rankLabel:'#8 Ranked', profileFile:'profiles/la-metro.html',
+    preSilo:'yellow', duringSilo:'yellow', postSilo:'red',
+    revenue:{streams:['Fare Revenue','Sales Tax (Measure M)','Federal/State Grants','Express Lanes Tolls','Transit-Oriented Development'],stat:'Budget ~$7B; Measure M generates ~$860M/year'},
+    siloNotes:{pre:'TAP works; GoPass multi-agency integration still maturing',during:'GTFS-RT available; real-time crowding absent; app UX inconsistent',post:'No post-journey engagement, analytics, or loyalty platform'}
+  },
+  { id:'ncdot',    name:'NCDOT (NC Transit)',  country:'USA — North Carolina', flag:'🚌', rank:9, region:'us',
+    scores:{tech:40,ux:38,silo:28,revenue:35}, overall:35, siloRating:'Low', siloTag:'tag-red',
+    topColor:'#6366f1', rankColor:'#ef4444', rankLabel:'#9 Ranked', profileFile:'profiles/ncdot.html',
+    preSilo:'yellow', duringSilo:'red', postSilo:'red',
+    revenue:{streams:['Fare Revenue','State Subsidy (NCDOT PTD grants)','Federal Grants (FTA 5307/5311)','NC Turnpike Tolls','Advertising (Minimal)'],stat:'Dozens of independent operators (GoRaleigh, GoTriangle, CATS, GoDurham, Greensboro Transit, etc.); no statewide revenue coordination; fare recovery ~25% avg [TO BE VERIFIED via NCDOT UPTAS]'},
+    siloNotes:{pre:'Some operators have mobile ticketing (GoTriangle UMO/GoPass pilot); no statewide unified platform',during:'No statewide real-time API; fragmented across dozens of independent operator systems',post:'No post-journey experience at any operator level; no loyalty, no statewide personalization'}
+  }
+];
+
+function scoreColor(n){ return n>=85?'#22c55e':n>=65?'#f59e0b':'#ef4444'; }
+function scoreTag(n)  { return n>=85?'tag-green':n>=65?'tag-yellow':'tag-red'; }
+
+function buildRankTable(){
+  const tb = document.getElementById('rankBody');
+  SYSTEMS.slice().sort((a,b)=>a.rank-b.rank).forEach(s=>{
+    const tr = document.createElement('tr');
+    tr.onclick = ()=>{ window.location.href = s.profileFile; };
+    tr.innerHTML=`
+      <td><div class="rank-num r${s.rank}">${s.rank}</div></td>
+      <td><div class="sys-name">${s.flag} ${s.name}</div><div class="sys-sub">${s.country}</div></td>
+      <td><span class="tag ${scoreTag(s.scores.tech)}">${s.scores.tech}/100</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.scores.ux}%;background:${scoreColor(s.scores.ux)}"></div></div>
+          <div class="score-num" style="color:${scoreColor(s.scores.ux)}">${s.scores.ux}/100</div>
+        </div>
+      </td>
+      <td><span class="tag ${s.siloTag}">${s.siloRating}</span></td>
+      <td><span class="tag ${scoreTag(s.scores.revenue)}">${s.scores.revenue}/100</span></td>
+      <td><strong style="color:${scoreColor(s.overall)};font-size:15px;">${s.overall}</strong><span style="font-size:10px;color:#94a3b8;">/100</span></td>
+      <td><a class="view-btn" href="${s.profileFile}">View Profile →</a></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function buildCards(){
+  const grid = document.getElementById('cardsGrid');
+  SYSTEMS.forEach(s=>{
+    const div = document.createElement('a');
+    div.href = s.profileFile;
+    div.className = 'profile-card';
+    div.dataset.region = s.region;
+    div.dataset.rank = s.rank;
+    div.style.borderTopColor = s.topColor;
+    div.innerHTML=`
+      <div class="pc-top" style="border-top:4px solid ${s.topColor}">
+        <div class="pc-flag">${s.flag}</div>
+        <div class="pc-title">
+          <h3>${s.name}</h3>
+          <div class="pc-sub">${s.country}</div>
+        </div>
+      </div>
+      <div class="pc-scores">
+        <div class="pcs"><div class="pcs-lbl">Tech</div><div class="pcs-val" style="color:${scoreColor(s.scores.tech)}">${s.scores.tech}</div></div>
+        <div class="pcs"><div class="pcs-lbl">UX</div><div class="pcs-val" style="color:${scoreColor(s.scores.ux)}">${s.scores.ux}</div></div>
+        <div class="pcs"><div class="pcs-lbl">Silo</div><div class="pcs-val" style="color:${scoreColor(s.scores.silo)}">${s.scores.silo}</div></div>
+        <div class="pcs"><div class="pcs-lbl">Revenue</div><div class="pcs-val" style="color:${scoreColor(s.scores.revenue)}">${s.scores.revenue}</div></div>
+      </div>
+      <div class="pc-footer">
+        <span class="pc-rank">${s.rankLabel} · Overall: <strong style="color:${scoreColor(s.overall)}">${s.overall}/100</strong></span>
+        <span class="pc-arrow">→</span>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function buildRevCards(){
+  const g = document.getElementById('revGrid');
+  SYSTEMS.forEach(s=>{
+    const d = document.createElement('div');
+    d.className = 'rev-card';
+    d.style.borderTopColor = s.topColor;
+    d.innerHTML=`
+      <h4>${s.flag} ${s.name}</h4>
+      <div class="rev-sub">${s.country} · Revenue Score: <strong style="color:${scoreColor(s.scores.revenue)}">${s.scores.revenue}/100</strong></div>
+      <div class="pill-row">${s.revenue.streams.slice(0,4).map(r=>`<span class="pill">${r}</span>`).join('')}</div>
+      <div class="rev-stat">${s.revenue.stat}</div>
+      <a class="rev-link" href="${s.profileFile}">See full revenue analysis →</a>
+    `;
+    g.appendChild(d);
+  });
+}
+
+function buildJourneyTable(){
+  const tb = document.getElementById('journeyBody');
+  const c={green:'#22c55e',yellow:'#f59e0b',red:'#ef4444'};
+  const l={green:'✅ Connected',yellow:'⚠️ Partial',red:'❌ Fragmented'};
+  SYSTEMS.slice().sort((a,b)=>a.rank-b.rank).forEach(s=>{
+    const sc=(s.preSilo==='green'?33:s.preSilo==='yellow'?17:0)+
+             (s.duringSilo==='green'?33:s.duringSilo==='yellow'?17:0)+
+             (s.postSilo==='green'?34:s.postSilo==='yellow'?17:0);
+    const tr = document.createElement('tr');
+    tr.innerHTML=`
+      <td><a href="${s.profileFile}" style="font-weight:700;color:#1f2328;text-decoration:none;">${s.flag} ${s.name}</a></td>
+      <td><span style="color:${c[s.preSilo]};font-weight:700;">${l[s.preSilo]}</span><br><span style="font-size:10px;color:#94a3b8;">${s.siloNotes.pre.substring(0,55)}…</span></td>
+      <td><span style="color:${c[s.duringSilo]};font-weight:700;">${l[s.duringSilo]}</span><br><span style="font-size:10px;color:#94a3b8;">${s.siloNotes.during.substring(0,55)}…</span></td>
+      <td><span style="color:${c[s.postSilo]};font-weight:700;">${l[s.postSilo]}</span><br><span style="font-size:10px;color:#94a3b8;">${s.siloNotes.post.substring(0,55)}…</span></td>
+      <td><strong style="color:${scoreColor(sc)};font-size:15px;">${sc}</strong><span style="font-size:10px;color:#94a3b8;">/100</span></td>
+      <td><a class="view-btn" href="${s.profileFile}">Full Profile →</a></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function filterCards(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.profile-card').forEach(card=>{
+    if(f==='all') card.classList.remove('hidden');
+    else if(f==='global') card.classList.toggle('hidden', card.dataset.region!=='global');
+    else if(f==='us')     card.classList.toggle('hidden', card.dataset.region!=='us');
+    else if(f==='top3')   card.classList.toggle('hidden', parseInt(card.dataset.rank)>3);
+  });
+}
+
+buildRankTable();
+buildCards();
+buildRevCards();
+buildJourneyTable();
+</script>
+</body>
+</html>

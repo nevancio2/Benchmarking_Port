@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IBM Success Stories — NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .hero {
+    background: linear-gradient(135deg, #0a0a23 0%, #0f1a3a 55%, #1a1048 100%);
+    color: #fff; padding: 52px 24px 40px; text-align: center;
+  }
+  .hero .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #93c5fd; margin-bottom: 10px; }
+  .hero h1 { font-size: 30px; font-weight: 900; margin-bottom: 10px; }
+  .hero h1 .ibm { color: #60a5fa; }
+  .hero h1 .ncdot { color: #fbbf24; }
+  .hero p { font-size: 13px; color: #c7d2fe; max-width: 640px; margin: 0 auto 26px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
+  .nav-chip {
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700;
+    color: #fff; text-decoration: none; transition: background .2s, transform .15s; display: inline-block;
+  }
+  .nav-chip:hover { background: rgba(255,255,255,.26); transform: translateY(-2px); }
+  .nav-chip.gold { background: rgba(251,191,36,.18); border-color: rgba(251,191,36,.4); color: #fbbf24; }
+
+  .main { max-width: 960px; margin: 0 auto; padding: 36px 20px 60px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+    color: #57606a; margin-bottom: 16px; padding-bottom: 7px;
+    border-bottom: 2px solid #3b82f6; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; flex-shrink: 0; }
+
+  /* STATS */
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 36px; }
+  .stat-card { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .stat-num { font-size: 32px; font-weight: 900; }
+  .stat-lbl { font-size: 11px; color: #64748b; font-weight: 600; margin-top: 2px; }
+
+  /* WHO IS IBM */
+  .ibm-intro { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 36px; border-top: 4px solid #3b82f6; }
+  .ibm-intro h2 { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+  .ibm-intro p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 16px; }
+  .pillar { background: #eff6ff; border-radius: 10px; padding: 14px 16px; border-left: 3px solid #3b82f6; }
+  .pillar h4 { font-size: 12px; font-weight: 800; color: #1e40af; margin-bottom: 4px; }
+  .pillar p { font-size: 11px; color: #374151; line-height: 1.5; }
+
+  /* CASE CARDS */
+  .cases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px,1fr)); gap: 18px; margin-bottom: 44px; }
+  .case-card {
+    background: #fff; border-radius: 14px; overflow: hidden; text-decoration: none; color: inherit; display: block;
+    box-shadow: 0 2px 14px rgba(0,0,0,.07); border: 2px solid transparent;
+    transition: transform .15s, box-shadow .2s, border-color .15s;
+  }
+  .case-card:hover { transform: translateY(-4px); box-shadow: 0 10px 36px rgba(0,0,0,.14); border-color: #3b82f6; }
+  .cc-band { height: 5px; }
+  .cc-body { padding: 18px 18px 12px; }
+  .cc-num { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
+  .cc-icon { font-size: 30px; margin-bottom: 8px; }
+  .cc-sector { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #7c5cd8; margin-bottom: 4px; }
+  .cc-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+  .cc-tagline { font-size: 11px; color: #64748b; line-height: 1.55; margin-bottom: 10px; }
+  .cc-tag { display: inline-block; font-size: 10px; font-weight: 700; border-radius: 20px; padding: 2px 9px; }
+  .tag-gov     { background: #dbeafe; color: #1e40af; }
+  .tag-private { background: #f3e8ff; color: #6b21a8; }
+  .tag-tech    { background: #d1fae5; color: #065f46; }
+  .cc-footer { padding: 10px 18px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; font-size: 11px; border-top: 1px solid #f1f5f9; }
+  .cc-rel { font-weight: 700; color: #64748b; }
+  .cc-arrow { color: #3b82f6; font-weight: 800; font-size: 13px; }
+
+  /* RELEVANCE BAR */
+  .rel-bar-bg { background: #e2e8f0; border-radius: 4px; height: 5px; overflow: hidden; width: 60px; display: inline-block; vertical-align: middle; margin-right: 4px; }
+  .rel-bar-fill { height: 100%; border-radius: 4px; background: #3b82f6; }
+
+  /* AI CALLOUT */
+  .ai-callout { background: linear-gradient(135deg,#1e1b4b,#1e3a5f); color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 36px; }
+  .ai-callout h3 { font-size: 16px; font-weight: 800; color: #93c5fd; margin-bottom: 8px; }
+  .ai-callout p { font-size: 13px; color: #c7d2fe; line-height: 1.7; margin-bottom: 14px; }
+  .ai-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+  .ai-step { background: rgba(255,255,255,.08); border-radius: 10px; padding: 12px 14px; text-align: center; }
+  .ai-step .sn { font-size: 22px; font-weight: 900; color: #60a5fa; }
+  .ai-step .sl { font-size: 10px; color: #c7d2fe; font-weight: 600; margin-top: 4px; }
+
+  /* SUMMARY TABLE */
+  .sum-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.08); margin-bottom: 44px; }
+  .sum-table th { padding: 10px 14px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; text-align: left; }
+  .sum-table td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; font-size: 12px; }
+  .sum-table tr:last-child td { border-bottom: none; }
+  .sum-table tbody tr { cursor: pointer; transition: background .15s; }
+  .sum-table tbody tr:hover td { background: #eff6ff; }
+  .pill { display: inline-block; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+  .pill-blue   { background: #eff6ff; color: #1e40af; }
+  .pill-purple { background: #f3e8ff; color: #6b21a8; }
+  .pill-gold   { background: #fef3c7; color: #92400e; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .stats-row { grid-template-columns: repeat(2,1fr); }
+    .pillars { grid-template-columns: 1fr; }
+    .ai-steps { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">IBM Consulting · Prepared for NCDOT · 2025</div>
+  <h1><span class="ibm">IBM</span> Data Silo Modernization<br><span class="ncdot">Success Stories</span></h1>
+  <p>Ten proven case studies showing how IBM solves the exact complex data silo problems facing NCDOT — across government, infrastructure, manufacturing, supply chain, and sports venues. Click any case to read the full deep dive.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="#section-cases">10 Case Studies</a>
+    <a class="nav-chip" href="#section-summary">Summary Table</a>
+    <a class="nav-chip" href="#section-ai">AI Readiness Path</a>
+    <a class="nav-chip gold" href="../one-pager-benchmarking-NCDOT.html">← Global Benchmarking</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" style="color:#3b82f6">10</div><div class="stat-lbl">Proven Case Studies</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#22c55e">90%</div><div class="stat-lbl">Defect Detection Improvement (Toyota MVI)</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#f59e0b">67%</div><div class="stat-lbl">Processing Time Reduced (Honda)</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#7c5cd8">3.4M</div><div class="stat-lbl">Delivery Points Unified (Grupo Bimbo)</div></div>
+  </div>
+
+  <div class="ibm-intro">
+    <div class="section-label"><div class="dot"></div>Who Is IBM — Built for Complex Government &amp; Infrastructure</div>
+    <h2>Why IBM for NCDOT?</h2>
+    <p>IBM is a 112-year-old technology and consulting company that specializes in solving what others call "unsolvable" — deeply interconnected legacy systems, fragmented government data, and complex multi-agency infrastructure. IBM's core differentiator is its proven ability to modernize systems <strong>incrementally</strong>, without requiring agencies to rebuild everything at once or take critical services offline.</p>
+    <p>For NCDOT, IBM brings three critical capabilities: the technical depth to decouple data silos across ferries, highways, tolls, and transit; the government experience to work within regulatory and budget constraints; and a real-time AI platform (watsonx + Confluent) that transforms unified data into predictive, revenue-generating intelligence.</p>
+    <div class="pillars">
+      <div class="pillar"><h4>Government-Scale Complexity</h4><p>Proven across IRS, VA, OPM, and dozens of federal agencies. IBM modernizes mission-critical government systems without service interruption.</p></div>
+      <div class="pillar"><h4>Incremental Modernization</h4><p>IBM's signature approach: deconstruct one subsystem at a time. No "big bang" rip-and-replace required. NCDOT can start with one modal silo and build outward.</p></div>
+      <div class="pillar"><h4>AI-First Data Platform</h4><p>IBM's acquisition of Confluent (2026) gives NCDOT real-time data streaming across all silos. IBM watsonx delivers AI for demand forecasting and dynamic pricing.</p></div>
+    </div>
+  </div>
+
+  <div id="section-cases">
+    <div class="section-label"><div class="dot" style="background:#7c5cd8"></div>10 IBM Case Studies — Click to read the full deep dive</div>
+    <div class="cases-grid">
+
+      <a class="case-card" href="01-irs.html">
+        <div class="cc-band" style="background:#ef4444"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 01 of 07</div>
+          <div class="cc-icon">🏛️</div>
+          <div class="cc-sector">Federal Government</div>
+          <div class="cc-title">IRS Tax System Modernization</div>
+          <div class="cc-tagline">Deconstructing "unsolvable" legacy complexity — one interconnected subsystem at a time, without rebuilding the end-to-end process.</div>
+          <span class="cc-tag tag-gov">Government</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:95%"></div></div>95/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="02-va.html">
+        <div class="cc-band" style="background:#2563eb"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 02 of 07</div>
+          <div class="cc-icon">⚕️</div>
+          <div class="cc-sector">Federal Government</div>
+          <div class="cc-title">VA Claims Processing Modernization</div>
+          <div class="cc-tagline">Modernizing mission-critical government systems — without ever taking them offline — across regionally fragmented data.</div>
+          <span class="cc-tag tag-gov">Government</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:90%"></div></div>90/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="03-honda.html">
+        <div class="cc-band" style="background:#7c3aed"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 03 of 07</div>
+          <div class="cc-icon">🚗</div>
+          <div class="cc-sector">Automotive / Private Sector</div>
+          <div class="cc-title">Honda Supply Chain Integration</div>
+          <div class="cc-tagline">AI-driven knowledge extraction cuts documentation modeling time by 67% — teaching NCDOT which silos to address first.</div>
+          <span class="cc-tag tag-private">Private Sector</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:78%"></div></div>78/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="04-confluent.html">
+        <div class="cc-band" style="background:#059669"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 04 of 07</div>
+          <div class="cc-icon">⚡</div>
+          <div class="cc-sector">Technology Platform</div>
+          <div class="cc-title">Confluent Real-Time Data Streaming</div>
+          <div class="cc-tagline">The technical backbone: real-time data flow between silos without ripping and replacing a single legacy application.</div>
+          <span class="cc-tag tag-tech">Technology</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:98%"></div></div>98/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="05-finserv.html">
+        <div class="cc-band" style="background:#0891b2"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 05 of 07</div>
+          <div class="cc-icon">🏦</div>
+          <div class="cc-sector">Financial Services</div>
+          <div class="cc-title">FinServ Data Governance &amp; Real Estate</div>
+          <div class="cc-tagline">Regulated-industry governance turns fragmented property and asset data into a unified, revenue-generating intelligence layer.</div>
+          <span class="cc-tag tag-private">Private Sector</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:82%"></div></div>82/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="06-pensions.html">
+        <div class="cc-band" style="background:#d97706"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 06 of 07</div>
+          <div class="cc-icon">👥</div>
+          <div class="cc-sector">Public Sector / HR</div>
+          <div class="cc-title">Public Sector Pension &amp; Payroll Integration</div>
+          <div class="cc-tagline">Subsystem modernization without replacing the primary business process — unlocking workforce optimization and predictive maintenance.</div>
+          <span class="cc-tag tag-gov">Government</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:80%"></div></div>80/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="07-smartcity.html">
+        <div class="cc-band" style="background:#6366f1"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 07 of 10</div>
+          <div class="cc-icon">🌐</div>
+          <div class="cc-sector">Smart City / IoT</div>
+          <div class="cc-title">Smart City &amp; Connected Infrastructure</div>
+          <div class="cc-tagline">From fragmented sensor data to an AI-ready multimodal intelligence layer — and new non-fare revenue streams for NCDOT.</div>
+          <span class="cc-tag tag-tech">Technology</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:93%"></div></div>93/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="08-toyota.html">
+        <div class="cc-band" style="background:#dc2626"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 08 of 10</div>
+          <div class="cc-icon">🏭</div>
+          <div class="cc-sector">Automotive / Manufacturing</div>
+          <div class="cc-title">Toyota Connected &amp; Manufacturing Quality AI</div>
+          <div class="cc-tagline">From fragmented vehicle telemetry to unified hybrid cloud intelligence — and AI visual inspection that cuts defects by 90% on production lines.</div>
+          <span class="cc-tag tag-private">Private Sector</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:88%"></div></div>88/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="09-supply-chain.html">
+        <div class="cc-band" style="background:#ea580c"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 09 of 10</div>
+          <div class="cc-icon">🚚</div>
+          <div class="cc-sector">Supply Chain / Logistics</div>
+          <div class="cc-title">Grupo Bimbo &amp; DSD Supply Chain Optimization</div>
+          <div class="cc-tagline">IBM unifies 3.4M delivery points across 33 countries — minimizing inventory space and optimizing every route in real time.</div>
+          <span class="cc-tag tag-private">Private Sector</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:83%"></div></div>83/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="case-card" href="10-stadium.html">
+        <div class="cc-band" style="background:#7c3aed"></div>
+        <div class="cc-body">
+          <div class="cc-num">Case 10 of 10</div>
+          <div class="cc-icon">🏟️</div>
+          <div class="cc-sector">Sports &amp; Entertainment Venues</div>
+          <div class="cc-title">Mercedes-Benz Stadium &amp; IBM Sports AI</div>
+          <div class="cc-tagline">IBM unifies thousands of venue data streams into a single real-time command center — 20–30% operational cost reduction and AI-powered fan experience.</div>
+          <span class="cc-tag tag-private">Private Sector</span>
+        </div>
+        <div class="cc-footer">
+          <span class="cc-rel"><div class="rel-bar-bg"><div class="rel-bar-fill" style="width:79%"></div></div>79/100 relevance</span>
+          <span class="cc-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div id="section-summary">
+    <div class="section-label"><div class="dot" style="background:#22c55e"></div>Summary — All 10 Cases at a Glance</div>
+    <table class="sum-table">
+      <thead>
+        <tr><th>Case Study</th><th>Primary Silo Problem</th><th>IBM's Key Innovation</th><th>NCDOT Benefit</th><th>Relevance</th></tr>
+      </thead>
+      <tbody>
+        <tr onclick="location.href='01-irs.html'"><td><strong>🏛️ IRS Tax System</strong></td><td><span class="pill pill-blue">Multiple revenue/subsystems</span></td><td><span class="pill pill-purple">Incremental deconstruction</span></td><td>Modernize without full rebuild</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:95%"></div></div> 95/100</td></tr>
+        <tr onclick="location.href='02-va.html'"><td><strong>⚕️ VA Claims System</strong></td><td><span class="pill pill-blue">Mission-critical fragmentation</span></td><td><span class="pill pill-purple">Government-scale modernization</span></td><td>24/7 ops without downtime</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:90%"></div></div> 90/100</td></tr>
+        <tr onclick="location.href='03-honda.html'"><td><strong>🚗 Honda Supply Chain</strong></td><td><span class="pill pill-blue">Silo prioritization</span></td><td><span class="pill pill-purple">Boundary-focused AI integration</span></td><td>Know which silos to address first</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:78%"></div></div> 78/100</td></tr>
+        <tr onclick="location.href='04-confluent.html'"><td><strong>⚡ Confluent Streaming</strong></td><td><span class="pill pill-blue">Rigid legacy architecture</span></td><td><span class="pill pill-purple">API-level data decoupling</span></td><td>Native real-time data flow between legacy apps</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:98%"></div></div> 98/100</td></tr>
+        <tr onclick="location.href='05-finserv.html'"><td><strong>🏦 FinServ Real Estate</strong></td><td><span class="pill pill-blue">Asset fragmentation</span></td><td><span class="pill pill-purple">Unified governance layer</span></td><td>Monetize NCDOT property assets</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:82%"></div></div> 82/100</td></tr>
+        <tr onclick="location.href='06-pensions.html'"><td><strong>👥 Pensions / Payroll</strong></td><td><span class="pill pill-blue">Employee data silos</span></td><td><span class="pill pill-purple">Subsystem modernization</span></td><td>Predictive maintenance + workforce optimization</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:80%"></div></div> 80/100</td></tr>
+        <tr onclick="location.href='07-smartcity.html'"><td><strong>🌐 Smart City / IoT</strong></td><td><span class="pill pill-blue">Sensor data fragmentation</span></td><td><span class="pill pill-purple">Unified intelligence platform</span></td><td>AI-ready multimodal platform</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:93%"></div></div> 93/100</td></tr>
+        <tr onclick="location.href='08-toyota.html'"><td><strong>🏭 Toyota Connected</strong></td><td><span class="pill pill-blue">Fragmented vehicle telemetry</span></td><td><span class="pill pill-purple">Hybrid cloud + AI visual inspection</span></td><td>Predictive maintenance reducing NCDOT fleet failures</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:88%"></div></div> 88/100</td></tr>
+        <tr onclick="location.href='09-supply-chain.html'"><td><strong>🚚 Grupo Bimbo / DSD</strong></td><td><span class="pill pill-blue">Fragmented multi-point inventory</span></td><td><span class="pill pill-purple">IBM Sterling + ILOG optimization</span></td><td>NCDOT resource allocation across all modes</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:83%"></div></div> 83/100</td></tr>
+        <tr onclick="location.href='10-stadium.html'"><td><strong>🏟️ Mercedes-Benz Stadium</strong></td><td><span class="pill pill-blue">Fragmented venue operations data</span></td><td><span class="pill pill-purple">IBM Watson + IoT command center</span></td><td>NCDOT statewide transportation command center</td><td><div class="rel-bar-bg" style="width:80px"><div class="rel-bar-fill" style="width:79%"></div></div> 79/100</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI ROADMAP -->
+  <div id="section-ai" class="ai-callout">
+    <h3>NCDOT's AI Readiness Roadmap with IBM</h3>
+    <p>IBM's 7 case studies are not just historical proof — together they define the four-phase journey from NCDOT's current fragmented data silos to a fully AI-ready multimodal transportation platform. North Carolina has the potential to become a national testbed for statewide multimodal AI optimization.</p>
+    <div class="ai-steps">
+      <div class="ai-step"><div class="sn">01</div><div class="sl">Decouple Data Silos<br>(IRS / VA model)</div></div>
+      <div class="ai-step"><div class="sn">02</div><div class="sl">Stream Real-Time Data<br>(Confluent architecture)</div></div>
+      <div class="ai-step"><div class="sn">03</div><div class="sl">Unify Asset &amp; Workforce<br>(FinServ / Pensions)</div></div>
+      <div class="ai-step"><div class="sn">04</div><div class="sl">Deploy AI Across Modes<br>(Smart City / watsonx)</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>

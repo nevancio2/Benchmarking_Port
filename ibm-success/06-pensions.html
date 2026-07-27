@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case 06 — Public Sector Pension &amp; Payroll Integration | IBM Success Stories for NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .case-hero { background: linear-gradient(135deg, #1c0f00 0%, #431407 50%, #b45309 100%); color: #fff; padding: 48px 24px 36px; text-align: center; }
+  .breadcrumb { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 10px; }
+  .breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .case-num { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #fcd34d; margin-bottom: 8px; }
+  .case-hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  .case-hero p { font-size: 13px; color: #fde68a; max-width: 620px; margin: 0 auto 24px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .nav-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #fff; text-decoration: none; transition: background .2s; display: inline-block; }
+  .nav-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #57606a; margin-bottom: 14px; padding-bottom: 7px; border-bottom: 2px solid #d97706; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #d97706; flex-shrink: 0; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #d97706; }
+  .kpi-num { font-size: 22px; font-weight: 900; color: #d97706; }
+  .kpi-lbl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 4px; }
+
+  .content-card { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .content-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+  .content-card p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul { padding-left: 18px; margin-bottom: 10px; }
+  .content-card ul li { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 4px; }
+
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .col-card { background: #fff; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .col-card h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #57606a; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #f1f5f9; }
+  .col-card p, .col-card li { font-size: 12px; color: #374151; line-height: 1.65; margin-bottom: 5px; }
+  .col-card ul { padding-left: 16px; }
+
+  /* WORKFORCE TABLE */
+  .wf-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .wf-table th { padding: 10px 14px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; text-align: left; }
+  .wf-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px; vertical-align: top; }
+  .wf-table tr:last-child td { border-bottom: none; }
+  .wf-table tbody tr:nth-child(odd) td { background: #fafafa; }
+  .pill { display: inline-block; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+  .pill-amber { background: #fef3c7; color: #92400e; }
+  .pill-green { background: #d1fae5; color: #065f46; }
+  .pill-blue  { background: #dbeafe; color: #1e40af; }
+
+  .ncdot-box { background: linear-gradient(90deg,#fef3c7,#fffbeb); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .ncdot-box .nb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #92400e; margin-bottom: 6px; }
+  .ncdot-box h3 { font-size: 15px; font-weight: 800; color: #78350f; margin-bottom: 8px; }
+  .ncdot-box p, .ncdot-box li { font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 5px; }
+  .ncdot-box ul { padding-left: 18px; }
+
+  .quote-block { background: #1e293b; border-radius: 12px; padding: 22px 26px; margin-bottom: 24px; }
+  .quote-block p { font-size: 14px; color: #e2e8f0; font-style: italic; line-height: 1.7; }
+  .quote-block .qsource { font-size: 11px; color: #64748b; margin-top: 8px; font-style: normal; }
+
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .page-nav a { display: inline-block; background: #1e293b; color: #fff; border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+  .page-nav a:hover { background: #334155; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="case-hero">
+  <div class="breadcrumb"><a href="index.html">IBM Success Stories</a> &rsaquo; Case 06 of 07</div>
+  <div class="case-num">Case Study 06 &nbsp;·&nbsp; Public Sector / HR</div>
+  <h1>👥 Public Sector Pension &amp; Payroll Integration</h1>
+  <p>How IBM modernizes government workforce systems as discrete subsystems — without touching the primary business process — to unlock predictive maintenance, workforce optimization, and real-time labor cost visibility for NCDOT.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="index.html">← All Cases</a>
+    <a class="nav-chip" href="#section-what">What IBM Did</a>
+    <a class="nav-chip" href="#section-workforce">NCDOT Workforce Silos</a>
+    <a class="nav-chip" href="#section-ncdot">NCDOT Outcomes</a>
+    <a class="nav-chip" href="05-finserv.html">← Case 05</a>
+    <a class="nav-chip" href="07-smartcity.html">Next Case →</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num">80/100</div><div class="kpi-lbl">NCDOT Relevance Score</div></div>
+    <div class="kpi"><div class="kpi-num">Subsystem</div><div class="kpi-lbl">Isolated Modernization</div></div>
+    <div class="kpi"><div class="kpi-num">Predictive</div><div class="kpi-lbl">Maintenance Scheduling</div></div>
+    <div class="kpi"><div class="kpi-num">Route-Level</div><div class="kpi-lbl">Labor Cost Visibility</div></div>
+  </div>
+
+  <div id="section-what">
+    <div class="section-label"><div class="dot"></div>What IBM Did</div>
+    <div class="content-card">
+      <h2>Government Workforce Systems Modernization — Without Disrupting Operations</h2>
+      <p>Government agencies at every level — federal, state, and local — commonly struggle with pension, payroll, benefits, and workforce data trapped in completely separate systems. IBM has successfully modernized these as <strong>"complicated subsystems"</strong> — treating each (payroll, benefits, pensions, workforce scheduling) as a bounded unit that can be modernized independently, without replacing the primary business process that employees and managers depend on daily.</p>
+      <p>IBM has been directly and actively involved in federal HR and benefits modernization at the highest levels. IBM filed a formal protest with the GAO over the Office of Personnel Management (OPM) HR IT system modernization procurement — underscoring that IBM is not a peripheral player in this space, but a primary competitor actively shaping federal workforce systems strategy.</p>
+      <p>IBM also publishes guidance on AI-enabled workforce transformation in government HR, specifically addressing the change management dimension: how to bring employees along through modernization so that workforce uncertainty does not become operational disruption. This human-centered approach is directly relevant to NCDOT's frontline workforce — ferry crews, highway maintenance teams, and transit drivers who depend on reliable payroll and scheduling systems.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p>"IBM has successfully modernized these as 'complicated subsystems' without replacing the primary business process."</p>
+    <div class="qsource">— IBM NCDOT Strategy Document, 2025 (on pension and payroll modernization)</div>
+  </div>
+
+  <div id="section-workforce">
+    <div class="section-label"><div class="dot"></div>NCDOT's Workforce Data Silos</div>
+    <table class="wf-table">
+      <thead>
+        <tr><th>NCDOT Workforce Group</th><th>Current Silo Problem</th><th>IBM Subsystem Modernization</th><th>Operational Outcome</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ferry Crews</strong><br><span style="font-size:11px;color:#64748b;">Vessel operators, mates, deckhands</span></td>
+          <td>Crew certification, scheduling, payroll, and vessel assignment in separate systems. No route-level labor cost tracking.</td>
+          <td><span class="pill pill-amber">Subsystem integration: crew + vessel + route</span></td>
+          <td><span class="pill pill-green">Labor cost per ferry route, predictive crew scheduling</span></td>
+        </tr>
+        <tr>
+          <td><strong>Highway Maintenance Teams</strong><br><span style="font-size:11px;color:#64748b;">NCDOT Division maintenance crews</span></td>
+          <td>Work order data, vehicle assignment, and payroll tracked in different Division systems with no unified cost-per-project view.</td>
+          <td><span class="pill pill-amber">Work order + vehicle + labor unified</span></td>
+          <td><span class="pill pill-green">Cost per lane-mile maintained, predictive equipment dispatch</span></td>
+        </tr>
+        <tr>
+          <td><strong>Transit Drivers</strong><br><span style="font-size:11px;color:#64748b;">Regional operator bus drivers</span></td>
+          <td>Each regional operator (CATS, GoTriangle, Wave) has independent scheduling and payroll — NCDOT has no aggregate labor cost visibility across the network.</td>
+          <td><span class="pill pill-amber">Cross-operator driver data standardization</span></td>
+          <td><span class="pill pill-green">Statewide transit labor cost by route/operator</span></td>
+        </tr>
+        <tr>
+          <td><strong>Vehicle &amp; Fleet Maintenance</strong><br><span style="font-size:11px;color:#64748b;">NCDOT fleet across all modes</span></td>
+          <td>Vehicle service histories, maintenance cost records, and driver/operator behavior data isolated in separate systems.</td>
+          <td><span class="pill pill-amber">Driver behavior + vehicle history + cost correlation</span></td>
+          <td><span class="pill pill-green">Predictive maintenance scheduling by vehicle and route</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="section-ncdot">
+    <div class="section-label"><div class="dot"></div>NCDOT Relevance — Why This Case Matters to You</div>
+    <div class="ncdot-box">
+      <div class="nb-label">NCDOT Direct Parallel</div>
+      <h3>NCDOT Has Employee Data Silos Preventing Operational Optimization and Cost Visibility</h3>
+      <p>NCDOT's ferry crews, highway maintenance teams, and transit drivers are its most significant operational cost center. Without a unified workforce data layer, NCDOT cannot answer basic operational questions that drive cost efficiency and service quality:</p>
+      <ul>
+        <li>What is the total labor cost per ferry route after accounting for crew scheduling, overtime, and benefits?</li>
+        <li>Which vehicles in the NCDOT fleet are most likely to fail in the next 90 days based on driver behavior and maintenance history?</li>
+        <li>Across the entire NCDOT transit network, which routes have the highest labor cost per rider served?</li>
+      </ul>
+    </div>
+    <div class="three-col">
+      <div class="col-card">
+        <h3>Predictive Maintenance</h3>
+        <p>IBM correlates driver behavior data (acceleration, braking, idle time) with vehicle maintenance histories and scheduled service records to predict which vehicles will need unplanned maintenance — before they fail.</p>
+        <p>Applied to NCDOT's ferry fleet, highway vehicles, and transit buses, this reduces emergency repair costs and prevents service disruptions.</p>
+      </div>
+      <div class="col-card">
+        <h3>Workforce Optimization</h3>
+        <p>IBM's workforce intelligence layer enables NCDOT to optimize crew and driver scheduling across ferry routes, highway maintenance districts, and transit corridors — reducing overtime costs while maintaining service levels.</p>
+        <p>This is especially valuable for NCDOT's ferry division, where crew scheduling is directly tied to vessel availability and weather constraints.</p>
+      </div>
+      <div class="col-card">
+        <h3>Route-Level Cost Visibility</h3>
+        <p>IBM creates real-time labor cost visibility by route and mode — a capability NCDOT currently lacks entirely. This data is essential for federal grant applications, state budget justifications, and negotiations with regional transit operators about service standards and funding formulas.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="05-finserv.html">← Case 05: FinServ Governance</a>
+    <a href="07-smartcity.html">Next: Smart City &amp; IoT →</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>

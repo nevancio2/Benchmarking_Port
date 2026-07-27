@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case 05 — FinServ Data Governance &amp; Real Estate | IBM Success Stories for NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .case-hero { background: linear-gradient(135deg, #0c2340 0%, #0e4272 50%, #0891b2 100%); color: #fff; padding: 48px 24px 36px; text-align: center; }
+  .breadcrumb { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 10px; }
+  .breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .case-num { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #7dd3fc; margin-bottom: 8px; }
+  .case-hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  .case-hero p { font-size: 13px; color: #bae6fd; max-width: 620px; margin: 0 auto 24px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .nav-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #fff; text-decoration: none; transition: background .2s; display: inline-block; }
+  .nav-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #57606a; margin-bottom: 14px; padding-bottom: 7px; border-bottom: 2px solid #0891b2; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #0891b2; flex-shrink: 0; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #0891b2; }
+  .kpi-num { font-size: 22px; font-weight: 900; color: #0891b2; }
+  .kpi-lbl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 4px; }
+
+  .content-card { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .content-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+  .content-card p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul { padding-left: 18px; margin-bottom: 10px; }
+  .content-card ul li { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 4px; }
+
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .col-card { background: #fff; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .col-card h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #57606a; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #f1f5f9; }
+  .col-card p, .col-card li { font-size: 12px; color: #374151; line-height: 1.65; margin-bottom: 5px; }
+  .col-card ul { padding-left: 16px; }
+
+  /* ASSET TABLE */
+  .asset-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .asset-table th { padding: 10px 14px; background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; text-align: left; }
+  .asset-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px; vertical-align: middle; }
+  .asset-table tr:last-child td { border-bottom: none; }
+  .asset-table tbody tr:nth-child(odd) td { background: #f8fafc; }
+  .pill { display: inline-block; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 9px; }
+  .pill-teal { background: #cffafe; color: #155e75; }
+  .pill-green { background: #d1fae5; color: #065f46; }
+  .pill-gold { background: #fef3c7; color: #92400e; }
+
+  .ncdot-box { background: linear-gradient(90deg,#fef3c7,#fffbeb); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .ncdot-box .nb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #92400e; margin-bottom: 6px; }
+  .ncdot-box h3 { font-size: 15px; font-weight: 800; color: #78350f; margin-bottom: 8px; }
+  .ncdot-box p, .ncdot-box li { font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 5px; }
+  .ncdot-box ul { padding-left: 18px; }
+
+  .quote-block { background: #1e293b; border-radius: 12px; padding: 22px 26px; margin-bottom: 24px; }
+  .quote-block p { font-size: 14px; color: #e2e8f0; font-style: italic; line-height: 1.7; }
+  .quote-block .qsource { font-size: 11px; color: #64748b; margin-top: 8px; font-style: normal; }
+
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .page-nav a { display: inline-block; background: #1e293b; color: #fff; border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+  .page-nav a:hover { background: #334155; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="case-hero">
+  <div class="breadcrumb"><a href="index.html">IBM Success Stories</a> &rsaquo; Case 05 of 07</div>
+  <div class="case-num">Case Study 05 &nbsp;·&nbsp; Financial Services</div>
+  <h1>🏦 FinServ Data Governance &amp; Real Estate Modernization</h1>
+  <p>How IBM's regulated-industry data governance framework turns fragmented property and asset data into a unified, revenue-generating intelligence layer — directly applicable to NCDOT's ferry terminals, park-and-rides, and maintenance facilities.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="index.html">← All Cases</a>
+    <a class="nav-chip" href="#section-what">What IBM Did</a>
+    <a class="nav-chip" href="#section-assets">NCDOT Assets</a>
+    <a class="nav-chip" href="#section-ncdot">Revenue Opportunities</a>
+    <a class="nav-chip" href="04-confluent.html">← Case 04</a>
+    <a class="nav-chip" href="06-pensions.html">Next Case →</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num">82/100</div><div class="kpi-lbl">NCDOT Relevance Score</div></div>
+    <div class="kpi"><div class="kpi-num">Unified</div><div class="kpi-lbl">Asset Intelligence Layer</div></div>
+    <div class="kpi"><div class="kpi-num">Regulated</div><div class="kpi-lbl">Industry Governance Model</div></div>
+    <div class="kpi"><div class="kpi-num">New Revenue</div><div class="kpi-lbl">Monetize Underutilized Assets</div></div>
+  </div>
+
+  <div id="section-what">
+    <div class="section-label"><div class="dot"></div>What IBM Did</div>
+    <div class="content-card">
+      <h2>IBM Cloud for Financial Services — Governance at Regulated-Industry Scale</h2>
+      <p>IBM operates a dedicated IBM Cloud for Financial Services platform that emphasizes industry-leading security, privacy, and data governance backed by deep sector expertise. This platform serves the world's largest banks, insurance companies, and asset managers — organizations that operate under regulatory scrutiny comparable to (and often more stringent than) a state transportation agency.</p>
+      <p>IBM's Financial Services IT Solutions practice spans core banking modernization, payments infrastructure, and insurance — helping regulated firms modernize using AI, hybrid cloud, and IBM's industry governance frameworks. A current major trend in this practice is core banking modernization: moving IBM Z mainframe environments (including the newest IBM z17) into colocation for multicloud connectivity, enabling financial institutions to connect their most sensitive data systems to modern cloud analytics without moving data off-premise.</p>
+      <p>IBM has documented these modernization patterns extensively in IBM Redbooks — a library of formal technical reference architectures that NCDOT could directly review as validation of IBM's methodology.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p>"IBM's financial services data governance approach could unify NCDOT's fragmented real estate/asset data into a single asset intelligence layer."</p>
+    <div class="qsource">— IBM NCDOT Strategy Document, 2025</div>
+  </div>
+
+  <div id="section-assets">
+    <div class="section-label"><div class="dot"></div>NCDOT's Asset Portfolio — The Silo Problem</div>
+    <table class="asset-table">
+      <thead>
+        <tr><th>NCDOT Asset Type</th><th>Current Data State</th><th>IBM Governance Outcome</th><th>Revenue Potential</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ferry Terminals</strong><br><span style="font-size:11px;color:#64748b;">Ocracoke, Hatteras, Swan Quarter, etc.</span></td>
+          <td>Separate scheduling, ticketing, and maintenance systems with no unified property view</td>
+          <td><span class="pill pill-teal">Unified asset profile per terminal</span></td>
+          <td><span class="pill pill-gold">Retail concessions, EV charging</span></td>
+        </tr>
+        <tr>
+          <td><strong>Park-and-Ride Facilities</strong><br><span style="font-size:11px;color:#64748b;">Statewide NCDOT lots</span></td>
+          <td>Utilization data not captured; revenue tracking fragmented across NCDOT divisions</td>
+          <td><span class="pill pill-teal">Real-time utilization + revenue tracking</span></td>
+          <td><span class="pill pill-gold">Dynamic pricing, EV charging revenue</span></td>
+        </tr>
+        <tr>
+          <td><strong>Maintenance Yards &amp; Facilities</strong><br><span style="font-size:11px;color:#64748b;">Highway and transit maintenance depots</span></td>
+          <td>Asset condition, cost, and lifecycle data in separate division systems</td>
+          <td><span class="pill pill-teal">Unified asset lifecycle management</span></td>
+          <td><span class="pill pill-green">Predictive maintenance cost savings</span></td>
+        </tr>
+        <tr>
+          <td><strong>Highway Rest Areas</strong><br><span style="font-size:11px;color:#64748b;">Statewide NCDOT rest area network</span></td>
+          <td>Visitor counts, maintenance costs, and concession revenue siloed</td>
+          <td><span class="pill pill-teal">Visitor analytics + maintenance scheduling</span></td>
+          <td><span class="pill pill-gold">Concession partnerships, advertising</span></td>
+        </tr>
+        <tr>
+          <td><strong>Transit-Oriented Development Sites</strong><br><span style="font-size:11px;color:#64748b;">NCDOT-owned land near transit corridors</span></td>
+          <td>No unified inventory of development-eligible NCDOT land with transit access data</td>
+          <td><span class="pill pill-teal">Development potential scoring per parcel</span></td>
+          <td><span class="pill pill-gold">TOD partnerships, ground lease revenue</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="section-ncdot">
+    <div class="section-label"><div class="dot"></div>NCDOT Relevance — Revenue Opportunities Unlocked</div>
+    <div class="ncdot-box">
+      <div class="nb-label">NCDOT Direct Parallel</div>
+      <h3>NCDOT Has a Hidden Asset Portfolio That IBM Can Turn Into Revenue</h3>
+      <p>NCDOT operates real estate — ferry terminals, maintenance yards, parking facilities, highway rest areas — with fragmented asset management. IBM's financial services governance model, applied to NCDOT's asset portfolio, creates a unified Asset Intelligence Layer that enables active revenue generation from currently underutilized infrastructure.</p>
+      <ul>
+        <li><strong>EV charging at park-and-rides:</strong> NCDOT park-and-ride facilities are ideal EV charging locations. A unified asset data layer identifies which lots have the highest traffic and grid connectivity — enabling a prioritized buildout with revenue-generating charging partnerships</li>
+        <li><strong>Retail concessions at ferry terminals:</strong> Ferry terminal dwell time creates a captive audience. Unified ridership and dwell data enables IBM to model the revenue potential of concession partnerships at each terminal</li>
+        <li><strong>TOD ground lease revenue:</strong> NCDOT land near transit corridors has development potential that is currently invisible because there is no unified inventory connecting parcel data with transit ridership data</li>
+      </ul>
+    </div>
+    <div class="three-col">
+      <div class="col-card">
+        <h3>Step 1: Inventory</h3>
+        <p>IBM creates a unified inventory of all NCDOT-owned property, mapping each asset's location, current use, utilization rate, maintenance cost, and revenue status — drawing from NCDOT's fragmented existing systems.</p>
+      </div>
+      <div class="col-card">
+        <h3>Step 2: Score</h3>
+        <p>IBM's AI models score each asset on revenue potential, development suitability, and partnership attractiveness — giving NCDOT leadership a prioritized list of monetization opportunities ranked by value and feasibility.</p>
+      </div>
+      <div class="col-card">
+        <h3>Step 3: Act</h3>
+        <p>NCDOT uses the Asset Intelligence Layer to structure revenue-generating partnerships — EV charging operators, retail concessionaires, transit-oriented developers — with real data supporting every negotiation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="04-confluent.html">← Case 04: Confluent Streaming</a>
+    <a href="06-pensions.html">Next: Pension &amp; Payroll →</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>

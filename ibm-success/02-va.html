@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case 02 — VA Claims Processing Modernization | IBM Success Stories for NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .case-hero { background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 55%, #1d4ed8 100%); color: #fff; padding: 48px 24px 36px; text-align: center; }
+  .breadcrumb { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 10px; }
+  .breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .case-num { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #93c5fd; margin-bottom: 8px; }
+  .case-hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  .case-hero p { font-size: 13px; color: #bfdbfe; max-width: 620px; margin: 0 auto 24px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .nav-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #fff; text-decoration: none; transition: background .2s; display: inline-block; }
+  .nav-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #57606a; margin-bottom: 14px; padding-bottom: 7px; border-bottom: 2px solid #2563eb; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #2563eb; flex-shrink: 0; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #2563eb; }
+  .kpi-num { font-size: 26px; font-weight: 900; color: #2563eb; }
+  .kpi-lbl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 4px; }
+
+  .content-card { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .content-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+  .content-card p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul { padding-left: 18px; margin-bottom: 10px; }
+  .content-card ul li { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 4px; }
+
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .col-card { background: #fff; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .col-card h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #57606a; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #f1f5f9; }
+  .col-card p, .col-card li { font-size: 12px; color: #374151; line-height: 1.65; margin-bottom: 5px; }
+  .col-card ul { padding-left: 16px; }
+
+  .ncdot-box { background: linear-gradient(90deg,#fef3c7,#fffbeb); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .ncdot-box .nb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #92400e; margin-bottom: 6px; }
+  .ncdot-box h3 { font-size: 15px; font-weight: 800; color: #78350f; margin-bottom: 8px; }
+  .ncdot-box p, .ncdot-box li { font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 5px; }
+  .ncdot-box ul { padding-left: 18px; }
+
+  .quote-block { background: #1e293b; border-radius: 12px; padding: 22px 26px; margin-bottom: 24px; }
+  .quote-block p { font-size: 14px; color: #e2e8f0; font-style: italic; line-height: 1.7; }
+  .quote-block .qsource { font-size: 11px; color: #64748b; margin-top: 8px; font-style: normal; }
+
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .page-nav a { display: inline-block; background: #1e293b; color: #fff; border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+  .page-nav a:hover { background: #334155; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="case-hero">
+  <div class="breadcrumb"><a href="index.html">IBM Success Stories</a> &rsaquo; Case 02 of 07</div>
+  <div class="case-num">Case Study 02 &nbsp;·&nbsp; Federal Government</div>
+  <h1>⚕️ VA Claims Processing Modernization</h1>
+  <p>How IBM modernized a mission-critical government system that could never go offline — and why NCDOT's 24/7 transportation infrastructure faces the exact same challenge.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="index.html">← All Cases</a>
+    <a class="nav-chip" href="#section-what">What IBM Did</a>
+    <a class="nav-chip" href="#section-silo">The Silo Problem</a>
+    <a class="nav-chip" href="#section-ncdot">NCDOT Relevance</a>
+    <a class="nav-chip" href="01-irs.html">← Case 01</a>
+    <a class="nav-chip" href="03-honda.html">Next Case →</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num">90/100</div><div class="kpi-lbl">NCDOT Relevance Score</div></div>
+    <div class="kpi"><div class="kpi-num">Regionally Fragmented</div><div class="kpi-lbl">VA Data Structure</div></div>
+    <div class="kpi"><div class="kpi-num">24/7</div><div class="kpi-lbl">Zero Service Interruption</div></div>
+    <div class="kpi"><div class="kpi-num">AI-Driven</div><div class="kpi-lbl">Claims Intake Automation</div></div>
+  </div>
+
+  <div id="section-what">
+    <div class="section-label"><div class="dot"></div>What IBM Did</div>
+    <div class="content-card">
+      <h2>Veterans Benefits Administration Modernization</h2>
+      <p>The Department of Veterans Affairs (VA) claims system was broadly considered one of the most complex modernization challenges in the federal government. Decades of accumulated systems, regional fragmentation, and mission-critical 24/7 service delivery created a situation where traditional modernization approaches were deemed too risky to attempt.</p>
+      <p>IBM successfully transformed the VA's claims processing through a combination of AI-driven intake automation and phased system integration. IBM deployed AI capabilities to automate the ingestion of benefits data into VA systems — a process the VA subsequently documented in a published AI Inventory submitted to oversight bodies. This was not a laboratory demonstration: the system directly determined Veteran service delivery and benefits eligibility processing.</p>
+      <p>IBM's Federal Government Solutions practice, which spans citizen services to national defense, provided the framework for this engagement. The VA simultaneously committed to a 5-Year IT Benefits Delivery Modernization Plan, delivered to Congress, which built on the IBM-supported foundation. Throughout all of this, the VA never took its claims system offline — Veteran benefits continued uninterrupted.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p>"IBM has proven experience modernizing regionally-fragmented government data into unified visibility layers without service interruption."</p>
+    <div class="qsource">— IBM NCDOT Strategy Document, 2025</div>
+  </div>
+
+  <div id="section-silo">
+    <div class="section-label"><div class="dot"></div>The Data Silo Problem IBM Solved</div>
+    <div class="three-col">
+      <div class="col-card">
+        <h3>The Problem</h3>
+        <p>Fragmented claims, benefits, and service delivery data lived in isolated systems across dozens of regional VA offices — each with its own data formats, processes, and access rules.</p>
+        <p>No unified statewide visibility existed. VA employees in one region could not see the full picture of a Veteran's case handled by another region.</p>
+      </div>
+      <div class="col-card">
+        <h3>The Constraint</h3>
+        <p>Unlike a commercial system that could be taken offline for migration, the VA's claims system determines life-affecting benefits for millions of Veterans. Any modernization had to happen with full operational continuity — a constraint directly analogous to NCDOT's 24/7 ferry, highway, and transit operations.</p>
+      </div>
+      <div class="col-card">
+        <h3>IBM's Solution</h3>
+        <p>IBM applied AI-driven automation to standardize data ingestion across regional systems, creating a unified benefits data layer without requiring individual regional systems to be replaced. This created an integrated visibility layer over the top of existing infrastructure — a model NCDOT can directly apply.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-ncdot">
+    <div class="section-label"><div class="dot"></div>NCDOT Relevance — Why This Case Matters to You</div>
+    <div class="ncdot-box">
+      <div class="nb-label">NCDOT Direct Parallel</div>
+      <h3>NCDOT's Regional Fragmentation is the VA Problem — Applied to Transportation</h3>
+      <p>NCDOT's challenge mirrors the VA's exactly: data from regional operators — CATS, GoTriangle, Wave Transit, GoDurham, Greensboro Transit — lives in isolated systems with no unified statewide visibility layer. IBM has already solved this at government scale.</p>
+      <ul>
+        <li><strong>No unified statewide transit data:</strong> Each regional operator runs independent systems, just as each VA regional office did</li>
+        <li><strong>24/7 constraint:</strong> NCDOT cannot take ferry operations, highway monitoring, or toll collection offline during modernization</li>
+        <li><strong>Mission-critical parallel:</strong> Just as VA claims affect Veteran lives, NCDOT systems support daily commuters, freight movement, and emergency access</li>
+      </ul>
+    </div>
+    <div class="content-card">
+      <h2>What NCDOT Can Take from This Case</h2>
+      <p>The VA engagement proves that IBM can handle the specific government constraint NCDOT faces: you cannot stop operations to modernize them. IBM built a unified visibility layer <strong>on top of</strong> the existing VA regional systems — the same approach that applies to NCDOT's regional transit operators.</p>
+      <p>The path for NCDOT is to create a statewide transportation data visibility layer that draws from each regional operator's existing system — GoTriangle, CATS, GoRaleigh, Wave Transit — without requiring any operator to replace their current platform. IBM demonstrated this is exactly achievable at the VA's scale and complexity.</p>
+      <ul>
+        <li>Deploy IBM's integration layer to pull data from each regional NCDOT operator in standardized format</li>
+        <li>Create a unified statewide transit visibility dashboard for NCDOT planners and executives</li>
+        <li>Extend the same pattern to ferries, toll systems, and highway monitoring data</li>
+        <li>Foundation is then ready for AI-driven analytics without any regional system having to be rebuilt</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="01-irs.html">← Case 01: IRS Modernization</a>
+    <a href="03-honda.html">Next: Honda Supply Chain →</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>

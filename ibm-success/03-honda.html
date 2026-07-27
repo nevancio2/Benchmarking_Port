@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case 03 — Honda Supply Chain Integration | IBM Success Stories for NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .case-hero { background: linear-gradient(135deg, #1e0a40 0%, #3b0f6b 50%, #5b21b6 100%); color: #fff; padding: 48px 24px 36px; text-align: center; }
+  .breadcrumb { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 10px; }
+  .breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .case-num { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #c4b5fd; margin-bottom: 8px; }
+  .case-hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  .case-hero p { font-size: 13px; color: #ddd6fe; max-width: 620px; margin: 0 auto 24px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .nav-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #fff; text-decoration: none; transition: background .2s; display: inline-block; }
+  .nav-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #57606a; margin-bottom: 14px; padding-bottom: 7px; border-bottom: 2px solid #7c3aed; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #7c3aed; flex-shrink: 0; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #7c3aed; }
+  .kpi-num { font-size: 26px; font-weight: 900; color: #7c3aed; }
+  .kpi-lbl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 4px; }
+
+  .content-card { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .content-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+  .content-card p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul { padding-left: 18px; margin-bottom: 10px; }
+  .content-card ul li { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 4px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .col-card { background: #fff; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .col-card h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #57606a; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #f1f5f9; }
+  .col-card p, .col-card li { font-size: 12px; color: #374151; line-height: 1.65; margin-bottom: 5px; }
+  .col-card ul { padding-left: 16px; }
+
+  .stat-callout { background: linear-gradient(135deg,#f3e8ff,#ede9fe); border-radius: 14px; padding: 24px 28px; margin-bottom: 24px; border-left: 4px solid #7c3aed; }
+  .stat-callout .big { font-size: 52px; font-weight: 900; color: #7c3aed; line-height: 1; }
+  .stat-callout .big-label { font-size: 16px; font-weight: 800; color: #4c1d95; margin-bottom: 8px; }
+  .stat-callout p { font-size: 13px; color: #4c1d95; line-height: 1.7; }
+
+  .ncdot-box { background: linear-gradient(90deg,#fef3c7,#fffbeb); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .ncdot-box .nb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #92400e; margin-bottom: 6px; }
+  .ncdot-box h3 { font-size: 15px; font-weight: 800; color: #78350f; margin-bottom: 8px; }
+  .ncdot-box p, .ncdot-box li { font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 5px; }
+  .ncdot-box ul { padding-left: 18px; }
+
+  .quote-block { background: #1e293b; border-radius: 12px; padding: 22px 26px; margin-bottom: 24px; }
+  .quote-block p { font-size: 14px; color: #e2e8f0; font-style: italic; line-height: 1.7; }
+  .quote-block .qsource { font-size: 11px; color: #64748b; margin-top: 8px; font-style: normal; }
+
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .page-nav a { display: inline-block; background: #1e293b; color: #fff; border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+  .page-nav a:hover { background: #334155; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="case-hero">
+  <div class="breadcrumb"><a href="index.html">IBM Success Stories</a> &rsaquo; Case 03 of 07</div>
+  <div class="case-num">Case Study 03 &nbsp;·&nbsp; Automotive / Private Sector</div>
+  <h1>🚗 Honda Supply Chain Integration</h1>
+  <p>How IBM's AI-driven knowledge extraction cut Honda's documentation modeling time by 67% — and what NCDOT's strategic lesson is about choosing which silos to attack first.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="index.html">← All Cases</a>
+    <a class="nav-chip" href="#section-what">What IBM Did</a>
+    <a class="nav-chip" href="#section-silo">The Silo Problem</a>
+    <a class="nav-chip" href="#section-ncdot">NCDOT Relevance</a>
+    <a class="nav-chip" href="02-va.html">← Case 02</a>
+    <a class="nav-chip" href="04-confluent.html">Next Case →</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num">78/100</div><div class="kpi-lbl">NCDOT Relevance Score</div></div>
+    <div class="kpi"><div class="kpi-num">67%</div><div class="kpi-lbl">Documentation Time Reduced</div></div>
+    <div class="kpi"><div class="kpi-num">AI-Driven</div><div class="kpi-lbl">Knowledge Extraction</div></div>
+    <div class="kpi"><div class="kpi-num">Strategic</div><div class="kpi-lbl">Silo Prioritization Lesson</div></div>
+  </div>
+
+  <div class="stat-callout">
+    <div class="big">67%</div>
+    <div class="big-label">Reduction in Documentation Modeling Time</div>
+    <p>IBM publicly states it is "helping boost Honda's efficiency with AI-driven knowledge extraction, expecting to slash documentation modeling time by 67%." This is the only quantified public performance metric across IBM's 7 NCDOT-relevant case studies — and it directly translates to NCDOT's maintenance and asset documentation workflows.</p>
+  </div>
+
+  <div id="section-what">
+    <div class="section-label"><div class="dot"></div>What IBM Did</div>
+    <div class="content-card">
+      <h2>Honda: AI-Driven Integration Across Fragmented Operational Data</h2>
+      <p>IBM's engagement with Honda addressed two related but distinct silo problems. First, Honda's operational documentation — technical specifications, maintenance records, parts data — existed in separate silos with no unified knowledge layer. IBM deployed AI-driven knowledge extraction to unify this documentation, dramatically reducing the time required to model and process it.</p>
+      <p>Second, Honda Canada explored mainframe integration to modernize the Honda Dealer Portal for its sales organization — delivering trusted, unified data across Salesforce for what IBM calls "agentic enterprises": organizations using AI agents that need reliable, real-time data to act autonomously on behalf of users.</p>
+      <p>IBM maintains a dedicated Automotive Industry IT Solutions practice with published Honda case work, providing a transparent, reference-able engagement for clients like NCDOT who want to understand the methodology in detail.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p>"This shows how to prioritize which silos matter most and when to address integration boundaries versus isolated systems."</p>
+    <div class="qsource">— IBM NCDOT Strategy Document, 2025 (on the Honda case's strategic lesson)</div>
+  </div>
+
+  <div id="section-silo">
+    <div class="section-label"><div class="dot"></div>The Data Silo Problem IBM Solved</div>
+    <div class="two-col">
+      <div class="col-card">
+        <h3>Honda's Silo Challenge</h3>
+        <p>Honda's documentation, dealer portal data, and sales information lived in completely separate systems. Knowledge was not flowing between them — meaning engineers couldn't leverage documentation insights for sales support, and sales teams couldn't surface relevant technical data for dealers in real time.</p>
+        <p>The key IBM innovation at Honda was <strong>boundary-focused integration</strong>: rather than attempting to unify all Honda data everywhere, IBM identified precisely which integration boundary mattered most — documentation-to-operations — and attacked that boundary first.</p>
+      </div>
+      <div class="col-card">
+        <h3>The Strategic Lens for NCDOT</h3>
+        <p>The Honda case teaches NCDOT a critical <strong>prioritization discipline</strong> that the IRS and VA cases do not: not all silos are equally important to address first.</p>
+        <ul>
+          <li>Which NCDOT silo, if unified, creates the most downstream value?</li>
+          <li>Should modernization focus on one modal silo (e.g., ferries only)?</li>
+          <li>Or address the integration <em>boundary</em> between ferries, highways, transit, and tolls to enable cross-modal revenue insights?</li>
+        </ul>
+        <p>IBM's Honda methodology gives NCDOT the framework to answer these questions before committing to any technology investment.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-ncdot">
+    <div class="section-label"><div class="dot"></div>NCDOT Relevance — Why This Case Matters to You</div>
+    <div class="ncdot-box">
+      <div class="nb-label">NCDOT Direct Parallel</div>
+      <h3>NCDOT's Maintenance Documentation is Honda's Documentation Problem</h3>
+      <p>NCDOT maintains thousands of vehicles, vessels, and highway infrastructure assets. Maintenance records, inspection data, parts histories, and work orders exist across fragmented systems — exactly the documentation silo IBM solved at Honda. The 67% time reduction IBM achieved is directly applicable.</p>
+      <ul>
+        <li><strong>Ferry fleet maintenance:</strong> Vessel inspection records, engine histories, crew certifications — all currently siloed</li>
+        <li><strong>Highway maintenance equipment:</strong> Fleet vehicle histories, repair records, and fuel costs in separate systems</li>
+        <li><strong>Transit assets:</strong> Bus maintenance records managed independently by each regional operator</li>
+      </ul>
+    </div>
+    <div class="content-card">
+      <h2>The Strategic Silo Prioritization Question for NCDOT</h2>
+      <p>The most important NCDOT takeaway from Honda is not the 67% metric — it is the <strong>question IBM forces its clients to answer before implementation begins</strong>: which silos do you attack first, and why?</p>
+      <p>IBM's Honda engagement showed that the right answer is often not the most obvious one. For NCDOT, the highest-value integration boundary may not be between its largest systems — it may be between a specific operational data source (e.g., ferry GPS data) and a financial data source (e.g., toll revenue) that, when connected, unlock a completely new revenue opportunity.</p>
+      <p>IBM's role is to guide NCDOT through this prioritization before any technology spending begins — ensuring every dollar of modernization investment addresses the boundary that creates the most operational and revenue value.</p>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="02-va.html">← Case 02: VA Claims</a>
+    <a href="04-confluent.html">Next: Confluent Streaming →</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>

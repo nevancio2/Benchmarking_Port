@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case 01 — IRS Tax System Modernization | IBM Success Stories for NCDOT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; background: #f0f4ff; color: #1f2328; font-size: 14px; line-height: 1.6; }
+
+  .case-hero {
+    background: linear-gradient(135deg, #1a0a0a 0%, #3b0d0d 50%, #7f1d1d 100%);
+    color: #fff; padding: 48px 24px 36px; text-align: center;
+  }
+  .breadcrumb { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 10px; }
+  .breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .case-num { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #fca5a5; margin-bottom: 8px; }
+  .case-hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  .case-hero p { font-size: 13px; color: #fecaca; max-width: 620px; margin: 0 auto 24px; }
+  .nav-strip { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .nav-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #fff; text-decoration: none; transition: background .2s; display: inline-block; }
+  .nav-chip:hover { background: rgba(255,255,255,.28); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #57606a; margin-bottom: 14px; padding-bottom: 7px; border-bottom: 2px solid #ef4444; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; flex-shrink: 0; }
+
+  /* KPI ROW */
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi { background: #fff; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-top: 4px solid #ef4444; }
+  .kpi-num { font-size: 26px; font-weight: 900; color: #ef4444; }
+  .kpi-lbl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 4px; }
+
+  /* CONTENT BLOCKS */
+  .content-card { background: #fff; border-radius: 14px; padding: 26px 28px; box-shadow: 0 2px 14px rgba(0,0,0,.07); margin-bottom: 24px; }
+  .content-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 12px; color: #1f2328; }
+  .content-card p { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul { padding-left: 18px; margin-bottom: 10px; }
+  .content-card ul li { font-size: 13px; color: #374151; line-height: 1.75; margin-bottom: 4px; }
+
+  /* THREE COL */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .col-card { background: #fff; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .col-card h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #57606a; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #f1f5f9; }
+  .col-card p, .col-card li { font-size: 12px; color: #374151; line-height: 1.65; margin-bottom: 5px; }
+  .col-card ul { padding-left: 16px; }
+
+  /* NCDOT HIGHLIGHT */
+  .ncdot-box { background: linear-gradient(90deg, #fef3c7, #fffbeb); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .ncdot-box .nb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #92400e; margin-bottom: 6px; }
+  .ncdot-box h3 { font-size: 15px; font-weight: 800; color: #78350f; margin-bottom: 8px; }
+  .ncdot-box p, .ncdot-box li { font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 5px; }
+  .ncdot-box ul { padding-left: 18px; }
+
+  /* QUOTE */
+  .quote-block { background: #1e293b; border-radius: 12px; padding: 22px 26px; margin-bottom: 24px; }
+  .quote-block p { font-size: 14px; color: #e2e8f0; font-style: italic; line-height: 1.7; }
+  .quote-block .qsource { font-size: 11px; color: #64748b; margin-top: 8px; font-style: normal; }
+
+  /* NAV FOOTER */
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .page-nav a { display: inline-block; background: #1e293b; color: #fff; border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+  .page-nav a:hover { background: #334155; }
+
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="case-hero">
+  <div class="breadcrumb"><a href="index.html">IBM Success Stories</a> &rsaquo; Case 01 of 07</div>
+  <div class="case-num">Case Study 01 &nbsp;·&nbsp; Federal Government</div>
+  <h1>🏛️ IRS Tax System Modernization</h1>
+  <p>How IBM deconstructed "unsolvable" legacy complexity at the IRS — and what it means for NCDOT's fragmented ferry, highway, transit, and toll systems.</p>
+  <div class="nav-strip">
+    <a class="nav-chip" href="index.html">← All Cases</a>
+    <a class="nav-chip" href="#section-what">What IBM Did</a>
+    <a class="nav-chip" href="#section-silo">The Silo Problem</a>
+    <a class="nav-chip" href="#section-ncdot">NCDOT Relevance</a>
+    <a class="nav-chip" href="02-va.html">Next Case →</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num">95/100</div><div class="kpi-lbl">NCDOT Relevance Score</div></div>
+    <div class="kpi"><div class="kpi-num">Incremental</div><div class="kpi-lbl">IBM's Core Approach</div></div>
+    <div class="kpi"><div class="kpi-num">0</div><div class="kpi-lbl">Service Interruptions</div></div>
+    <div class="kpi"><div class="kpi-num">Multiple</div><div class="kpi-lbl">Revenue Silos Unified</div></div>
+  </div>
+
+  <div id="section-what">
+    <div class="section-label"><div class="dot"></div>What IBM Did</div>
+    <div class="content-card">
+      <h2>IRS Business Systems Modernization (BSM)</h2>
+      <p>The IRS Business Systems Modernization (BSM) program is one of the most frequently cited federal legacy modernization case studies in the United States. For decades, the IRS operated on aging systems with deeply integrated business processes that federal oversight bodies — including the Government Accountability Office (GAO) and the Defense Business Board — described as appearing "unsolvable" due to their complexity and interdependence.</p>
+      <p>IBM's approach was not to rebuild the IRS's entire end-to-end process. Instead, IBM demonstrated success in <strong>deconstructing complexity across multiple interconnected subsystems independently</strong> — modernizing each one while keeping the primary tax processing business process continuously operational. The goal was to move IRS employees onto unified, integrated data from fragmented case management systems without triggering cascading failures across dependent systems.</p>
+      <p>The GAO formally documented this as a model case study on the value of shared services and phased federal modernization. The Defense Business Board subsequently adopted it as a formal reference for government-wide systems transformation strategy.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p>"The lesson is incremental deconstruction — modernizing complicated subsystems one at a time while keeping the primary business process running."</p>
+    <div class="qsource">— IBM NCDOT Strategy Document, 2025</div>
+  </div>
+
+  <div id="section-silo">
+    <div class="section-label"><div class="dot"></div>The Data Silo Problem IBM Solved</div>
+    <div class="three-col">
+      <div class="col-card">
+        <h3>The Problem</h3>
+        <p>Multiple revenue streams and case management systems were trapped in separate legacy environments. Each subsystem had its own data model, lifecycle, and access rules with no integrated reporting layer across them.</p>
+        <p>IRS employees could not get a unified view of a taxpayer's case. Data had to be re-entered manually between systems, creating errors and delays.</p>
+      </div>
+      <div class="col-card">
+        <h3>Why It Appeared Unsolvable</h3>
+        <p>The subsystems were not merely old — they were deeply woven together. A change in one triggered unpredictable effects in others. Any traditional "rip-and-replace" approach risked catastrophic failure of tax collection for hundreds of millions of Americans.</p>
+      </div>
+      <div class="col-card">
+        <h3>IBM's Solution</h3>
+        <p>IBM applied an incremental deconstruction strategy: identify each subsystem's boundary, modernize it as a discrete unit, and connect it to the emerging integrated enterprise data layer — one at a time, with zero downtime to tax processing operations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-ncdot">
+    <div class="section-label"><div class="dot"></div>NCDOT Relevance — Why This Case Matters to You</div>
+    <div class="ncdot-box">
+      <div class="nb-label">NCDOT Direct Parallel</div>
+      <h3>NCDOT's Systems Are the IRS Problem — Reapplied to Transportation</h3>
+      <p>NCDOT operates multiple modal systems — ferries, highways, transit, and tolls — each trapped in its own legacy data silo with no integrated reporting or cross-agency visibility. This is structurally identical to the IRS challenge IBM already solved.</p>
+      <ul>
+        <li><strong>Ferry systems</strong> have GPS/arrival data that does not communicate with transit dispatch</li>
+        <li><strong>Toll collection</strong> revenue data is isolated from transit ridership and highway traffic data</li>
+        <li><strong>Regional operators</strong> (CATS, GoTriangle, Wave Transit) each run independent systems with no statewide data layer</li>
+      </ul>
+    </div>
+    <div class="content-card">
+      <h2>What NCDOT Can Take from This Case</h2>
+      <p>The IRS case delivers one foundational insight for NCDOT: <strong>you do not have to rebuild everything to modernize everything.</strong> IBM's incremental deconstruction methodology means NCDOT can start with a single modal silo — ferries, for example — modernize it as a discrete subsystem, and then extend the unified data layer to highways, transit, and tolls one at a time.</p>
+      <p>This eliminates the political, financial, and operational risk of a "big bang" technology overhaul. NCDOT continues operating 24/7 transportation infrastructure throughout — just as the IRS never stopped collecting taxes during its modernization.</p>
+      <ul>
+        <li>Pick one NCDOT modal silo as the starting point (e.g., NC Turnpike tolls or NCDOT Ferry Division)</li>
+        <li>Define the subsystem boundary clearly — what data flows in, what flows out</li>
+        <li>Modernize that subsystem using IBM's deconstruction methodology</li>
+        <li>Connect it to the emerging NCDOT integrated data platform</li>
+        <li>Repeat for each additional mode — highways, transit, maintenance</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="index.html">← Back to All Cases</a>
+    <a href="02-va.html">Next: VA Claims Modernization →</a>
+  </div>
+
+</div>
+
+<div class="footer">Made with IBM Bob &nbsp;·&nbsp; NCDOT IBM Success Stories 2025</div>
+</body>
+</html>
